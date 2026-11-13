@@ -3426,8 +3426,10 @@ html.is-entered body {
    tag says it instead */
 .project-soon {
   position: absolute;
-  left: 16px;
-  bottom: 14px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
   z-index: 1;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
