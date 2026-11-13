@@ -26,7 +26,7 @@
     { src: "golden-gate.jpg", alt: "Golden Gate Bridge seen from the beach as waves roll in" },
     { src: "aquarium-large.jpg", alt: "Planted aquarium with driftwood, java moss and tall grasses, small fish swimming near the surface" },
     { src: "poppies-door.jpg", alt: "Coral ranunculus in a twisted white vase against white paneling" },
-    { src: "portfolio-browser.webp", alt: "Illustration of a portfolio site in a browser window floating in a blue sky, beside folders for work and memes and a trash can labeled regrets" },
+    { src: "portfolio-browser.mp4", silent: true, alt: "Illustration of a portfolio site in a browser window floating in a blue sky, beside folders for work and memes and a trash can labeled regrets" },
     // Light mode on the front, dark mode on the back
     {
       src: "illustrations-light.webp",
@@ -352,7 +352,7 @@
     big.alt = it.piece.alt;
     if (it.isVideo) big.setAttribute("aria-label", it.piece.alt);
     lbMedia.appendChild(big);
-    soundBtn.hidden = !it.isVideo;
+    soundBtn.hidden = !it.isVideo || !!it.piece.silent; // silent: a converted GIF with no audio
     syncSound();
     lightbox.hidden = false;
     requestAnimationFrame(() => lightbox.classList.add("is-open"));
