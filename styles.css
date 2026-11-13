@@ -1,0 +1,3415 @@
+/* ---------- Tokens ---------- */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-placeholder: #000000;
+
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --text-sm: 12px;
+  --text-md: 15px;
+
+  --gutter: 24px;
+  --nav-gap: 12px;
+
+  --theme-ease: 0.4s ease;
+
+  /* Glide to a project when it's picked from the Projects dropdown */
+  scroll-behavior: smooth;
+
+  /* Project tile background (projects 01–03) */
+  --tile-bg: #e8e8e8;
+  --tile-bg-hover: #dfdfdf;
+
+  /* The rule SVGs are drawn in black; invert them in dark mode */
+  --line-filter: none;
+}
+
+/* Dark mode: toggled by the circle/moon button in the header (main.js) */
+:root[data-theme="dark"] {
+  --color-bg: #000000;
+  --color-text: #ffffff;
+  --color-placeholder: #1a1a1a;
+  --tile-bg: #1c1c1c;
+  --tile-bg-hover: #242424;
+  --line-filter: invert(1);
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--theme-ease), color var(--theme-ease);
+}
+
+p {
+  margin: 0;
+}
+
+/* Avoid orphans (a lone word on the last line) in text that wraps */
+p,
+li,
+dt,
+dd,
+h1,
+h2,
+h3 {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.rule {
+  width: 100%;
+  height: 1px;
+  filter: var(--line-filter);
+  transition: filter var(--theme-ease);
+}
+
+/* ---------- Theme toggle (circle → crescent moon) ---------- */
+.theme-toggle {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  /* Solid circle: an inset shadow that fills the whole button */
+  box-shadow: inset 0 0 0 6px currentColor;
+  transition: box-shadow 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* Crescent: shift the fill so only a sliver is left */
+:root[data-theme="dark"] .theme-toggle {
+  box-shadow: inset 4px -3px 0 0 currentColor;
+}
+
+/* Invisible 36px hit area so the 12px circle is easy to tap */
+.theme-toggle {
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+}
+
+.theme-toggle:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 3px;
+}
+
+.project-image {
+  transition: background-color var(--theme-ease);
+}
+
+/* ---------- Header ---------- */
+/* Stays at the top of the window on every page while the page scrolls.
+   z-index 25 keeps it (and its dropdowns) above the page and above the
+   mobile menu panel (20), so the name and [MENU] stay visible over it. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  gap: var(--nav-gap);
+  align-items: flex-start;
+  padding: var(--gutter);
+  width: 100%;
+}
+
+/* The header's backdrop stops at the underline (the bottom of its content),
+   not at the bottom of its padding, so page content shows right up to the line */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 var(--gutter) 0;
+  z-index: -1;
+  background: var(--color-bg);
+  transition: background-color var(--theme-ease);
+}
+
+/* When the header shows the circle, time and location (homepage), those rows
+   sit below the line, so keep the 24px under them covered too */
+.site-header:has(.nav-meta)::before {
+  bottom: 0;
+}
+
+/* ...but with the mobile menu open those rows are hidden, so stop at the
+   line again, or the backing covers the first menu link */
+body.menu-open .site-header::before {
+  bottom: var(--gutter);
+}
+
+.nav-item {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav-item > a,
+.nav-item > .nav-button {
+  align-self: flex-start;
+}
+
+/* Buttons that should look like the plain text nav links */
+.nav-button,
+.copy-email {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* ---------- Header dropdowns: Projects, Contact (desktop) ----------
+   Opens on hover, on keyboard focus, or (touch screens) when tapped.
+   It is positioned out of flow so only the label itself, not the empty space
+   below it, starts the hover; the 12px top padding bridges the gap. */
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+/* While a dropdown is open, fade the page content back so the list reads
+   cleanly where it runs over it (e.g. the bio on the about page) */
+main {
+  transition: opacity 0.3s ease;
+}
+
+body:has(.nav-dropdown:hover) main,
+body:has(.nav-dropdown :focus-visible) main,
+body:has(.nav-dropdown.is-open) main,
+body:has(.nav-dropdown:hover) .toolbox,
+body:has(.nav-dropdown :focus-visible) .toolbox,
+body:has(.nav-dropdown.is-open) .toolbox {
+  opacity: 0.12;
+}
+
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown:has(:focus-visible) .dropdown-menu,
+.nav-dropdown.is-open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s;
+}
+
+/* ---------- Copy email: EMAIL rolls up, COPIED EMAIL rolls in, then back ---------- */
+.copy-email {
+  display: inline-grid;
+  align-self: flex-start;
+  overflow: hidden;
+  line-height: 14px;
+}
+
+.copy-label {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.copy-label--done {
+  transform: translateY(100%);
+}
+
+.copy-email.is-copied .copy-label--default {
+  transform: translateY(-100%);
+}
+
+.copy-email.is-copied .copy-label--done {
+  transform: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Split-text hover: letters roll up together and a copy rolls in from below.
+   Letters are wrapped by main.js; add `transition-delay: calc(var(--i) * 20ms)`
+   to .char to stagger them left to right. */
+.split {
+  --split-lh: 1.1667em; /* 14px at 12px, matching the Figma text box */
+  position: relative; /* keeps its hidden screen-reader text inside it */
+  display: inline-flex;
+  overflow: hidden;
+  line-height: var(--split-lh);
+}
+
+.split .char {
+  display: inline-block;
+  white-space: pre;
+  text-shadow: 0 var(--split-lh) currentColor;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.split:hover .char,
+.split:focus-visible .char,
+.copy-email:hover .split .char,
+.copy-email:focus-visible .split .char {
+  transform: translateY(calc(-1 * var(--split-lh)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  .carousel {
+    scroll-behavior: auto;
+  }
+
+  .split .char,
+  .theme-toggle,
+  body,
+  .rule,
+  .project-image,
+  .dropdown-menu,
+  .nav-dropdown:hover .dropdown-menu,
+  .nav-dropdown:has(:focus-visible) .dropdown-menu,
+  .nav-dropdown.is-open .dropdown-menu,
+  .copy-label,
+  .project-image .inset,
+  .project-image > .cover {
+    transition: none;
+  }
+
+  html .project:hover .project-image,
+  html .project:hover .project-image > .cover {
+    --zoom: 1;
+  }
+}
+
+.nav-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.nav-meta .dot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* ---------- Home ---------- */
+.page-home {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: var(--gutter);
+}
+
+.carousel {
+  display: flex;
+  gap: var(--gutter);
+  padding: var(--gutter) var(--gutter) 0;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scroll-padding-left: var(--gutter);
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.project {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 645px;
+  scroll-snap-align: start;
+}
+
+.project-title {
+  display: flex;
+  gap: var(--gutter);
+  text-transform: uppercase;
+  white-space: pre;
+}
+
+.project-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 645 / 440;
+  overflow: hidden;
+  background: var(--color-placeholder);
+}
+
+.project-image > .cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Inset screenshot (project 01): 517×336 centered in a 645×440 frame */
+.project-image .inset {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(517 / 645 * 100%);
+  height: calc(336 / 440 * 100%);
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px 2px rgba(0, 0, 0, 0.15);
+}
+
+.project-image .inset img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Variant for images that already include their own rounded corners and
+   drop shadow (project 01): show the whole image, add no frame of our own.
+   553×372 image in a 645×440 tile; its window part lines up with the 517×336 slot. */
+.project-image .inset.inset--baked {
+  width: calc(553 / 645 * 100%);
+  height: calc(372 / 440 * 100%);
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.project-image .inset.inset--baked img {
+  object-fit: contain;
+}
+
+/* Variant for the screen recording (project 01): same width as the
+   screenshot slot, and the height comes from the video itself, so a
+   re-export with different proportions still fits with no gaps. Keeps the
+   standard rounded frame and shadow. */
+.project-image .inset.inset--motion {
+  height: auto;
+}
+
+.project-image .inset.inset--motion video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (hover: hover) {
+  .project:hover .project-image .inset.inset--baked {
+    box-shadow: none;
+  }
+}
+
+/* Three emoji GIFs side by side, centred in the tile (project 03) */
+.project-image .gif-row {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4%;
+}
+
+.project-image .gif-row img {
+  width: 30%;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+/* The OK hand sits high and small in its own frame; nudge it down and up a
+   size so it lines up with the popper and the box */
+.project-image .gif-row img.gif-ok {
+  transform: translateY(9%) scale(1.15);
+}
+
+/* Projects 01–03: plain grey tile (light grey, or dark grey in dark mode) */
+.project-image.tile {
+  background: var(--tile-bg);
+}
+
+/* ---------- Project hover ----------
+   On hover: the title rolls (split text), the tile darkens a touch, the
+   image eases in and drifts gently against the cursor, and a [VIEW] label
+   follows the cursor. main.js sets --px/--py (-1…1) and --mx/--my (px). */
+.project-image {
+  --px: 0;
+  --py: 0;
+  --zoom: 1;
+  --drift: 10px;
+}
+
+.project-image .inset,
+.project-image > .cover,
+.project-image .gif-row {
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.project-image .inset {
+  transform: translate(-50%, -50%)
+    translate(calc(var(--px) * var(--drift) * -1), calc(var(--py) * var(--drift) * -1))
+    scale(var(--zoom));
+}
+
+.project-image > .cover,
+.project-image .gif-row {
+  transform: translate(calc(var(--px) * var(--drift) * -1), calc(var(--py) * var(--drift) * -1))
+    scale(var(--zoom));
+}
+
+.project-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  white-space: nowrap;
+  /* Inverts whatever is underneath, so it reads on light, dark and photos */
+  color: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  /* Centred on the pointer: [VIEW] stands in for the cursor itself */
+  transform: translate(calc(var(--mx, 0px) - 50%), calc(var(--my, 0px) - 50%));
+  transition: opacity 0.12s ease;
+}
+
+@media (hover: hover) {
+  .project:hover .project-image {
+    --zoom: 1.035;
+  }
+
+  .project:hover .project-image > .cover {
+    --zoom: 1.06; /* a bit more, so drifting never shows an edge */
+  }
+
+  .project:hover .project-image .inset {
+    box-shadow: 0 12px 32px 4px rgba(0, 0, 0, 0.22);
+  }
+
+  .project:hover .project-image.tile {
+    background: var(--tile-bg-hover);
+  }
+
+  .project-image:hover .project-cursor {
+    opacity: 1;
+  }
+
+  /* Over a project image the normal pointer is hidden; [VIEW] is the cursor.
+     (While a toolbox tool is on, the tool's own cursor still wins.) */
+  .project-image,
+  .project-image * {
+    cursor: none;
+  }
+
+  .project:hover .project-title .char {
+    transform: translateY(calc(-1 * var(--split-lh)));
+  }
+}
+
+/* ---------- About ---------- */
+.page-about {
+  padding-bottom: var(--gutter);
+}
+
+.intro {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gutter);
+  padding: var(--gutter);
+}
+
+.intro-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+  width: 420px;
+  max-width: 100%;
+  font-size: var(--text-md);
+}
+
+.intro-text a {
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+}
+
+.intro-photo {
+  flex-shrink: 0;
+  width: 261px;
+  aspect-ratio: 4096 / 2731;
+  object-fit: cover;
+}
+
+.divider {
+  padding: 0 var(--gutter);
+}
+
+.experience {
+  padding: 20px var(--gutter);
+}
+
+.experience-table {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 0.2fr) minmax(0, 0.5fr) minmax(0, 1fr) minmax(0, 1fr)
+    minmax(0, 1.5fr);
+  column-gap: var(--gutter);
+  row-gap: 60px;
+  font-size: var(--text-sm);
+}
+
+.experience-row {
+  display: contents;
+}
+
+.experience-row .company,
+.experience-row .role,
+.experience-row .place {
+  text-transform: uppercase;
+}
+
+.experience-row .desc {
+  font-size: var(--text-md);
+}
+
+.experience-row .desc p + p {
+  margin-top: 8px;
+}
+
+/* ---------- Responsive ---------- */
+/* Below 840px the four header columns can't fit on one row (the About
+   column needs ~185px for the dot + clock), so the header collapses to
+   name + [MENU] instead of stacking. Keep in sync with NAV_COLLAPSE in main.js. */
+@media (max-width: 839px) {
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+
+  .site-header > .nav-item:not(:first-child):not(.nav-about),
+  .nav-about > a,
+  .nav-about > .rule {
+    display: none;
+  }
+
+  /* Name and button stay above the open menu panel */
+  .site-header > .nav-item:first-child,
+  .menu-toggle {
+    position: relative;
+    z-index: 30;
+  }
+
+  .site-header .menu-toggle {
+    display: block;
+    position: absolute;
+    top: var(--gutter);
+    right: var(--gutter);
+  }
+
+  .mobile-menu:not([hidden]) {
+    display: flex;
+  }
+
+  /* The open menu panel starts right under the name row; collapse the
+     clock rows so the header doesn't cover the menu links */
+  body.menu-open .site-header .nav-about {
+    display: none;
+  }
+
+  /* Project pages have no clock or location, so on small screens the About
+     column is empty; drop it so the header is just the name row */
+  .site-header .nav-about:not(:has(.nav-meta)) {
+    display: none;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Projects: vertical stack with a divider line above each one */
+  .carousel {
+    flex-direction: column;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .project {
+    width: 100%;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-text);
+    transition: border-color var(--theme-ease);
+  }
+}
+
+@media (max-width: 900px) {
+  .experience-table {
+    grid-template-columns: 32px 1fr;
+    row-gap: 6px;
+  }
+
+  .experience-row .num {
+    grid-row: span 4;
+  }
+
+  .experience-row .desc {
+    margin-bottom: 36px;
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
+
+  .intro {
+    flex-direction: column;
+  }
+
+  .intro-text {
+    width: 100%;
+  }
+
+  .intro-photo {
+    display: none;
+  }
+}
+
+/* ---------- Mobile menu ---------- */
+.menu-toggle {
+  display: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-toggle::after {
+  /* Larger invisible tap area */
+  content: "";
+  position: absolute;
+  inset: -12px;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  flex-direction: column;
+  gap: 20px;
+  /* Starts below the name + rule row (24 + 14 + 12 + 1) plus a gap */
+  padding: calc(var(--gutter) + 14px + 12px + 1px + 20px) var(--gutter)
+    var(--gutter);
+  background: var(--color-bg);
+  overflow-y: auto;
+}
+
+.mobile-menu .nav-item {
+  flex: none;
+}
+
+/* ---------- Creative toolbox (homepage; desktop with a mouse only) ----------
+   [CREATIVE TOOLBOX] sits under ELIZABETH WANG, on the clock's row.
+   Brush / flowers / fish draw on fixed layers over the page (toolbox.js). */
+.toolbox {
+  display: none;
+}
+
+@media (min-width: 840px) and (hover: hover) and (pointer: fine) {
+  .toolbox {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 50; /* above the drawing layers */
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+  }
+}
+
+.tool-btn {
+  margin: 0 -3px;
+  padding: 0 3px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tool-btn:hover {
+  background: var(--tile-bg);
+}
+
+/* The tool that's switched on */
+.tool-btn.is-active {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.tool-btn:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* Keep the label width steady when it swaps to [CLOSE TOOLBOX] */
+.toolbox-toggle {
+  min-width: calc(19ch + 6px);
+  text-align: left;
+}
+
+.toolbox-tools {
+  display: flex;
+  gap: 16px;
+}
+
+.toolbox-tools[hidden] {
+  display: none;
+}
+
+.toolbox-tools .tool-btn {
+  animation: tool-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+@keyframes tool-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+/* Cursors while a tool is on */
+body[data-tool="brush"],
+body[data-tool="brush"] * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='5' fill='none' stroke='white' stroke-width='3'/%3E%3Ccircle cx='12' cy='12' r='5' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") 12 12, crosshair !important;
+  user-select: none;
+}
+
+body[data-tool="flowers"] *,
+body[data-tool="fish"] * {
+  cursor: crosshair !important;
+}
+
+body[data-tool] .toolbox .tool-btn,
+body[data-tool] .site-header a,
+body[data-tool] .site-header button {
+  cursor: pointer !important;
+}
+
+body[data-tool] .project-cursor {
+  display: none;
+}
+
+/* Drawing layers: fixed over the viewport, never catch clicks */
+.fx-canvas,
+.fx-flowers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fx-flowers {
+  z-index: 40;
+}
+
+.fx-fish {
+  z-index: 41;
+}
+
+/* Doodle fish blend with the page the same way as the doodle flowers */
+.fx-fish.is-doodle {
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="dark"] .fx-fish.is-doodle {
+  mix-blend-mode: difference;
+}
+
+.fx-brush {
+  z-index: 42;
+  transition: opacity 0.6s ease;
+}
+
+/* Fish chat bubble: rides along just above the fish that spoke.
+   The outer box is positioned by toolbox.js; the inner body pops in and out. */
+.fish-bubble {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 43;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
+.fish-bubble-body {
+  position: relative;
+  display: block;
+  padding: 4px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  white-space: nowrap;
+  transform-origin: 50% 100%;
+  animation: bubble-in 0.35s cubic-bezier(0.3, 1.6, 0.5, 1) both;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Little tail pointing down at the fish */
+.fish-bubble-body::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-text);
+  border-bottom: 1px solid var(--color-text);
+  transform: rotate(45deg);
+}
+
+.fish-bubble.is-leaving .fish-bubble-body {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* Flowers: the stem grows up from the click, leaves unfurl, petals bloom */
+.flower {
+  position: absolute;
+  overflow: visible;
+  transform-origin: 50% 100%;
+  animation: fl-sway 3.2s ease-in-out 1.8s infinite alternate;
+}
+
+.fl-stem {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: fl-grow 0.8s cubic-bezier(0.3, 0.7, 0.3, 1) forwards;
+}
+
+.fl-leaf,
+.fl-petal {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  transform: scale(0);
+}
+
+.fl-leaf {
+  animation: fl-pop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) forwards;
+  animation-delay: var(--d, 0.4s);
+}
+
+.fl-petal {
+  animation: fl-pop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
+  animation-delay: calc(0.72s + var(--i, 0) * 45ms);
+}
+
+.fl-center {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: scale(0);
+  animation: fl-pop 0.4s cubic-bezier(0.3, 1.8, 0.5, 1) forwards;
+  animation-delay: var(--d, 1.1s);
+}
+
+/* Doodle flowers: pen lines that draw themselves in, in the text colour */
+.flower-doodle {
+  color: var(--color-text);
+}
+
+/* Blend the doodle layer with the page so only the lines show:
+   light mode multiplies (the tulip's page-coloured fill disappears, black
+   lines stay black); dark mode uses difference (the black fill disappears,
+   and white lines turn dark wherever they cross something light, like the
+   white screenshot, so they never vanish) */
+.fx-flowers.is-doodle {
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="dark"] .fx-flowers.is-doodle {
+  mix-blend-mode: difference;
+}
+
+.dd-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: fl-grow var(--t, 0.35s) ease-out var(--d, 0s) forwards;
+}
+
+/* The tulip's front petal is filled with the page colour (fading in as it's
+   drawn) so it hides the outer petals' lines behind it */
+.dd-line.dd-solid {
+  fill: var(--color-bg);
+  fill-opacity: 0;
+  animation: fl-grow var(--t, 0.35s) ease-out var(--d, 0s) forwards,
+    dd-fill 0.3s ease var(--d, 0s) forwards;
+}
+
+@keyframes dd-fill {
+  to {
+    fill-opacity: 1;
+  }
+}
+
+.dd-dot {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: scale(0);
+  animation: fl-pop 0.3s cubic-bezier(0.3, 1.8, 0.5, 1) var(--d, 1.4s) forwards;
+}
+
+/* Tulip leaves: long blades that rise from their base */
+.fl-blade {
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+  transform: scale(0);
+  animation: fl-pop 0.6s cubic-bezier(0.3, 1.3, 0.5, 1) forwards;
+  animation-delay: var(--d, 0.3s);
+}
+
+/* Tulip cup swells up from the top of the stem… */
+.tl-cup {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scale(0);
+  animation: fl-pop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) 0.72s forwards;
+}
+
+/* …then its two outer petals ease open */
+.tl-side {
+  transform-box: fill-box;
+  animation: tl-open 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) 1.15s both;
+}
+
+.tl-side-l {
+  transform-origin: 100% 100%;
+  --open: -9deg;
+}
+
+.tl-side-r {
+  transform-origin: 0% 100%;
+  --open: 9deg;
+}
+
+@keyframes tl-open {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(var(--open));
+  }
+}
+
+@keyframes fl-grow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fl-pop {
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fl-sway {
+  from {
+    transform: rotate(-2.5deg);
+  }
+  to {
+    transform: rotate(2.5deg);
+  }
+}
+
+/* Gravity reset: copies of the page's pieces fall and float back */
+.reset-layer {
+  position: fixed;
+  inset: 0;
+  /* Above the page, but below the flowers (40), fish (41) and brush (42),
+     so those tumble off the screen in front of the falling page */
+  z-index: 35;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flower,
+  .fl-stem,
+  .fl-leaf,
+  .fl-petal,
+  .fl-center,
+  .fl-blade,
+  .tl-cup,
+  .tl-side,
+  .dd-line,
+  .dd-dot,
+  .fish-bubble-body,
+  .toolbox-tools .tool-btn {
+    animation-duration: 0.01ms;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+  }
+}
+
+/* ---------- Project page: Emoji Motion Design (emoji-motion.html) ----------
+   The header stays at the top and the project info on the left stays put;
+   only the work on the right scrolls. Left and right line up with the
+   header's first two and last two columns. Stacks below 900px. */
+.case {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--nav-gap);
+  align-items: start;
+  padding: 0 var(--gutter);
+}
+
+.case-info {
+  grid-column: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 20px var(--gutter) var(--gutter) 0;
+}
+
+.case-top {
+  display: flex;
+  flex-direction: column;
+  gap: 68px;
+}
+
+.case-title {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 500;
+  line-height: 1.05; /* tight leading between the two title lines */
+  text-transform: uppercase;
+  max-width: 460px;
+}
+
+.case-meta {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 420px;
+  max-width: 100%;
+  font-size: var(--text-md);
+  text-transform: uppercase;
+}
+
+.case-meta > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nav-gap);
+}
+
+.case-meta dd {
+  margin: 0;
+}
+
+.case-client {
+  font-weight: 500;
+}
+
+.case-desc {
+  max-width: 420px; /* same width as the title and the details above */
+  font-size: var(--text-md); /* 15px */
+}
+
+.case-work {
+  grid-column: 3 / 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nav-gap);
+  padding: 20px 0 var(--gutter);
+}
+
+.case-reel,
+.case-tile {
+  margin: 0;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease);
+}
+
+/* A screenshot on a grey tile, like the homepage tiles (645 × 440) */
+.case-shot {
+  margin: 0;
+  aspect-ratio: 645 / 440;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease);
+}
+
+.case-shot img,
+.case-shot video {
+  width: calc(553 / 645 * 100%);
+  height: auto;
+}
+
+/* Screen recording with its own window shape: round its corners to match
+   and give it the soft shadow the screenshots have baked in */
+.case-shot--motion video {
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px 2px rgba(0, 0, 0, 0.12);
+}
+
+.case-reel video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The reel should read as a GIF: never show play buttons or controls */
+.case-reel video::-webkit-media-controls,
+.case-reel video::-webkit-media-controls-start-playback-button,
+.case-reel video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nav-gap);
+}
+
+/* Three across on wide screens; two across when the column gets narrow
+   (stacked mobile layout, or a narrow desktop window) */
+.case-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1099px) {
+  .case-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.case-tile {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Desktop: the left column stays put under the header (main.js sets --header-h) */
+@media (min-width: 900px) and (min-height: 560px) {
+  .case-info {
+    position: sticky;
+    top: var(--header-h, 128px);
+    height: calc(100vh - var(--header-h, 128px));
+    height: calc(100dvh - var(--header-h, 128px));
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 899px) {
+  .case {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .case-info,
+  .case-work {
+    grid-column: 1;
+  }
+
+  .case-info {
+    padding-right: 0;
+  }
+
+  .case-top {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .case-title {
+    font-size: 36px;
+  }
+
+  .case-meta {
+    font-size: var(--text-sm);
+  }
+}
+
+/* ---------- Case study story (events-app.html, teams-qa.html; motion in story.js) ----------
+   Long-form sections in the scrolling right column. Layout switches on the
+   column's own width (container queries), so it adapts whether the column is
+   beside the fixed left side or full width on a phone. */
+.story {
+  --brand: #5b5fc7; /* Teams purple, for the event page mock */
+  --brand-soft: #b5b8ff;
+  --hairline: color-mix(in srgb, var(--color-text) 16%, transparent);
+  container-type: inline-size;
+  gap: 0;
+  padding-bottom: 120px;
+}
+
+.story-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 140px;
+}
+
+.story-section:first-child {
+  padding-top: 0;
+}
+
+.story-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  white-space: pre;
+}
+
+.story-headline {
+  margin: -12px 0 0;
+  max-width: 560px;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.story-body {
+  max-width: 560px;
+  font-size: var(--text-md);
+}
+
+.story-label {
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.story-callout {
+  max-width: 560px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.story-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 640px;
+  font-size: var(--text-md);
+}
+
+/* Fade/slide in when scrolled into view (story.js adds .is-in) */
+.story-js .story [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.story-js .story [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----- 01 The problem: sticky stage, five beats, then the merge ----- */
+.problem {
+  /* Scroll distance for the four beats, on top of one screen for the stage */
+  height: calc(100vh - var(--header-h, 0px) + 4 * 45vh);
+}
+
+.problem-stage {
+  position: sticky;
+  top: var(--header-h, 0px);
+  height: calc(100vh - var(--header-h, 0px));
+  height: calc(100dvh - var(--header-h, 0px));
+  display: flex;
+  flex-direction: column;
+  /* Content sits at the top; the 20px matches the left column, so the
+     eyebrow lines up with the top of the project title */
+  justify-content: flex-start;
+  gap: 40px;
+  padding: 20px 0 32px;
+}
+
+/* The pinned stage brings its own top padding */
+.story {
+  padding-top: 0;
+}
+
+.problem-stage .story-headline {
+  margin-top: -28px; /* keep it close to the eyebrow despite the 40px gap */
+}
+
+.tools {
+  --c: clamp(84px, calc((100% - 48px) / 5), 124px);
+  /* Fills the stage between the headline and the beat caption, with the
+     circles centered in it */
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+/* Each tool: a circle with just its name, and a caption below it */
+.tool {
+  width: var(--c);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.2, 1), opacity 0.6s ease;
+}
+
+.tool-circle {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-text);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  font-size: var(--text-sm);
+  line-height: 1.2;
+}
+
+/* Caption: what the tool is, then its fixed features (from beat 2) */
+.tool-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 5.5em;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.tool-desc {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.25;
+  text-transform: none;
+}
+
+/* One feature per line */
+.tool-features {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.tool-features span {
+  padding: 0 2px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Before the stage is reached, the circles wait; then they pop in one by one */
+.story-js .problem:not(.is-in) .tool {
+  opacity: 0;
+  transform: translateY(var(--drop, 0px)) scale(0.7);
+}
+
+/* Beat 1: no captions yet, so the circles sit in the middle of the space;
+   they glide up as the captions appear (story.js sets --drop) */
+.problem[data-beat="0"] .tool {
+  transform: translateY(var(--drop, 0px));
+}
+
+.story-js .problem.is-in .tool {
+  transition-delay: calc(var(--i) * 0.08s);
+}
+
+/* Beat 2 onward: each tool shows its own fixed set of features */
+.problem[data-beat="1"] .tool-sub,
+.problem[data-beat="2"] .tool-sub {
+  opacity: 1;
+  transform: none;
+}
+
+/* Beat 3: registration and Q&A live in different tools; none has both */
+.problem[data-beat="2"] .f-qa,
+.problem[data-beat="2"] .f-reg {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* Beat 4: the five merge into one */
+.problem[data-beat="3"] .tool {
+  opacity: 0;
+  transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.5);
+  transition-delay: 0s;
+}
+
+/* Centered where the circles meet, a little bigger than one of them */
+.tool-merged {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--c) * 1.2);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--text-sm);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  transition: opacity 0.5s ease 0.3s, transform 0.8s cubic-bezier(0.3, 1.4, 0.5, 1) 0.3s;
+  pointer-events: none;
+}
+
+.problem[data-beat="3"] .tool-merged {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* The features organizers now pick for themselves */
+.tool-picks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin: calc(var(--c) * 0.6 + 20px) 0 0; /* just under the merged circle */
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.tool-picks li {
+  padding: 4px 10px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.problem[data-beat="3"] .tool-picks li {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(0.7s + var(--i) * 0.1s);
+}
+
+/* One beat caption at a time */
+.beats {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 560px;
+  min-height: 6.5em;
+  font-size: var(--text-md); /* 15px */
+  line-height: 1.35;
+  counter-reset: beat;
+}
+
+.beats li {
+  grid-area: 1 / 1;
+  counter-increment: beat;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.beats li::before {
+  content: "0" counter(beat) " / 04";
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.beats li.is-active {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.1s;
+}
+
+/* ----- 02 The solution: the event path diagram ----- */
+.flow-wrap {
+  margin: 16px 0 0;
+  padding: 72px 24px 48px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
+}
+
+.flow {
+  --c: 68px;
+  display: grid;
+  grid-template-columns:
+    auto minmax(84px, 1fr) var(--c) minmax(84px, 1fr) var(--c)
+    minmax(20px, 0.4fr) var(--c) minmax(20px, 0.4fr) var(--c);
+  grid-template-rows: auto var(--c);
+  row-gap: 14px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.flow > * {
+  grid-row: 2;
+}
+
+.flow-start {
+  padding-right: 10px;
+  white-space: nowrap;
+}
+
+.flow-node {
+  width: var(--c);
+  height: var(--c);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.flow-node--draft {
+  background: transparent;
+  color: inherit;
+  border: 1px dashed var(--color-text);
+}
+
+.flow-arrow {
+  position: relative;
+  height: 1px;
+  background: var(--color-text);
+  transform-origin: left center;
+}
+
+.flow-arrow::after {
+  /* Arrowhead */
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--color-text);
+  border-right: 1px solid var(--color-text);
+  transform: translate(0, -50%) rotate(45deg);
+  transform-origin: center;
+}
+
+.flow-arrow--tick::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: var(--color-text);
+}
+
+.flow-arrow > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  line-height: 1.2;
+}
+
+/* "Event lifecycle" bracket over before, during, after */
+.flow-bracket {
+  grid-row: 1;
+  grid-column: 5 / 10;
+  position: relative;
+  height: 18px;
+  border: 1px solid var(--color-text);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  align-self: end;
+}
+
+.flow-bracket > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Circles appear left to right, arrows draw between them */
+.story-js .flow > * {
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1);
+  transition-delay: calc(0.2s + var(--i) * 0.28s);
+}
+
+.story-js .flow > .flow-node,
+.story-js .flow > .flow-start {
+  transform: scale(0.6);
+}
+
+.story-js .flow > .flow-arrow {
+  transform: scaleX(0);
+  transition-timing-function: ease, cubic-bezier(0.6, 0, 0.3, 1);
+}
+
+.story-js .flow > .flow-bracket {
+  transform: scaleX(0.6);
+}
+
+.story-js .flow-arrow > span {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  transition-delay: calc(0.5s + var(--i) * 0.28s);
+}
+
+.story-js .is-in .flow > * {
+  opacity: 1;
+  transform: none;
+}
+
+.story-js .is-in .flow-arrow > span {
+  opacity: 1;
+}
+
+.flow-steps {
+  margin: 8px 0 0;
+  max-width: 640px;
+}
+
+.flow-steps > div {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--hairline);
+  font-size: var(--text-md);
+}
+
+.flow-steps dt {
+  padding-top: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+}
+
+.flow-steps dd {
+  margin: 0;
+}
+
+/* ----- 04 Draft mode and branding ----- */
+.draft-demo {
+  margin: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
+}
+
+.draft-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.draft-steps li {
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+}
+
+.draft-steps li + li::before {
+  content: "→ ";
+}
+
+.draft-demo[data-step="0"] .draft-steps li:nth-child(1),
+.draft-demo[data-step="1"] .draft-steps li:nth-child(2),
+.draft-demo[data-step="2"] .draft-steps li:nth-child(3),
+.draft-demo[data-step="3"] .draft-steps li:nth-child(4) {
+  opacity: 1;
+}
+
+.draft-page {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-text);
+  border-radius: 8px;
+  transition: background-color var(--theme-ease);
+}
+
+.draft-demo[data-step="0"] .draft-page {
+  border-style: dashed;
+}
+
+.draft-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.draft-badge {
+  grid-area: 1 / 1;
+  justify-self: start;
+  padding: 3px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.draft-badge--live {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.draft-demo[data-step="0"] .draft-badge--draft,
+.draft-demo[data-step="1"] .draft-badge--preview,
+.draft-demo[data-step="2"] .draft-badge--brand,
+.draft-demo[data-step="3"] .draft-badge--live {
+  opacity: 1;
+  transform: none;
+}
+
+.draft-swatches {
+  grid-area: 1 / 2;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.draft-swatches i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.draft-swatches i:nth-child(2) {
+  background: var(--brand-soft);
+}
+
+.draft-swatches i:nth-child(3) {
+  background: var(--color-text);
+}
+
+.draft-demo[data-step="2"] .draft-swatches {
+  opacity: 1;
+}
+
+.draft-cover {
+  position: relative;
+  aspect-ratio: 16 / 4.5;
+  display: grid;
+  place-items: center;
+  background: var(--tile-bg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  transition: background-color var(--theme-ease);
+}
+
+.draft-cover::after {
+  /* The organizer's cover image, fading in when branding is added */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 78% 30%, var(--brand-soft), transparent 55%),
+    linear-gradient(120deg, var(--brand), #8b8ff0 60%, var(--brand-soft));
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.draft-demo[data-step="2"] .draft-cover::after,
+.draft-demo[data-step="3"] .draft-cover::after {
+  opacity: 1;
+}
+
+.draft-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.draft-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.draft-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.draft-lines i {
+  height: 6px;
+  width: 90%;
+  border-radius: 3px;
+  background: var(--hairline);
+}
+
+.draft-lines i:nth-child(2) {
+  width: 75%;
+}
+
+.draft-lines i:nth-child(3) {
+  width: 55%;
+}
+
+.draft-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.draft-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--color-text);
+  border-radius: 4px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: 12px;
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+.draft-btn--ghost {
+  background: transparent;
+  color: inherit;
+}
+
+.draft-demo[data-step="2"] .draft-btn:not(.draft-btn--ghost),
+.draft-demo[data-step="3"] .draft-btn:not(.draft-btn--ghost) {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.draft-toast {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease 0.4s, transform 0.3s ease 0.4s;
+}
+
+.draft-demo[data-step="3"] .draft-toast {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----- 05 Q&A across the event ----- */
+.qa-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qa-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 24px;
+  align-items: center;
+  padding: 24px;
+  background: var(--tile-bg);
+  font-size: var(--text-md);
+}
+
+.qa-card {
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-bg);
+  font-size: 13px;
+  transition: background-color var(--theme-ease);
+}
+
+.qa-q {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.qa-meta,
+.qa-tag,
+.qa-mod,
+.qa-source {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.qa-meta {
+  margin-top: 6px;
+  opacity: 0.6;
+}
+
+.qa-a {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+.qa-tag {
+  padding: 2px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+}
+
+.qa-tag--live::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #e5484d;
+  vertical-align: 1px;
+}
+
+.qa-mod {
+  display: flex;
+  gap: 6px;
+}
+
+.qa-mod span {
+  padding: 3px 6px;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+}
+
+.qa-source {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* The answer arrives a beat after the question */
+.story-js .qa-stage .qa-a {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
+}
+
+.story-js .qa-stage.is-in .qa-a {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----- 06 Impact ----- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 8px 0 0;
+}
+
+.stats > div {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-text);
+}
+
+.stats dt {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.stats dd {
+  margin: 8px 0 0;
+  font-size: var(--text-md);
+}
+
+.story-js .stats > div {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition-delay: calc(0.15s + var(--i) * 0.15s);
+}
+
+.story-js .stats.is-in > div {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----- Narrow column (phones, small windows) ----- */
+@container (max-width: 600px) {
+  .story-section {
+    padding-top: 100px;
+  }
+
+  .story-headline {
+    font-size: 26px;
+  }
+
+  .story-columns,
+  .qa-stage,
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .qa-stage {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .flow-steps > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  /* The path runs top to bottom, labels to the right of each arrow */
+  .flow-wrap {
+    padding: 32px 16px;
+  }
+
+  .flow {
+    --c: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .flow-start {
+    padding: 0 0 4px;
+  }
+
+  .flow-arrow {
+    width: 1px;
+    height: 48px;
+    margin: 4px 0;
+    transform-origin: center top;
+  }
+
+  .story-js .flow-wrap:not(.is-in) .flow > .flow-arrow {
+    transform: scaleY(0);
+  }
+
+  .flow-arrow::after {
+    right: auto;
+    top: auto;
+    left: 0;
+    bottom: 0;
+    transform: translate(-50%, 0) rotate(135deg);
+  }
+
+  .flow-arrow--tick::before {
+    top: 0;
+    left: -5px;
+    width: 11px;
+    height: 1px;
+  }
+
+  .flow-arrow > span {
+    left: 14px;
+    right: auto;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .flow-bracket {
+    align-self: center;
+    height: auto;
+    margin: 16px 0 8px;
+    border: 0;
+  }
+
+  .flow-bracket > span {
+    position: static;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story *,
+  .story *::before,
+  .story *::after {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ---------- Page transition (main.js) ----------
+   Leaving: the page blurs and fades away. Entering (Play gallery): it starts
+   blurred and comes into focus. */
+html.is-leaving body {
+  filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: filter 0.6s ease, opacity 0.6s ease;
+}
+
+html.is-entering body {
+  filter: blur(18px);
+  opacity: 0;
+}
+
+html.is-entered body {
+  transition: filter 0.8s ease, opacity 0.8s ease, background-color var(--theme-ease), color var(--theme-ease);
+}
+
+/* Over the Play tile animation, the ripple layer hides when the water is calm */
+.project-image > .ripple-canvas.is-idle {
+  visibility: hidden;
+}
+
+/* The silk and ripple canvases sit exactly over the Play tile image */
+.project-image > .ripple-canvas,
+.project-image > .silk-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Play gallery (play.html, play.js) ----------
+   A full-screen wall of pieces you drag around; buttons float on top. */
+.play-body {
+  min-height: 100vh; /* keeps the fixed wall sized while the page blurs in/out */
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.play-world {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.play-world.is-dragging {
+  cursor: grabbing;
+}
+
+.play-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  cursor: pointer;
+  outline: none;
+}
+
+.play-world.is-dragging .play-item {
+  cursor: grabbing;
+}
+
+/* Black and white until the piece has been opened */
+.play-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  filter: grayscale(1);
+  transition: filter 0.8s ease;
+}
+
+.play-item.is-seen .play-media {
+  filter: none;
+}
+
+/* Fish-eye wall (wall-lens.js): a full-screen canvas draws the pieces;
+   the real pieces stay on top, invisible, for clicking and keyboard focus */
+.play-wall {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.play-gl .play-media {
+  opacity: 0;
+}
+
+.play-item:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 6px;
+}
+
+/* Bracketed mono buttons, on a backing so they read over photos */
+.play-btn {
+  position: fixed;
+  z-index: 30;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.play-back {
+  top: var(--gutter);
+  left: var(--gutter);
+}
+
+.play-back:hover,
+.play-back:focus-visible,
+.play-close:hover,
+.play-close:focus-visible {
+  background: var(--color-text);
+  color: var(--color-bg);
+  outline: none;
+}
+
+.play-hint {
+  right: var(--gutter);
+  bottom: var(--gutter);
+  cursor: default;
+  pointer-events: none;
+}
+
+.play-hint::before {
+  content: "[";
+}
+
+.play-hint::after {
+  content: "]";
+}
+
+/* Opened piece: centered over a blurred wall */
+.play-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 72px var(--gutter);
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.play-lightbox[hidden] {
+  display: none;
+}
+
+.play-lightbox.is-open {
+  opacity: 1;
+}
+
+.play-lightbox-media {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fit the whole piece on screen, leaving room for the [CLOSE] button */
+.play-lightbox-media > * {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 2 * var(--gutter));
+  max-height: calc(100vh - 144px);
+  max-height: calc(100dvh - 144px);
+  object-fit: contain;
+  transform: scale(0.96);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.play-lightbox.is-open .play-lightbox-media > * {
+  transform: none;
+}
+
+.play-close {
+  top: var(--gutter);
+  right: var(--gutter);
+}
+
+.play-sound {
+  top: var(--gutter);
+  left: var(--gutter);
+}
+
+.play-sound[hidden] {
+  display: none;
+}
+
+.play-sound:hover,
+.play-sound:focus-visible {
+  background: var(--color-text);
+  color: var(--color-bg);
+  outline: none;
+}
+
+/* ---------- Teams Q&A story pieces (teams-qa.html) ---------- */
+
+/* Without the pinned Events App stage, the first section brings the 20px
+   that lines its eyebrow up with the project title */
+.story > .story-section:first-child:not(.problem) {
+  padding-top: 20px;
+}
+
+.story-link {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.story-link:hover {
+  text-decoration: none;
+}
+
+/* 01: the old event types, scattered */
+.scatter {
+  position: relative;
+  height: 190px;
+  max-width: 560px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.scatter span {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 96px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid var(--color-text);
+  border-radius: 50%;
+}
+
+.story-js .scatter span {
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+  transition-delay: calc(0.2s + var(--i) * 0.12s);
+}
+
+.story-js .scatter.is-in span {
+  opacity: 1;
+  transform: none;
+}
+
+/* 02: three event types flow into one shared feed */
+.feed-diagram {
+  margin: 0;
+  padding: 24px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
+}
+
+.feed-types {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.feed-type {
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-bg);
+  font-size: 13px;
+  transition: background-color var(--theme-ease);
+}
+
+.feed-lines {
+  display: block;
+  width: 100%; /* x 50 / 150 / 250 of 300 = the middle of each card */
+  height: 48px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.feed-lines path {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.feed-box {
+  padding: 16px;
+  border: 1px solid var(--color-text);
+  border-radius: 8px;
+  background: var(--color-bg);
+  transition: background-color var(--theme-ease);
+}
+
+.feed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.feed-row i {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--hairline);
+}
+
+.feed-tag {
+  padding: 2px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Cards appear, the lines draw down, then the feed fills in */
+.story-js .feed-type {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease, background-color var(--theme-ease);
+  transition-delay: calc(0.2s + var(--i) * 0.12s);
+}
+
+.story-js .feed-lines path {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.6, 0, 0.3, 1) 0.6s;
+}
+
+.story-js .feed-box {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease 1.2s, transform 0.5s ease 1.2s, background-color var(--theme-ease);
+}
+
+.story-js .feed-diagram.is-in .feed-type,
+.story-js .feed-diagram.is-in .feed-box {
+  opacity: 1;
+  transform: none;
+}
+
+.story-js .feed-diagram.is-in .feed-lines path {
+  stroke-dashoffset: 0;
+}
+
+/* 03: before, during, after */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 24px;
+  align-items: start;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-text);
+  font-size: var(--text-md);
+}
+
+.stage .story-label {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.stage-points {
+  margin: 0;
+  padding-left: 1.1em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Placeholder until the real screens are added */
+.screen-slot,
+.phone {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: var(--tile-bg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+  transition: background-color var(--theme-ease);
+}
+
+.screen-slot {
+  aspect-ratio: 16 / 10;
+}
+
+/* 04: Q&A settings demo */
+.qa-demo {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 12px;
+  padding: 24px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
+}
+
+.qa-demo-settings,
+.qa-demo-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-bg);
+  transition: background-color var(--theme-ease);
+}
+
+.qa-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The toggle itself */
+.qa-switch i {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 18px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+.qa-switch i::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-text);
+  transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1), background-color 0.2s ease;
+}
+
+.qa-switch[aria-pressed="true"] i {
+  background: var(--color-text);
+}
+
+.qa-switch[aria-pressed="true"] i::after {
+  transform: translateX(12px);
+  background: var(--color-bg);
+}
+
+.qa-switch:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.qa-ask {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.qa-ask-field {
+  opacity: 0.5;
+}
+
+.qa-ask-anon,
+.qa-ask-note,
+.qa-votes,
+.qa-who {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.qa-ask-note {
+  opacity: 0.6;
+}
+
+.qa-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qa-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--hairline);
+  font-size: 13px;
+}
+
+.qa-who {
+  grid-column: 1;
+  opacity: 0.6;
+}
+
+.qa-text {
+  grid-column: 1;
+}
+
+.qa-votes {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  padding: 4px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+}
+
+.qa-anon-name {
+  display: none;
+}
+
+/* Settings → what attendees see */
+.qa-demo[data-moderation="off"] .qa-ask-note,
+.qa-demo[data-upvotes="off"] .qa-votes,
+.qa-demo[data-anonymous="off"] .qa-ask-anon {
+  display: none;
+}
+
+.qa-demo[data-anonymous="on"] .qa-list li:first-child .qa-name {
+  display: none;
+}
+
+.qa-demo[data-anonymous="on"] .qa-list li:first-child .qa-anon-name {
+  display: inline;
+}
+
+/* 05: phones */
+.phones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 560px;
+}
+
+.phone {
+  aspect-ratio: 9 / 19;
+  border-radius: 22px;
+}
+
+.story-js .phone {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.6s ease, background-color var(--theme-ease);
+  transition-delay: calc(0.15s + var(--i) * 0.12s);
+}
+
+.story-js .phones.is-in .phone {
+  opacity: 1;
+  transform: none;
+}
+
+@container (max-width: 600px) {
+  .feed-types,
+  .stage,
+  .qa-demo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .feed-lines {
+    display: none;
+  }
+
+  .feed-types {
+    margin-bottom: 12px;
+  }
+
+  .qa-demo {
+    padding: 16px;
+  }
+
+  .scatter span {
+    width: 76px;
+  }
+}
+
+/* ---------- Hover video (about page "pet fish" link; main.js) ----------
+   A small looping video takes the cursor's place, centered on the pointer,
+   the same width as the fish photo on the page. */
+.hover-video {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  width: 261px;
+  aspect-ratio: 3176 / 2192;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 50%)) scale(0.9);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* While it shows, it follows the pointer without lag */
+.hover-video.is-visible {
+  opacity: 1;
+  transform: translate(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 50%));
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  a[data-hover-video] {
+    cursor: none;
+  }
+}
+
+/* ---------- Flip card (two-sided Play piece; play.js) ----------
+   Opened full size; clicking turns it over in 3D to show the back. */
+.play-lightbox-media:has(.play-card) {
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 16px;
+}
+
+.play-lightbox-media > .play-card {
+  position: relative;
+  display: block;
+  /* As big as fits, keeping the front image's shape (--ar, set by play.js) */
+  width: min(calc(100vw - 2 * var(--gutter)), calc((100vh - 180px) * var(--ar, 1.5)));
+  width: min(calc(100vw - 2 * var(--gutter)), calc((100dvh - 180px) * var(--ar, 1.5)));
+  max-width: none;
+  max-height: none;
+  aspect-ratio: var(--ar, 1.5);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 2400px;
+}
+
+.play-card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.6, 0, 0.2, 1);
+}
+
+.play-card[aria-pressed="true"] .play-card-inner {
+  transform: rotateY(180deg);
+}
+
+.play-card-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* The back fills the card */
+.play-card-back {
+  object-fit: cover;
+  transform: rotateY(180deg);
+}
+
+/* ...with the same rounded corners as the front, when it has them (merch) */
+.play-card--rounded .play-card-back {
+  border-radius: 2% / 3.1%;
+}
+
+.play-card:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 6px;
+}
+
+.play-flip-hint {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-card-inner {
+    transition: none;
+  }
+}
+
+/* [FLIP OVER] replaces the cursor over an opened two-sided piece, so it's
+   clear the card can be turned; touch screens get the text hint instead */
+.play-flip-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 14px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transform: translate(calc(var(--mx, 0px) - 50%), calc(var(--my, 0px) - 50%));
+  transition: opacity 0.12s ease;
+}
+
+@media (hover: hover) {
+  .play-lightbox-media > .play-card {
+    cursor: none;
+  }
+
+  .play-card:hover .play-flip-cursor {
+    opacity: 1;
+  }
+
+  .play-flip-hint {
+    display: none;
+  }
+}
+
+/* Hero reel on the Events App page: before (video), during (still), after
+   (video). Each slide sits centred on the grey tile like a screenshot; the
+   one leaving slides out to the left while the next slides in from the
+   right (story.js). */
+.hero-reel {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(100%);
+  transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.hero-slide.is-active {
+  transform: none;
+}
+
+.hero-slide.is-leaving {
+  transform: translateX(-100%);
+}
+
+/* Parked off to the right, ready to come in, with no animation */
+.hero-slide.is-parked {
+  transition: none;
+}
+
+.hero-slide > img,
+.hero-slide > video,
+.reel-media {
+  display: block;
+  width: calc(553 / 645 * 100%);
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px 2px rgba(0, 0, 0, 0.12);
+}
+
+/* A screen with callouts on it. It is a size container, so callout line
+   lengths (--len, in % of the screen's width) scale with it. */
+.reel-media {
+  position: relative;
+  container-type: inline-size;
+}
+
+.reel-media > img,
+.reel-media > video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Callout: a dot on the feature, a line that draws out from it, then a
+   label. Dark on the (always light) screens in both themes. */
+.callout {
+  --ink: #111;
+  --delay: 0ms;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.callout::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px #fff;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+.callout-line {
+  position: absolute;
+  top: -0.5px;
+  left: 0;
+  width: calc(var(--len) * 1cqw);
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+.callout--left .callout-line {
+  left: auto;
+  right: 0;
+  transform-origin: right center;
+}
+
+.callout-label {
+  position: absolute;
+  top: 0;
+  left: calc(var(--len) * 1cqw);
+  padding: 3px 7px;
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1.9cqw, 12px);
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--ink);
+  border-radius: 3px;
+  opacity: 0;
+  transform: translate(-4px, -50%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.callout--left .callout-label {
+  left: auto;
+  right: calc(var(--len) * 1cqw);
+  transform: translate(4px, -50%);
+}
+
+/* Drawing out: dot, then line, then label. Retracting is quick and together. */
+.callout.is-on::before {
+  transform: scale(1);
+  transition-delay: var(--delay);
+}
+
+.callout.is-on .callout-line {
+  transform: scaleX(1);
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--delay) + 150ms);
+}
+
+.callout.is-on .callout-label {
+  opacity: 1;
+  transform: translate(0, -50%);
+  transition-delay: calc(var(--delay) + 550ms);
+}
+
+.hero-reel video::-webkit-media-controls,
+.hero-reel video::-webkit-media-controls-start-playback-button,
+.hero-reel video::-webkit-media-controls-overlay-play-button,
+.case-shot--motion video::-webkit-media-controls-start-playback-button,
+.project-image video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .callout::before,
+  .callout-line,
+  .callout-label {
+    transition: none !important;
+  }
+}
+
+/* Desktop: the reel sits at the bottom right of the opening screen, its
+   bottom edge level with the description at the bottom left. The column is
+   a size container (.story), so 100cqw is the reel's width. */
+@media (min-width: 900px) and (min-height: 560px) {
+  .hero-reel--top {
+    margin-top: max(0px, calc(100dvh - var(--header-h, 128px) - var(--gutter) - 100cqw * 440 / 645));
+  }
+}
+
+/* Attendee / organizer tabs under the event page reel (events-app.html).
+   The two columns are buttons: the selected one is full strength with a
+   solid rule above it; the other is faded until hovered. */
+.role-tab {
+  display: block;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid var(--hairline, rgba(0, 0, 0, 0.16));
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.4;
+  box-shadow: inset 0 1px 0 transparent;
+  transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.role-tab .story-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* A small square that fills in when selected */
+.role-tab .story-label::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  transition: background-color 0.25s ease;
+}
+
+.role-tab-text {
+  display: block;
+}
+
+.role-tab[aria-selected="true"] {
+  opacity: 1;
+  border-top-color: var(--color-text);
+  box-shadow: inset 0 1px 0 var(--color-text); /* 2px rule in all */
+  cursor: default;
+}
+
+.role-tab[aria-selected="true"] .story-label::before {
+  background: currentColor;
+}
+
+@media (hover: hover) {
+  .role-tab[aria-selected="false"]:hover {
+    opacity: 0.75;
+  }
+}
+
+.role-tab:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 4px;
+}
+
+/* A dialog that pops over a reel screen (the theme picker on the organizer
+   reel). It fades in over a dimmed screen and grows from the top right,
+   where the button that opens it sits. */
+.reel-pop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.reel-pop-card {
+  position: relative;
+  width: 64%;
+  transform: scale(0.92);
+  transform-origin: 80% 20%;
+  transition: transform 0.3s ease;
+}
+
+.reel-pop-card > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.reel-pop.is-on {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+
+.reel-pop.is-on .reel-pop-card {
+  transform: none;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+}
+
+/* Section 04: step labels lit by the draft reel (story.js) */
+.draft-steps li.is-current {
+  opacity: 1;
+}
+
+/* The share dialog is wider than the theme dialog */
+.reel-pop-card--wide {
+  width: 72%;
+}
+
+/* A reel whose screens are states of one page (section 04): screens swap in
+   place, with no slide, as if the product were being used */
+.hero-reel--inplace .hero-slide,
+.hero-reel--inplace .hero-slide.is-leaving {
+  transform: none;
+  visibility: hidden;
+  transition: none;
+}
+
+.hero-reel--inplace .hero-slide.is-active {
+  visibility: visible;
+}
+
+/* Section 04 step labels are buttons that jump the reel to that step */
+.draft-steps button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.draft-steps button:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .draft-steps li:not(.is-current):hover {
+    opacity: 0.75;
+  }
+}
+
+/* 05 Q&A stages: text above, the real Q&A post below at full width so its
+   text stays readable. The post rises in a beat after the text. */
+.qa-stage {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.qa-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px 2px rgba(0, 0, 0, 0.08);
+}
+
+.story-js .qa-stage .qa-shot {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+}
+
+.story-js .qa-stage.is-in .qa-shot {
+  opacity: 1;
+  transform: none;
+}
+
+/* 07 What's next: early mobile visuals on a grey tile, tagged as
+   explorations so they aren't read as shipped work */
+.case-explore {
+  position: relative;
+  margin: 0;
+  padding: 56px 24px 24px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease);
+}
+
+.case-explore img {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.case-explore-tag {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  padding: 3px 8px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}

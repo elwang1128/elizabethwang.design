@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Elizabeth Wang</title>
+    <meta name="description" content="Elizabeth Wang — designer focused on interactive language across digital and physical spaces." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page-home">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html" aria-current="page">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <!-- Creative toolbox: desktop with a mouse only (toolbox.js) -->
+          <div class="toolbox">
+            <button class="tool-btn toolbox-toggle" type="button" aria-expanded="false" aria-controls="toolbox-tools">[CREATIVE TOOLBOX]</button>
+            <div id="toolbox-tools" class="toolbox-tools" hidden>
+              <button class="tool-btn" type="button" data-tool="brush" aria-pressed="false" style="--i: 0">[BRUSH]</button>
+              <button class="tool-btn" type="button" data-tool="flowers" aria-pressed="false" style="--i: 1">[FLOWERS]</button>
+              <button class="tool-btn" type="button" data-tool="fish" aria-pressed="false" style="--i: 2">[FEED FISH]</button>
+              <button class="tool-btn" type="button" data-action="reset" style="--i: 3">[RESET]</button>
+            </div>
+          </div>
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div class="nav-meta">
+            <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"></button>
+            <span data-clock>12:00:00 PM PST UTC−08</span>
+          </div>
+          <div class="nav-meta">
+            <span>San Francisco</span>
+            <span>California</span>
+          </div>
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main id="projects" class="carousel" aria-label="Projects">
+        <article class="project" id="events-app">
+          <a href="events-app.html">
+            <div class="project-title">
+              <span>01</span>
+              <span>Microsoft  /  Teams Events App</span>
+            </div>
+          </a>
+          <a href="events-app.html">
+            <div class="project-image tile">
+              <!-- Organizer screen recording (same file as the Events App page) -->
+              <div class="inset inset--motion">
+                <video src="assets/images/events-app-organizer.mp4" autoplay muted loop playsinline aria-label="The organizer view of the Spring Kickoff event page in the Teams Events app"></video>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="project" id="teams-qa">
+          <div class="project-title">
+            <span>02</span>
+            <span>Microsoft  /  Teams Q&amp;A + Engage Events</span>
+          </div>
+          <a href="teams-qa.html"><div class="project-image tile"></div></a>
+        </article>
+
+        <article class="project" id="emoji-motion">
+          <div class="project-title">
+            <span>03</span>
+            <span>Curology  / Emoji Motion Design</span>
+          </div>
+          <a href="emoji-motion.html">
+            <div class="project-image tile">
+              <div class="gif-row">
+                <img src="assets/curology/tada.gif" alt="Party popper emoji" />
+                <img src="assets/curology/curology-box.gif" alt="Curology box emoji" />
+                <img class="gif-ok" src="assets/curology/ok-hand.gif" alt="OK hand emoji" />
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="project" id="play">
+          <div class="project-title">
+            <span>04</span>
+            <span>Play</span>
+          </div>
+          <a href="play.html" data-transition>
+            <!-- data-silk: looping animation (silk.js); data-ripple: water ripples
+                 follow the cursor (ripple.js). The image is the fallback. -->
+            <div class="project-image" data-cursor-label="[ENTER]" data-ripple data-silk>
+              <img class="cover" src="assets/images/play.jpg" alt="Play" />
+            </div>
+          </a>
+        </article>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="silk.js"></script>
+    <script src="ripple.js"></script>
+    <script src="main.js"></script>
+    <script src="toolbox.js"></script>
+  </body>
+</html>

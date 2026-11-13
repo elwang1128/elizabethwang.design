@@ -1,0 +1,7 @@
+# Local only, not part of the site
+.DS_Store
+.claude/
+serve.js
+*.sb-*
+# Original high-res fish video (the site uses friend-fish.mp4)
+assets/images/friend-fish.mov

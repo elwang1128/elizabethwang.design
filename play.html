@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Play — Elizabeth Wang</title>
+    <meta name="description" content="Play: photos, arrangements and motion pieces by Elizabeth Wang." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Theme before first paint (same rule as the other pages), and start
+      // blurred so the gallery comes into focus as it opens.
+      (function () {
+        var root = document.documentElement;
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= 18 || hour < 6 ? "dark" : "light";
+        }
+        if (theme === "dark") root.dataset.theme = "dark";
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) root.classList.add("is-entering");
+      })();
+    </script>
+  </head>
+  <body class="play-body">
+    <a class="play-btn play-back" href="index.html#play" data-transition>[← Go back]</a>
+
+    <!-- The gallery: drag, or scroll with a trackpad or mouse wheel, in any
+         direction; it wraps around forever. Pieces are added by play.js. -->
+    <main class="play-world" id="play-world" aria-label="Play gallery. Drag or scroll to explore; select a piece to open it."></main>
+
+    <p class="play-btn play-hint" aria-hidden="true">Drag to explore</p>
+
+    <div class="play-lightbox" id="play-lightbox" role="dialog" aria-modal="true" aria-label="Piece" hidden>
+      <button class="play-btn play-close" type="button">[Close]</button>
+      <button class="play-btn play-sound" type="button" aria-pressed="true" hidden>[Mute]</button>
+      <div class="play-lightbox-media"></div>
+    </div>
+
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="wall-lens.js"></script>
+    <script src="main.js"></script>
+    <script src="play.js"></script>
+  </body>
+</html>

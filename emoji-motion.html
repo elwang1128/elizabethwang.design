@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Emoji Motion Design — Elizabeth Wang</title>
+    <meta name="description" content="Emoji motion design for Curology by Elizabeth Wang: animated emojis and kinetic typography for influencer ad campaigns." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page-case">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="index.html#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main class="case">
+        <!-- Left: stays put while the work on the right scrolls -->
+        <section class="case-info">
+          <div class="case-top">
+            <h1 class="case-title">Emoji Motion Design</h1>
+            <dl class="case-meta">
+              <div>
+                <dt class="sr-only">Client</dt>
+                <dd class="case-client">Curology</dd>
+                <dt class="sr-only">Role</dt>
+                <dd class="mono">Motion designer</dd>
+              </div>
+              <div class="mono">
+                <dt class="sr-only">Year</dt>
+                <dd>2020</dd>
+                <dt class="sr-only">Disciplines</dt>
+                <dd>Animation, illustration, video</dd>
+              </div>
+            </dl>
+          </div>
+          <p class="case-desc">
+            I designed motion graphics for Curology’s influencer ad
+            campaigns as a motion design intern. I paired kinetic typography with
+            video and designed custom animated emojis to go along with each piece,
+            working with the creative team to keep everything on brand and fun to
+            watch.
+          </p>
+        </section>
+
+        <!-- Right: the work. The reel plays like a GIF: muted, looping, no controls. -->
+        <section class="case-work" aria-label="Work">
+          <figure class="case-reel">
+            <video
+              src="assets/curology/reel.mp4"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              disablepictureinpicture
+              disableremoteplayback
+              aria-label="Reel of Curology influencer ads with kinetic typography and animated emojis"
+            ></video>
+          </figure>
+          <!-- 12 GIFs: rows of 3 on wide screens, rows of 2 on narrow ones (favorites first) -->
+          <div class="case-grid case-grid--3">
+            <figure class="case-tile"><img src="assets/curology/camera.gif" alt="Camera emoji" /></figure>
+            <figure class="case-tile"><img src="assets/curology/curology-box.gif" alt="Curology box emoji" /></figure>
+            <figure class="case-tile"><img src="assets/curology/tada.gif" alt="Party popper emoji" /></figure>
+            <figure class="case-tile"><img src="assets/curology/wink.gif" alt="Winking face emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/blush.gif" alt="Smiling face emoji with closed eyes" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/worried.gif" alt="Worried face emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/clap.gif" alt="Clapping hands emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/ok-hand.gif" alt="OK hand emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/clock.gif" alt="Alarm clock emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/phone-quiz.gif" alt="Phone emoji" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/doctor-1.gif" alt="Dermatologist emoji with long hair" loading="lazy" /></figure>
+            <figure class="case-tile"><img src="assets/curology/doctor-2.gif" alt="Dermatologist emoji with curly hair" loading="lazy" /></figure>
+          </div>
+        </section>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="main.js"></script>
+  </body>
+</html>

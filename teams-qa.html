@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Teams Q&amp;A + Engage Events — Elizabeth Wang</title>
+    <meta name="description" content="Teams Q&amp;A and Engage events by Elizabeth Wang: Q&amp;A, AMAs, live events and webinars in one experience." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page-case">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="index.html#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main class="case">
+        <!-- Left: stays put while the work on the right scrolls -->
+        <section class="case-info">
+          <div class="case-top">
+            <h1 class="case-title">Teams Q&amp;A +<br />Engage Events</h1>
+            <dl class="case-meta">
+              <div>
+                <dt class="sr-only">Company</dt>
+                <dd class="case-client">Microsoft</dd>
+                <dt class="sr-only">Role</dt>
+                <dd class="mono">Lead product designer</dd>
+              </div>
+              <div class="mono">
+                <dt class="sr-only">Years</dt>
+                <dd>2021 – 2026</dd>
+                <dt class="sr-only">Platforms</dt>
+                <dd>Web, mobile, Teams platform</dd>
+              </div>
+            </dl>
+          </div>
+          <p class="case-desc">
+            I designed Teams Q&amp;A and Engage events by bringing
+            Q&amp;A, AMAs, live events, and webinars together into one experience.
+            Used by millions of people each month, it shipped in 2026 and became
+            the foundation for the Events app in Microsoft Teams.
+          </p>
+        </section>
+
+        <!-- Right: the case study. Motion and the Q&A demo are driven by story.js. -->
+        <section class="case-work story" aria-label="Case study">
+          <!-- 1. Context -->
+          <section class="story-section" aria-labelledby="context-title">
+            <p class="story-eyebrow">01&nbsp;&nbsp;Context</p>
+            <h2 class="story-headline" id="context-title">Events in communities</h2>
+            <p class="story-body">
+              Events bring people together around the conversations that matter,
+              from company-wide town halls to learning sessions to async AMAs.
+              Before, Q&amp;A, AMAs, live events, and webinars were separate
+              experiences, each with its own setup and features.
+            </p>
+            <div class="scatter" data-reveal aria-hidden="true">
+              <span style="--i: 0; --x: 4%; --y: 18%">Q&amp;A</span>
+              <span style="--i: 1; --x: 30%; --y: 52%">AMA</span>
+              <span style="--i: 2; --x: 55%; --y: 8%">Live event</span>
+              <span style="--i: 3; --x: 76%; --y: 46%">Webinar</span>
+            </div>
+            <a class="story-link" href="events-app.html">See how this became the Events app →</a>
+          </section>
+
+          <!-- 2. The solution: three cards flow into one shared feed -->
+          <section class="story-section" aria-labelledby="types-title">
+            <p class="story-eyebrow">02&nbsp;&nbsp;The solution</p>
+            <h2 class="story-headline" id="types-title">Three event types, one feed</h2>
+            <figure class="feed-diagram" data-reveal>
+              <div class="feed-types">
+                <div class="feed-type" style="--i: 0">
+                  <h3 class="story-label">Broadcast</h3>
+                  <p>Powered by Teams town hall, for all-hands and events at scale.</p>
+                </div>
+                <div class="feed-type" style="--i: 1">
+                  <h3 class="story-label">Meeting</h3>
+                  <p>Powered by Teams webinar, for interactive sessions.</p>
+                </div>
+                <div class="feed-type" style="--i: 2">
+                  <h3 class="story-label">Async</h3>
+                  <p>Text-based AMAs, feedback, and crowdsourcing.</p>
+                </div>
+              </div>
+              <svg class="feed-lines" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M50 0 C50 30, 150 30, 150 60" pathLength="1" />
+                <path d="M150 0 L150 60" pathLength="1" />
+                <path d="M250 0 C250 30, 150 30, 150 60" pathLength="1" />
+              </svg>
+              <div class="feed-box" aria-hidden="true">
+                <p class="story-label">Shared feed</p>
+                <div class="feed-row"><span class="feed-tag">Q&amp;A</span><i></i></div>
+                <div class="feed-row"><span class="feed-tag">Conversation</span><i></i></div>
+                <div class="feed-row"><span class="feed-tag">Q&amp;A</span><i></i></div>
+              </div>
+            </figure>
+            <p class="story-body">
+              Every event type shares the same feed, so Q&amp;A and conversation
+              are built in no matter which type an organizer picks.
+            </p>
+          </section>
+
+          <!-- 3. Before, during, after: one screen per stage, ideally the same event -->
+          <section class="story-section" aria-labelledby="stages-title">
+            <p class="story-eyebrow">03&nbsp;&nbsp;The event experience</p>
+            <h2 class="story-headline" id="stages-title">Before, during, and after the event</h2>
+
+            <div class="stage" data-reveal>
+              <h3 class="story-label">Before</h3>
+              <ul class="stage-points">
+                <li>Organizers create an event in a community or storyline and set up Q&amp;A.</li>
+                <li>Calendar invites go to communities, Microsoft 365 groups, or individuals, and edits or cancellations update the same invite automatically.</li>
+                <li>Attendees can ask and upvote questions early.</li>
+              </ul>
+              <!-- TODO (Elizabeth): replace with the "before" screen -->
+              <figure class="screen-slot" aria-hidden="true"><span>Screen · before</span></figure>
+            </div>
+
+            <div class="stage" data-reveal>
+              <h3 class="story-label">During</h3>
+              <ul class="stage-points">
+                <li>Attendees watch the live event alongside the feed.</li>
+                <li>Moderators review questions, and presenters answer the most upvoted ones.</li>
+              </ul>
+              <!-- TODO (Elizabeth): replace with the "during" screen -->
+              <figure class="screen-slot" aria-hidden="true"><span>Screen · during</span></figure>
+            </div>
+
+            <div class="stage" data-reveal>
+              <h3 class="story-label">After</h3>
+              <ul class="stage-points">
+                <li>The recording and conversation stay in the community.</li>
+                <li>Unanswered questions can still be answered, so the conversation keeps going.</li>
+              </ul>
+              <!-- TODO (Elizabeth): replace with the "after" screen -->
+              <figure class="screen-slot" aria-hidden="true"><span>Screen · after</span></figure>
+            </div>
+          </section>
+
+          <!-- 4. Q&A: flip an organizer setting and the attendee view changes -->
+          <section class="story-section" aria-labelledby="qa-settings-title">
+            <p class="story-eyebrow">04&nbsp;&nbsp;Q&amp;A</p>
+            <h2 class="story-headline" id="qa-settings-title">Q&amp;A built for every event</h2>
+            <p class="story-body">
+              Moderation, upvotes, and anonymous questions can all be customized
+              throughout the event. Try the organizer settings to see what changes
+              for attendees.
+            </p>
+
+            <figure class="qa-demo" data-reveal data-moderation="on" data-upvotes="on" data-anonymous="on">
+              <div class="qa-demo-settings">
+                <p class="story-label">Organizer settings</p>
+                <button class="qa-switch" type="button" data-setting="moderation" aria-pressed="true">
+                  <span>Moderation</span><i aria-hidden="true"></i>
+                </button>
+                <button class="qa-switch" type="button" data-setting="upvotes" aria-pressed="true">
+                  <span>Upvotes</span><i aria-hidden="true"></i>
+                </button>
+                <button class="qa-switch" type="button" data-setting="anonymous" aria-pressed="true">
+                  <span>Anonymous questions</span><i aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div class="qa-demo-view" aria-live="polite">
+                <p class="story-label">What attendees see</p>
+                <div class="qa-ask">
+                  <span class="qa-ask-field">Ask a question</span>
+                  <span class="qa-ask-anon">☐ Post anonymously</span>
+                </div>
+                <p class="qa-ask-note">Questions appear after a moderator reviews them.</p>
+                <ul class="qa-list">
+                  <li>
+                    <span class="qa-who"><span class="qa-name">Priya S.</span><span class="qa-anon-name">Anonymous</span></span>
+                    <span class="qa-text">Will the session be recorded?</span>
+                    <span class="qa-votes">▲ 24</span>
+                  </li>
+                  <li>
+                    <span class="qa-who"><span class="qa-name">Marcus L.</span><span class="qa-anon-name">Anonymous</span></span>
+                    <span class="qa-text">How do we share feedback after launch?</span>
+                    <span class="qa-votes">▲ 11</span>
+                  </li>
+                </ul>
+              </div>
+            </figure>
+
+            <p class="story-body">
+              <!-- TODO (Elizabeth): add one or two design decisions, e.g. how
+                   anonymous questions work with moderation. -->
+            </p>
+          </section>
+
+          <!-- 5. Mobile: phone screens following before, during, after -->
+          <section class="story-section" aria-labelledby="mobile-title">
+            <p class="story-eyebrow">05&nbsp;&nbsp;Mobile</p>
+            <h2 class="story-headline" id="mobile-title">Ready on phones, too</h2>
+            <p class="story-body">
+              Attendees can find events in their communities, join, and ask or
+              upvote questions from their phones.
+              <!-- TODO (Elizabeth): if relevant, mention the iOS and Android visual
+                   refresh you led. -->
+            </p>
+            <div class="phones" data-reveal aria-hidden="true">
+              <!-- TODO (Elizabeth): replace with phone screens -->
+              <figure class="phone" style="--i: 0"><span>Before</span></figure>
+              <figure class="phone" style="--i: 1"><span>During</span></figure>
+              <figure class="phone" style="--i: 2"><span>After</span></figure>
+            </div>
+          </section>
+
+          <!-- 6. Connecting to Teams -->
+          <section class="story-section" aria-labelledby="teams-title">
+            <p class="story-eyebrow">06&nbsp;&nbsp;Connecting to Teams</p>
+            <h2 class="story-headline" id="teams-title">Where members already are</h2>
+            <p class="story-body">
+              Organizers can create town halls and webinars in Teams and link them
+              to an Engage community, so the event shows up where members already
+              are. This brings Teams features like event page customization and
+              registration to Engage users, and became the starting point for the
+              Events app.
+            </p>
+            <a class="story-link" href="events-app.html">Read more about the Events app →</a>
+          </section>
+
+          <!-- 7. Impact -->
+          <section class="story-section" aria-labelledby="qa-impact-title">
+            <p class="story-eyebrow">07&nbsp;&nbsp;Impact</p>
+            <h2 class="story-headline" id="qa-impact-title">Built to last</h2>
+            <dl class="stats" data-reveal>
+              <div style="--i: 0">
+                <dt>Millions</dt>
+                <dd>of people use it each month</dd>
+              </div>
+              <div style="--i: 1">
+                <dt>2026</dt>
+                <dd>shipped, and became the foundation for the Events app</dd>
+              </div>
+              <div style="--i: 2">
+                <dt>Invites</dt>
+                <dd>calendar invites, one of the most requested features from communities</dd>
+              </div>
+            </dl>
+            <!-- TODO (Elizabeth): add anything else you can share publicly, like
+                 customer quotes or adoption trends. -->
+          </section>
+        </section>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="main.js"></script>
+    <script src="story.js"></script>
+  </body>
+</html>

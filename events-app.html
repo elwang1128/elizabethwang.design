@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Teams Events App — Elizabeth Wang</title>
+    <meta name="description" content="Teams Events App by Elizabeth Wang: one hub in Microsoft Teams for events from across Microsoft." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page-case">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="index.html#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main class="case">
+        <!-- Left: stays put while the work on the right scrolls -->
+        <section class="case-info">
+          <div class="case-top">
+            <h1 class="case-title">Teams<br />Events App</h1>
+            <dl class="case-meta">
+              <div>
+                <dt class="sr-only">Company</dt>
+                <dd class="case-client">Microsoft</dd>
+                <dt class="sr-only">Role</dt>
+                <dd class="mono">Lead product designer</dd>
+              </div>
+              <div class="mono">
+                <dt class="sr-only">Years</dt>
+                <dd>2021 – Present</dd>
+                <dt class="sr-only">Platforms</dt>
+                <dd>Web, mobile, Teams platform</dd>
+              </div>
+            </dl>
+          </div>
+          <p class="case-desc">
+            The Events app brings events from across Microsoft into one hub in
+            Teams. Before, each event type lived in its own tool with fixed
+            features, so organizers couldn’t mix and match. After unifying events
+            in Viva Engage, I proposed bringing that approach to Teams and created
+            the initial vision for the product. I contributed to early discovery
+            and the creation flow, and led design for the event page.
+          </p>
+        </section>
+
+        <!-- Right: the case study. Motion is driven by story.js. -->
+        <section class="case-work story" aria-label="Case study">
+          <!-- Hero reel (story.js): before the event (video), during (still),
+               after (video). Each slides out to the left as the next slides
+               in from the right, and the sequence repeats. -->
+          <figure class="case-shot hero-reel hero-reel--top" data-reel aria-label="The Spring Kickoff event page before, during, and after the event">
+            <div class="hero-slide is-active">
+              <video src="assets/images/events-app-attendee.mp4" muted playsinline preload="auto" aria-label="Before the event: an attendee scrolls the Spring Kickoff event page, with details, Register, and presenters"></video>
+            </div>
+            <div class="hero-slide" data-hold="4500">
+              <img src="assets/images/events-app-during.webp" alt="During the event: the live Spring Kickoff keynote in Teams, with the Q&amp;A panel open beside the stage" />
+            </div>
+            <div class="hero-slide">
+              <video src="assets/images/events-app-post-event.mp4" muted playsinline preload="auto" aria-label="After the event: the event page shows the recording, an event summary, and Open for Q&amp;A"></video>
+            </div>
+          </figure>
+
+          <!-- 1. The problem: a scroll-driven sequence. The stage sticks while the
+               four beats play; at the last beat the five tools merge into one. -->
+          <section class="story-section problem" aria-labelledby="problem-title" data-beats="4">
+            <div class="problem-stage">
+              <p class="story-eyebrow">01&nbsp;&nbsp;The problem</p>
+              <h2 class="story-headline" id="problem-title">Too many ways to run an event</h2>
+
+              <div class="tools" aria-hidden="true">
+                <div class="tool" style="--i: 0">
+                  <span class="tool-circle"><span class="tool-name">Q&amp;A</span></span>
+                  <span class="tool-sub">
+                    <span class="tool-desc">Teams option</span>
+                    <span class="tool-features"><span class="f-qa">Live Q&amp;A</span></span>
+                  </span>
+                </div>
+                <div class="tool" style="--i: 1">
+                  <span class="tool-circle"><span class="tool-name">AMA</span></span>
+                  <span class="tool-sub">
+                    <span class="tool-desc">Feed</span>
+                    <span class="tool-features"><span class="f-qa">Async Q&amp;A</span></span>
+                  </span>
+                </div>
+                <div class="tool" style="--i: 2">
+                  <span class="tool-circle"><span class="tool-name">Live event</span></span>
+                  <span class="tool-sub">
+                    <span class="tool-desc">Teams meeting, smaller scale</span>
+                    <span class="tool-features"><span>Chat</span></span>
+                  </span>
+                </div>
+                <div class="tool" style="--i: 3">
+                  <span class="tool-circle"><span class="tool-name">Webinar</span></span>
+                  <span class="tool-sub">
+                    <span class="tool-desc">Up to 1,000</span>
+                    <span class="tool-features"><span class="f-reg">Registration</span><span>Chat</span><span>Interactive</span></span>
+                  </span>
+                </div>
+                <div class="tool" style="--i: 4">
+                  <span class="tool-circle"><span class="tool-name">Town hall</span></span>
+                  <span class="tool-sub">
+                    <span class="tool-desc">Up to 100,000</span>
+                    <span class="tool-features"><span class="f-reg">Registration</span><span>Large-scale</span><span>Broadcast</span></span>
+                  </span>
+                </div>
+                <!-- What the five become -->
+                <div class="tool-merged">
+                  <span class="tool-name">Events app</span>
+                </div>
+                <ul class="tool-picks">
+                  <li style="--i: 0">+ Live Q&amp;A</li>
+                  <li style="--i: 1">+ Async Q&amp;A</li>
+                  <li style="--i: 2">+ Chat</li>
+                  <li style="--i: 3">+ Registration</li>
+                  <li style="--i: 4">+ Interactive</li>
+                  <li style="--i: 5">+ Large-scale</li>
+                  <li style="--i: 6">+ Broadcast</li>
+                </ul>
+              </div>
+
+              <ol class="beats">
+                <li>Q&amp;As, AMAs, live events, webinars, and town halls each lived in a different tool.</li>
+                <li>Each tool had its own setup and its own set of features.</li>
+                <li>
+                  Organizers couldn’t mix and match. If you wanted registration and
+                  moderated Q&amp;A, you had to find the one tool that had both, if it
+                  existed. It would never cover the before, during, or after event experience fully. 
+                </li>
+                <li>
+                  The Events app replaces all of them. Organizers choose the features
+                  they need, not a type.
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <!-- 2. The solution: the event path. Circles appear left to right and
+               the arrows draw in when the diagram scrolls into view. -->
+          <section class="story-section" aria-labelledby="solution-title">
+            <p class="story-eyebrow">02&nbsp;&nbsp;The solution</p>
+            <h2 class="story-headline" id="solution-title">One path for every event</h2>
+            <p class="story-body">
+              Whether it’s a 50-person training or a company-wide town hall, every
+              event should follow the same path. This made the experience easier to
+              learn for organizers and gave attendees one place to go, no matter
+              the event.
+            </p>
+
+            <figure class="flow-wrap" data-reveal>
+              <div class="flow" role="img" aria-label="Event path: the creation form creates a draft event page; publishing it starts the event lifecycle of before, during and after.">
+                <span class="flow-start" style="--i: 0">Creation form</span>
+                <span class="flow-arrow flow-arrow--long" style="--i: 1"><span>Event page is created</span></span>
+                <span class="flow-node flow-node--draft" style="--i: 2">Draft</span>
+                <span class="flow-arrow flow-arrow--long flow-arrow--tick" style="--i: 3"><span>Event is published</span></span>
+                <span class="flow-bracket" style="--i: 4"><span>Event lifecycle™</span></span>
+                <span class="flow-node" style="--i: 4">Before</span>
+                <span class="flow-arrow" style="--i: 5"></span>
+                <span class="flow-node" style="--i: 6">During</span>
+                <span class="flow-arrow" style="--i: 7"></span>
+                <span class="flow-node" style="--i: 8">After</span>
+              </div>
+            </figure>
+
+            <dl class="flow-steps">
+              <div>
+                <dt>Creation form</dt>
+                <dd>Organizers set up the event and turn on the features they need.</dd>
+              </div>
+              <div>
+                <dt>Draft</dt>
+                <dd>A private event page is created so organizers can review and customize it before anyone sees it.</dd>
+              </div>
+              <div>
+                <dt>Before</dt>
+                <dd>Once published, attendees can register, read about the event, and submit questions.</dd>
+              </div>
+              <div>
+                <dt>During</dt>
+                <dd>The same page becomes the place to join and follow along live.</dd>
+              </div>
+              <div>
+                <dt>After</dt>
+                <dd>The recording, recap, and Q&amp;A answers stay on the page for anyone who missed it.</dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- 3. The event page -->
+          <section class="story-section" aria-labelledby="page-title">
+            <p class="story-eyebrow">03&nbsp;&nbsp;The event page</p>
+            <h2 class="story-headline" id="page-title">One page for the whole event</h2>
+            <p class="story-body">
+              I led design for the event page, the center of every event. It’s
+              where attendees find details, register, and ask questions, and where
+              organizers manage everything behind the scenes.
+            </p>
+
+            <!-- Two views of the event page, switched by the tabs below
+                 (story.js). The organizer panel is a placeholder for now. -->
+            <div class="role-panels">
+              <div id="panel-attendees" role="tabpanel" aria-labelledby="tab-attendees">
+              <!-- Attendee reel (story.js): the same three moments, with callouts
+                   that draw out to name each part. --x/--y place the dot on the
+                   frame shown at data-at seconds; --len is the line length. -->
+              <figure class="case-shot hero-reel" data-reel aria-label="What attendees see before, during, and after the event">
+                <div class="hero-slide is-active">
+                  <div class="reel-media">
+                    <video src="assets/images/events-app-attendee.mp4" muted playsinline preload="metadata" aria-label="Before the event: the event page with event details, registration, presenters, and Q&amp;A"></video>
+                  <span class="callout callout--left" data-at="1.0" style="--x: 70.7%; --y: 30.6%; --len: 10"><span class="callout-line"></span><span class="callout-label">Event details</span></span>
+                  <span class="callout callout--left" data-at="1.0" style="--x: 72.3%; --y: 47.4%; --len: 10"><span class="callout-line"></span><span class="callout-label">Registration</span></span>
+                  <span class="callout callout--right" data-at="2.0" style="--x: 69.1%; --y: 70.2%; --len: 7"><span class="callout-line"></span><span class="callout-label">Presenters</span></span>
+                  <span class="callout callout--right" data-at="3.0" style="--x: 69.1%; --y: 38.9%; --len: 7"><span class="callout-line"></span><span class="callout-label">Q&amp;A</span></span>
+                  </div>
+                </div>
+                <div class="hero-slide">
+                  <div class="reel-media">
+                    <img src="assets/images/events-app-during.webp" alt="During the event: the live keynote in Teams, with the Q&amp;A panel beside the stage" loading="lazy" />
+                  <span class="callout callout--right" style="--x: 51.5%; --y: 46.2%; --len: 12"><span class="callout-line"></span><span class="callout-label">The live event</span></span>
+                  <span class="callout callout--left" style="--x: 76.1%; --y: 23.8%; --len: 9"><span class="callout-line"></span><span class="callout-label">Live Q&amp;A</span></span>
+                  </div>
+                </div>
+                <div class="hero-slide">
+                  <div class="reel-media">
+                    <video src="assets/images/events-app-post-event.mp4" muted playsinline preload="metadata" aria-label="After the event: the event page with the recording and a recap"></video>
+                  <span class="callout callout--right" data-at="1.0" style="--x: 40%; --y: 47.9%; --len: 14"><span class="callout-line"></span><span class="callout-label">Recording</span></span>
+                  <span class="callout callout--right" data-at="3.0" style="--x: 66.8%; --y: 29.8%; --len: 8"><span class="callout-line"></span><span class="callout-label">Recap</span></span>
+                  </div>
+                </div>
+              </figure>
+              </div>
+              <div id="panel-organizers" role="tabpanel" aria-labelledby="tab-organizers" hidden>
+                <!-- Organizer reel (story.js). data-step orders stops that share
+                     a time: at 1s the Branding callout comes first, then the
+                     theme modal (.reel-pop) opens with its own callouts and
+                     closes again, then attendee tracking. -->
+                <figure class="case-shot hero-reel" data-reel aria-label="What organizers see before, during, and after the event">
+                  <div class="hero-slide is-active">
+                    <div class="reel-media">
+                      <video src="assets/images/events-app-organizer.mp4" muted playsinline preload="metadata" aria-label="Before the event: the organizer view of the event page, with branding, attendee tracking, presenters, and Q&amp;A moderation"></video>
+                    <span class="callout callout--left" data-at="1.0" data-step="1" style="--x: 65.7%; --y: 33.4%; --len: 12"><span class="callout-line"></span><span class="callout-label">Branding</span></span>
+                    <div class="reel-pop" data-at="1.0" data-step="2">
+                        <div class="reel-pop-card">
+                          <img src="assets/images/events-app-theme.webp" alt="The Cover image dialog: upload a cover image and logo, and pick a theme color" loading="lazy" />
+                        <span class="callout callout--left" style="--x: 70.4%; --y: 46.2%; --len: 12"><span class="callout-line"></span><span class="callout-label">Cover image</span></span>
+                        <span class="callout callout--left" style="--x: 10.4%; --y: 65.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Logo</span></span>
+                        <span class="callout callout--right" style="--x: 89.6%; --y: 62.2%; --len: 5"><span class="callout-line"></span><span class="callout-label">Theme color</span></span>
+                        </div>
+                      </div>
+                    <span class="callout callout--left" data-at="1.0" data-step="3" style="--x: 70.6%; --y: 66.6%; --len: 10"><span class="callout-line"></span><span class="callout-label">Attendee tracking</span></span>
+                    <span class="callout callout--right" data-at="2.0" style="--x: 67.2%; --y: 65.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Presenter management</span></span>
+                    <span class="callout callout--right" data-at="3.0" style="--x: 29.6%; --y: 35.7%; --len: 8"><span class="callout-line"></span><span class="callout-label">Q&amp;A moderation</span></span>
+                    <span class="callout callout--right" data-at="3.0" style="--x: 63.5%; --y: 35.5%; --len: 8"><span class="callout-line"></span><span class="callout-label">Copilot is on</span></span>
+                    <span class="callout callout--right" data-at="5.0" style="--x: 23.6%; --y: 68.8%; --len: 8"><span class="callout-line"></span><span class="callout-label">Copilot answers questions</span></span>
+                    </div>
+                  </div>
+                  <div class="hero-slide">
+                    <div class="reel-media">
+                      <video src="assets/images/events-app-people.mp4" muted playsinline preload="metadata" aria-label="People and emails: email notifications, organizers, presenters, and the attendee list with registration status"></video>
+                    <span class="callout callout--right" data-at="1.0" style="--x: 25.7%; --y: 32.6%; --len: 8"><span class="callout-line"></span><span class="callout-label">Attendee emails</span></span>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 82.2%; --y: 66.2%; --len: 10"><span class="callout-line"></span><span class="callout-label">Co-organizers</span></span>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 84.2%; --y: 85.1%; --len: 10"><span class="callout-line"></span><span class="callout-label">Presenter invites</span></span>
+                    <span class="callout callout--right" data-at="4.0" style="--x: 54.7%; --y: 27.4%; --len: 8"><span class="callout-line"></span><span class="callout-label">Registration tracking</span></span>
+                    </div>
+                  </div>
+                  <div class="hero-slide">
+                    <div class="reel-media">
+                      <img src="assets/images/events-app-during-organizer.webp" alt="During the event: the organizer's live view, with controls for what's on screen and Q&amp;A moderation tabs" loading="lazy" />
+                    <span class="callout callout--right" style="--x: 15.2%; --y: 15.2%; --len: 10"><span class="callout-line"></span><span class="callout-label">Stage controls</span></span>
+                    <span class="callout callout--left" style="--x: 77.3%; --y: 21.6%; --len: 10"><span class="callout-line"></span><span class="callout-label">Q&amp;A moderation</span></span>
+                    </div>
+                  </div>
+                  <div class="hero-slide">
+                    <div class="reel-media">
+                      <video src="assets/images/events-app-post-event-organizer.mp4" muted playsinline preload="metadata" aria-label="After the event: the organizer view of the event page, with the recording, a recap, and Q&amp;A still open"></video>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 40%; --y: 52.6%; --len: 12"><span class="callout-line"></span><span class="callout-label">Recording</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 72.3%; --y: 52.1%; --len: 10"><span class="callout-line"></span><span class="callout-label">Q&amp;A stays open</span></span>
+                    <span class="callout callout--right" data-at="3.0" style="--x: 66.8%; --y: 31.9%; --len: 8"><span class="callout-line"></span><span class="callout-label">Recap</span></span>
+                    </div>
+                  </div>
+                </figure>
+              </div>
+            </div>
+
+            <div class="story-columns role-tabs" role="tablist" aria-label="Event page views">
+              <button class="role-tab" type="button" role="tab" id="tab-attendees" aria-selected="true" aria-controls="panel-attendees">
+                <span class="story-label">For attendees</span>
+                <span class="role-tab-text">Event details, presenters, registration, Q&amp;A, the live event, and the recording and recap afterward.</span>
+              </button>
+              <button class="role-tab" type="button" role="tab" id="tab-organizers" aria-selected="false" aria-controls="panel-organizers" tabindex="-1">
+                <span class="story-label">For organizers</span>
+                <span class="role-tab-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation.</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 4. Draft mode and branding: a looping draft → preview → branding →
+               publish sequence on a simplified event page -->
+          <section class="story-section" aria-labelledby="draft-title">
+            <p class="story-eyebrow">04&nbsp;&nbsp;Draft mode and branding</p>
+            <h2 class="story-headline" id="draft-title">See it before your audience does</h2>
+            <p class="story-body">
+              When an event is created, it starts as a draft. Organizers can
+              preview exactly what attendees will see, then add their own branding
+              before publishing.
+            </p>
+
+            <!-- Draft → preview → branding → publish (story.js): real screens
+                 with callouts. Dialogs (.reel-pop) open after the callout on
+                 the button that opens them (data-step orders them). -->
+            <ol class="draft-steps" data-reel-steps="draft-reel" aria-label="Steps: choose one to see it">
+              <li class="is-current"><button type="button" aria-current="step">Draft</button></li>
+              <li><button type="button">Preview</button></li>
+              <li><button type="button">Branding</button></li>
+              <li><button type="button">Publish &amp; share</button></li>
+            </ol>
+            <figure class="case-shot hero-reel hero-reel--inplace" id="draft-reel" data-reel data-slide-ms="350" aria-label="An event page in draft, in attendee preview, being branded, then published and shared">
+              <div class="hero-slide is-active">
+                <div class="reel-media">
+                  <img src="assets/images/events-app-draft.webp" alt="The event page in draft mode, with a banner saying only organizers and presenters can see it, and a Publish event button" loading="lazy" />
+                  <span class="callout callout--right" style="--x: 57.7%; --y: 19.9%; --len: 4"><span class="callout-line"></span><span class="callout-label">Draft mode</span></span>
+                  <span class="callout callout--left" style="--x: 90.5%; --y: 31.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Preview toggle</span></span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <div class="reel-media">
+                  <img src="assets/images/events-app-preview.webp" alt="Preview on: the page shows what attendees will see, with a note at the top saying it is a preview" loading="lazy" />
+                  <span class="callout callout--left" style="--x: 90.5%; --y: 31.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Preview on</span></span>
+                  <span class="callout callout--left" style="--x: 34%; --y: 37.3%; --len: 8"><span class="callout-line"></span><span class="callout-label">What attendees see</span></span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <div class="reel-media">
+                  <img src="assets/images/events-app-draft.webp" alt="The draft event page, with an edit button on the cover image" loading="lazy" />
+                  <span class="callout callout--left" data-step="1" style="--x: 65.7%; --y: 45.6%; --len: 12"><span class="callout-line"></span><span class="callout-label">Branding</span></span>
+                  <div class="reel-pop" data-step="2">
+                    <div class="reel-pop-card">
+                      <img src="assets/images/events-app-theme.webp" alt="The Cover image dialog: upload a cover image and logo, and pick a theme color" loading="lazy" />
+                      <span class="callout callout--left" style="--x: 70.4%; --y: 46.2%; --len: 12"><span class="callout-line"></span><span class="callout-label">Cover image</span></span>
+                      <span class="callout callout--left" style="--x: 10.4%; --y: 65.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Logo</span></span>
+                      <span class="callout callout--right" style="--x: 89.6%; --y: 62.2%; --len: 5"><span class="callout-line"></span><span class="callout-label">Theme color</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <div class="reel-media">
+                  <img src="assets/images/events-app-draft.webp" alt="The draft event page with the Publish event button" loading="lazy" />
+                  <span class="callout callout--left" data-step="1" style="--x: 82%; --y: 21.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Publish</span></span>
+                  <div class="reel-pop" data-step="2">
+                    <div class="reel-pop-card reel-pop-card--wide">
+                      <img src="assets/images/events-app-share.png" alt="Help attendees discover this event: a preview of the event card, toggles to list it on Discover and allow social sharing, a Share button, and buttons to copy the event link or embed code" loading="lazy" />
+                      <span class="callout callout--left" style="--x: 4.8%; --y: 51.4%; --len: 3"><span class="callout-line"></span><span class="callout-label">Attendee card</span></span>
+                      <span class="callout callout--right" style="--x: 94.2%; --y: 26.0%; --len: 3"><span class="callout-line"></span><span class="callout-label">Discoverable</span></span>
+                      <span class="callout callout--right" style="--x: 95.2%; --y: 68.7%; --len: 3"><span class="callout-line"></span><span class="callout-label">Share link</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figure>
+
+            <p class="story-body">
+              Organizers can add a cover image and brand colors, and the page
+              updates as they go. This gave organizers confidence before sharing
+              their event with thousands of people.
+              <!-- TODO (Elizabeth): add any key decisions, e.g. why preview lives in
+                   the page instead of a separate screen. -->
+            </p>
+          </section>
+
+          <!-- 5. Q&A across the event: three stages that reveal in turn, each
+               with the Q&A post as it looks at that stage -->
+          <section class="story-section" aria-labelledby="qa-title">
+            <p class="story-eyebrow">05&nbsp;&nbsp;Q&amp;A across the event</p>
+            <h2 class="story-headline" id="qa-title">Q&amp;A that doesn’t end when the event does</h2>
+            <p class="story-body">
+              Before, Q&amp;A only existed during the live event. Questions that
+              didn’t get answered were lost. I designed Q&amp;A to carry through the
+              whole event.
+            </p>
+
+            <ol class="qa-stages">
+              <li class="qa-stage" data-reveal>
+                <div class="qa-text">
+                  <h3 class="story-label">Before</h3>
+                  <p>Attendees ask questions early, and presenters and organizers can answer them ahead of time.</p>
+                </div>
+                <img class="qa-shot" src="assets/images/events-app-qa-before.png" alt="A question from Mona Kane about making products easier to use, with a best answer from presenter Daniel Folk" loading="lazy" />
+              </li>
+              <li class="qa-stage" data-reveal>
+                <div class="qa-text">
+                  <h3 class="story-label">During</h3>
+                  <p>
+                    During the event, people ask and expect answers in the moment.
+                    Copilot posts questions on its own and answers them as the
+                    event goes, so the feed keeps up with what’s happening on stage.
+                  </p>
+                </div>
+                <img class="qa-shot" src="assets/images/events-app-qa-during.png" alt="A question posted by Copilot about sharing customer feedback with product teams, with Copilot's best answer drawn from what Maya and Daniel said" loading="lazy" />
+              </li>
+              <li class="qa-stage" data-reveal>
+                <div class="qa-text">
+                  <h3 class="story-label">After</h3>
+                  <p>
+                    Once the event ends, Copilot answers open questions using the
+                    event transcript, including questions asked after the event is
+                    over.
+                  </p>
+                </div>
+                <img class="qa-shot" src="assets/images/events-app-qa-after.png" alt="A question from Mona Kane about early access for retail teams, with Copilot's best answer from the event transcript" loading="lazy" />
+              </li>
+            </ol>
+          </section>
+
+          <!-- 6. Impact -->
+          <section class="story-section" aria-labelledby="impact-title">
+            <p class="story-eyebrow">06&nbsp;&nbsp;Impact</p>
+            <h2 class="story-headline" id="impact-title">Off to a strong start</h2>
+            <dl class="stats" data-reveal>
+              <div style="--i: 0">
+                <dt>10×</dt>
+                <dd>growth in two months after launch</dd>
+              </div>
+              <div style="--i: 1">
+                <dt>Higher</dt>
+                <dd>satisfaction than the previous webinar experience</dd>
+              </div>
+              <div style="--i: 2">
+                <dt>Nearly half</dt>
+                <dd>of target organizations adopted within two months</dd>
+              </div>
+            </dl>
+            <p class="story-body">
+              Most organizers using the app were first-time event hosts, which
+              showed the app was bringing new people into hosting events, not just
+              moving existing ones over.
+            </p>
+          </section>
+
+          <!-- 7. What's next -->
+          <section class="story-section" aria-labelledby="next-title">
+            <p class="story-eyebrow">07&nbsp;&nbsp;What’s next</p>
+            <h2 class="story-headline" id="next-title">Still growing</h2>
+            <p class="story-body">
+              The Events app is still growing. I created the initial mobile designs, bringing the event page to phones so attendees can find, register for, and join events from anywhere. Engage events are also moving fully onto the same platform, and AI is expanding across planning, running, and recapping events, with recap and Q&A answers heading to public preview at Microsoft Ignite.
+            </p>
+
+            <!-- Mobile explorations: labeled so they read as early visuals -->
+            <figure class="case-explore">
+              <figcaption class="case-explore-tag">Initial explorations · visuals only</figcaption>
+              <img src="assets/images/events-app-mobile.webp" alt="Three early mobile screens: Discover with events happening now and upcoming, Manage with drafts, published, and past events, and an event page with Register and Q&amp;A" loading="lazy" />
+            </figure>
+          </section>
+        </section>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="main.js"></script>
+    <script src="story.js"></script>
+  </body>
+</html>
