@@ -507,3 +507,69 @@
     });
   });
 })();
+
+// Homepage carousel: a mouse wheel (up/down) scrolls the projects sideways.
+// Trackpad side swipes are left alone (they already scroll sideways), and
+// at either end the wheel goes back to scrolling the page. The movement
+// eases toward where the wheel asked, so notched mouse wheels glide.
+(function () {
+  const carousel = document.querySelector(".carousel");
+  if (!carousel) return;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let target = null;
+  let frame = null;
+  let settle = null;
+
+  function release() {
+    // Wait for the glide to land before handing back to snapping
+    if (frame) {
+      settle = setTimeout(release, 100);
+      return;
+    }
+    carousel.style.scrollSnapType = "";
+    carousel.style.scrollBehavior = "";
+    target = null;
+  }
+
+  function glide() {
+    frame = null;
+    const diff = target - carousel.scrollLeft;
+    // The browser rounds scroll positions, so finish once within 2px
+    // (smaller steps would round away and never arrive)
+    if (Math.abs(diff) < 2) {
+      carousel.scrollLeft = target;
+      return;
+    }
+    carousel.scrollLeft += Math.sign(diff) * Math.max(1, Math.abs(diff) * 0.2);
+    frame = requestAnimationFrame(glide);
+  }
+
+  carousel.addEventListener(
+    "wheel",
+    (e) => {
+      if (e.ctrlKey) return; // pinch zoom
+      if (getComputedStyle(carousel).flexDirection === "column") return; // stacked on phones
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return; // already sideways
+      const max = carousel.scrollWidth - carousel.clientWidth;
+      if (max <= 0) return;
+      // Lines or pages (some mice) to pixels
+      const unit = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? carousel.clientWidth : 1;
+      const delta = e.deltaY * unit;
+      const from = target == null ? carousel.scrollLeft : target;
+      // At an end: let the page scroll instead
+      if ((delta < 0 && from <= 0) || (delta > 0 && from >= max - 1)) return;
+      e.preventDefault();
+
+      // Snapping and smooth-scroll would fight the glide, so pause them,
+      // then let snapping settle the cards once the wheel stops
+      carousel.style.scrollSnapType = "none";
+      carousel.style.scrollBehavior = "auto";
+      target = Math.max(0, Math.min(max, from + delta));
+      if (reduceMotion) carousel.scrollLeft = target;
+      else if (!frame) frame = requestAnimationFrame(glide);
+      clearTimeout(settle);
+      settle = setTimeout(release, 250);
+    },
+    { passive: false }
+  );
+})();
