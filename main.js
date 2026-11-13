@@ -472,6 +472,7 @@
   document.querySelectorAll("a[data-hover-video]").forEach((link) => {
     const video = document.createElement("video");
     video.className = "hover-video";
+    video.disablePictureInPicture = true;
     video.muted = true;
     video.loop = true;
     video.playsInline = true;

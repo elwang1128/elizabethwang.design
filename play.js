@@ -84,6 +84,7 @@
     if (isVideo) {
       media = document.createElement("video");
       media.muted = true;
+      media.disablePictureInPicture = true;
       media.loop = true;
       media.autoplay = true;
       media.playsInline = true;
