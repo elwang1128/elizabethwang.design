@@ -451,6 +451,19 @@
   });
 })();
 
+// Under construction tile (project 02): a slow, faint silk animation that
+// sits just above the grey tile (silk.js subtle mode). No ripples.
+(function () {
+  if (!window.Silk) return;
+  document.querySelectorAll('[data-silk="subtle"]').forEach((tile) => {
+    const canvas = document.createElement("canvas");
+    canvas.className = "cover silk-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    tile.insertBefore(canvas, tile.firstChild);
+    if (!Silk.create(canvas, { subtle: true })) canvas.remove();
+  });
+})();
+
 // Hover video: links with data-hover-video swap the cursor for a small looping
 // video that follows the pointer (about page: "pet fish" → the fish).
 // Mouse/trackpad only; the video starts downloading once the page has loaded.

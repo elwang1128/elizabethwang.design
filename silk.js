@@ -3,6 +3,8 @@
 // down them, like light through moving water, matching the Play image.
 //
 //   const silk = Silk.create(canvas);  // null if WebGL isn't available
+//   Silk.create(canvas, { subtle: true }) // a slow, faint version that sits
+//                                         // close to the tile color behind it
 //
 // It loops seamlessly every LOOP_SECONDS (the noise travels in a circle, so
 // the last frame meets the first), pauses while off screen, and holds still
@@ -23,6 +25,8 @@
     precision highp float;
     uniform float uPhase;   // 0..2π over one loop
     uniform float uAspect;
+    uniform float uSubtle;  // 0 = full look, 1 = faint and close to uBg
+    uniform vec3 uBg;       // the tile color the subtle version blends into
     varying vec2 vUv;
 
     float hash(vec2 p) {
@@ -108,6 +112,11 @@
       color *= 1.0 - dot(c, c) * 0.35;
       color += (hash(vUv * 900.0 + uPhase) - 0.5) * 0.025;
 
+      // Subtle: almost no light streaks, and only a hint of the folds over
+      // the tile color
+      vec3 subtle = mix(uBg, vec3(base) * vec3(1.0, 0.985, 0.96) + glint * 0.12, 0.2);
+      color = mix(color, subtle, uSubtle);
+
       gl_FragColor = vec4(color, 1.0);
     }`;
 
@@ -119,7 +128,9 @@
     return s;
   }
 
-  function create(canvas) {
+  function create(canvas, options) {
+    const subtle = !!(options && options.subtle);
+    const loopSeconds = subtle ? 30 : LOOP_SECONDS;
     // preserveDrawingBuffer lets the ripple read each frame as a texture
     const gl = canvas.getContext("webgl", { antialias: false, preserveDrawingBuffer: true });
     if (!gl) return null;
@@ -142,6 +153,17 @@
     gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
     const uPhase = gl.getUniformLocation(program, "uPhase");
     const uAspect = gl.getUniformLocation(program, "uAspect");
+    const uSubtle = gl.getUniformLocation(program, "uSubtle");
+    const uBg = gl.getUniformLocation(program, "uBg");
+    gl.uniform1f(uSubtle, subtle ? 1 : 0);
+
+    // The subtle version takes its tile color from the page, and follows
+    // the theme (light or dark) when it changes
+    function readBg() {
+      const m = getComputedStyle(canvas.parentElement).backgroundColor.match(/[\d.]+/g);
+      if (!m) return;
+      gl.uniform3f(uBg, m[0] / 255, m[1] / 255, m[2] / 255);
+    }
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let visible = true;
@@ -160,7 +182,7 @@
     }
 
     function draw(now) {
-      const phase = reduceMotion ? 0.8 : (((now - start) / 1000) % LOOP_SECONDS) / LOOP_SECONDS * Math.PI * 2;
+      const phase = reduceMotion ? 0.8 : (((now - start) / 1000) % loopSeconds) / loopSeconds * Math.PI * 2;
       gl.uniform1f(uPhase, phase);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
@@ -181,6 +203,16 @@
       resize();
       draw(performance.now());
     });
+    if (subtle) {
+      readBg();
+      new MutationObserver(() => {
+        // Wait for the theme's color transition to finish
+        setTimeout(() => {
+          readBg();
+          draw(performance.now());
+        }, 450);
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    }
     resize();
     draw(performance.now());
 

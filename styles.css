@@ -451,6 +451,7 @@ body:has(.nav-dropdown.is-open) .toolbox {
    re-export with different proportions still fits with no gaps. Keeps the
    standard rounded frame and shadow. */
 .project-image .inset.inset--motion {
+  width: calc(460 / 645 * 100%); /* a little smaller than the screenshot slot, so it sits with room around it */
   height: auto;
 }
 
@@ -3412,4 +3413,30 @@ html.is-entered body {
   font-family: var(--font-mono);
   font-size: 11px;
   text-transform: uppercase;
+}
+
+/* Under construction (Teams Q&A + Engage Events): greyed out in the
+   Projects menu and not clickable */
+.menu-soon {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* The project tile: on touch screens there is no cursor label, so a small
+   tag says it instead */
+.project-soon {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+@media (hover: hover) {
+  .project-soon {
+    display: none;
+  }
 }
