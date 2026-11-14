@@ -782,6 +782,22 @@ body:has(.nav-dropdown.is-open) .toolbox {
 
 .mobile-menu .nav-item {
   flex: none;
+  position: relative;
+}
+
+/* The whole row is the tap target: an invisible layer over the full width,
+   from halfway into the gap above to halfway into the gap below */
+.mobile-menu .nav-item > a::after,
+.mobile-menu .nav-item > .copy-email::after {
+  content: "";
+  position: absolute;
+  inset: -10px 0;
+}
+
+/* Links are positioned for their letter roll; unset it here so the layer
+   above stretches over the row, not just the word */
+.mobile-menu .nav-item > a {
+  position: static;
 }
 
 /* ---------- Creative toolbox (homepage; desktop with a mouse only) ----------
