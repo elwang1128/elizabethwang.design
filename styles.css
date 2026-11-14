@@ -3442,3 +3442,34 @@ html.is-entered body {
     display: none;
   }
 }
+
+/* Attendee / organizer tabs on narrow screens: the two tabs sit side by side
+   directly above the reel, like a switch, and the selected view's
+   description moves under the reel (.role-panel-text). On wider screens the
+   descriptions stay inside the tabs below the reel. */
+.role-panel-text {
+  display: none;
+}
+
+@container (max-width: 600px) {
+  .story-columns.role-tabs {
+    order: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: -8px;
+  }
+
+  .role-panels {
+    order: 2;
+  }
+
+  .role-tab-text {
+    display: none;
+  }
+
+  .role-panel-text {
+    display: block;
+    margin: 16px 0 0;
+    font-size: var(--text-md);
+  }
+}
