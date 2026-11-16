@@ -1676,8 +1676,8 @@ body[data-tool] .project-cursor {
 /* ----- 02 The solution: the event path diagram ----- */
 .flow-wrap {
   margin: 16px 0 0;
-  padding: 72px 24px 48px;
-  background: var(--tile-bg);
+  padding: 56px 0 24px; /* on the page itself, no grey tile; room above for the bracket label */
+  background: none;
   transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
 }
 
@@ -3761,10 +3761,10 @@ html.is-entered body {
    across to show it's one continuous event. */
 .gaps {
   margin: 0;
-  padding: 24px;
+  padding: 0; /* on the page itself, no grey tile */
   display: grid;
   gap: 12px;
-  background: var(--tile-bg);
+  background: none;
   transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
 }
 
@@ -3815,7 +3815,7 @@ html.is-entered body {
 }
 
 .gap-cell--on {
-  background: var(--color-bg);
+  background: var(--tile-bg); /* filled cards read against the page now the tile is gone */
 }
 
 .gap-cell--missing {
@@ -4029,8 +4029,8 @@ html:not(.story-js) .gaps-to {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   max-width: none;
-  padding: 32px 15%;
-  background: var(--tile-bg);
+  padding: 0 15%; /* on the page itself, no grey tile */
+  background: none;
   transition: background-color var(--theme-ease);
 }
 
@@ -4141,4 +4141,74 @@ html:not(.story-js) .gaps-track {
     max-width: none;
     white-space: nowrap;
   }
+}
+
+/* Events App, What's next: early mobile screens in an endless carousel under
+   the "visuals only" pill. The track holds the screens twice and slides by
+   half its width, so the loop is seamless; it pauses on hover and holds
+   still for reduced motion. The edges fade into the tile. */
+.phone-marquee {
+  overflow: hidden;
+  margin: 0 -24px;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.phone-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: phone-marquee 48s linear infinite;
+}
+
+.case-explore .phone-track img {
+  display: block;
+  width: 150px;
+  max-width: none;
+  height: auto;
+  margin: 0;
+}
+
+@keyframes phone-marquee {
+  to {
+    transform: translateX(calc(-50% - 10px)); /* one set plus its gap */
+  }
+}
+
+@media (hover: hover) {
+  .phone-marquee:hover .phone-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-track {
+    animation: none;
+  }
+}
+
+@container (max-width: 600px) {
+  .case-explore .phone-track img {
+    width: 120px;
+  }
+}
+
+/* The mobile carousel sits on the page itself, without the grey tile */
+.case-explore:has(.phone-marquee) {
+  padding: 48px 0 0;
+  background: none;
+}
+
+.case-explore:has(.phone-marquee) .case-explore-tag {
+  top: 0;
+  left: 0;
+}
+
+.case-explore:has(.phone-marquee) .phone-marquee {
+  margin: 0;
+}
+
+/* Section 01→02 cards: tags start collapsed (story.js grows them) */
+.gaps--scroll .gap-cell small {
+  overflow: hidden;
 }

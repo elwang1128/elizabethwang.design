@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261117l" />
+    <link rel="stylesheet" href="styles.css?v=20261117r" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -540,7 +540,28 @@
             <!-- Mobile explorations: labeled so they read as early visuals -->
             <figure class="case-explore" data-reveal>
               <figcaption class="case-explore-tag">Initial explorations · visuals only</figcaption>
-              <img src="assets/images/events-app-mobile.webp" alt="Three early mobile screens: Discover with events happening now and upcoming, Manage with drafts, published, and past events, and an event page with Register and Q&amp;A" loading="lazy" />
+              <!-- Endless carousel (CSS): the set of screens is drawn twice and the
+                   track slides by exactly one set, so it loops with no seam -->
+              <div class="phone-marquee" role="region" aria-label="Early mobile screens">
+                <div class="phone-track">
+                  <img src="assets/images/events-app-mobile-1.png" alt="Discover: events happening now and upcoming in your org" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-2.png" alt="Manage: drafts, published, and past events" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-3.png" alt="An event page with Register, What to expect, presenters, and Q&amp;A" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-4.png" alt="What to expect: time, place, who can attend, and moderation" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-5.png" alt="Presenters with their roles and bios" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-6.png" alt="A draft event page with Publish event, Overview, and People &amp; emails" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-7.png" alt="Branding: cover image, logo, and theme color" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-8.png" alt="New event form: details, hosting, Teams meeting, roles, and who can attend" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-1.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-2.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-3.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-4.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-5.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-6.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-7.png" alt="" aria-hidden="true" loading="lazy" />
+                  <img src="assets/images/events-app-mobile-8.png" alt="" aria-hidden="true" loading="lazy" />
+                </div>
+              </div>
             </figure>
           </section>
         </section>
@@ -548,6 +569,6 @@
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
     <script src="main.js?v=20261116z"></script>
-    <script src="story.js?v=20261117d"></script>
+    <script src="story.js?v=20261117e"></script>
   </body>
 </html>

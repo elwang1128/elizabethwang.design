@@ -765,7 +765,13 @@
     const l = ease(span(q, 0.44, 0.55));
     from.forEach((f) => (f.style.opacity = 1 - l));
     to.style.opacity = l;
-    tags.forEach((t) => (t.style.opacity = l));
+    // The "from …" tags grow in from nothing, so each card's text sits centered
+    // until its tag appears, then eases up to make room for it
+    tags.forEach((t) => {
+      t.style.opacity = l;
+      t.style.maxHeight = (l * 16).toFixed(2) + "px";
+      t.style.marginTop = ((l - 1) * 4).toFixed(2) + "px";
+    });
     const t = ease(span(q, 0.52, 0.66));
     thread.style.opacity = t > 0 ? 1 : 0;
     thread.style.transform = `scaleX(${t})`;
