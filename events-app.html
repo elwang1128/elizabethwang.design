@@ -272,7 +272,7 @@
             <!-- Two views of the event page, switched by the tabs below
                  (story.js). The organizer panel is a placeholder for now. -->
             <div class="role-panels">
-              <div id="panel-attendees" role="tabpanel" aria-labelledby="tab-attendees" hidden>
+              <div id="panel-attendees" role="tabpanel" aria-labelledby="tab-attendees">
               <!-- Attendee reel (story.js): the same three moments, with callouts
                    that draw out to name each part. --x/--y place the dot on the
                    frame shown at data-at seconds; --len is the line length. -->
@@ -311,14 +311,14 @@
               </figure>
               <p class="role-panel-text">Event details, registration, recommended events, presenters, Q&amp;A answered by Copilot, the live event, and the recording and recap afterward.</p>
               </div>
-              <div id="panel-organizers" role="tabpanel" aria-labelledby="tab-organizers">
+              <div id="panel-organizers" role="tabpanel" aria-labelledby="tab-organizers" hidden>
                 <!-- Organizer reel (story.js). data-step orders stops that share
                      a time: at 1s the Branding callout comes first, then the
                      theme modal (.reel-pop) opens with its own callouts and
                      closes again, then attendee tracking. -->
                 <ol class="draft-steps reel-steps" data-reel-steps="organizer-reel" aria-label="Moments: choose one to see it">
-                  <li class="is-current"><button type="button" aria-current="step">Set up</button></li>
-                  <li><button type="button">Invites</button></li>
+                  <li class="is-current"><button type="button" aria-current="step">Before: Event page</button></li>
+                  <li><button type="button">Before: People</button></li>
                   <li><button type="button">During</button></li>
                   <li><button type="button">After</button></li>
                 </ol>
@@ -374,13 +374,13 @@
             </div>
 
             <div class="story-columns role-tabs" role="tablist" aria-label="Event page views">
-              <button class="role-tab" type="button" role="tab" id="tab-organizers" aria-selected="true" aria-controls="panel-organizers">
-                <span class="story-label">For organizers</span>
-                <span class="role-tab-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation, with Copilot ready to answer.</span>
-              </button>
-              <button class="role-tab" type="button" role="tab" id="tab-attendees" aria-selected="false" aria-controls="panel-attendees" tabindex="-1">
+              <button class="role-tab" type="button" role="tab" id="tab-attendees" aria-selected="true" aria-controls="panel-attendees">
                 <span class="story-label">For attendees</span>
                 <span class="role-tab-text">Event details, registration, recommended events, presenters, Q&amp;A answered by Copilot, the live event, and the recording and recap afterward.</span>
+              </button>
+              <button class="role-tab" type="button" role="tab" id="tab-organizers" aria-selected="false" aria-controls="panel-organizers" tabindex="-1">
+                <span class="story-label">For organizers</span>
+                <span class="role-tab-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation, with Copilot ready to answer.</span>
               </button>
             </div>
           </section>
@@ -548,6 +548,6 @@
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
     <script src="main.js?v=20261116z"></script>
-    <script src="story.js?v=20261117c"></script>
+    <script src="story.js?v=20261117d"></script>
   </body>
 </html>

@@ -522,7 +522,8 @@
     const groups = new Map(views.map((v) => [v, groupsOf(v)]));
     const stageCount = steps.length;
     let stage = 0;
-    let role = "organizer";
+    const picked = tabs.find((t) => t.getAttribute("aria-selected") === "true");
+    let role = picked ? picked.dataset.role : views[0].dataset.role;
     let inView = false;
     let gen = 0; // bumps on every stop/start so old loops quit
 

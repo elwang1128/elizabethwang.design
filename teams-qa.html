@@ -241,7 +241,7 @@
                   <li><button type="button">After</button></li>
                 </ol>
                 <figure class="case-shot stage-shot" aria-label="The event screens at each stage">
-                  <div class="reel-media stage-view" data-stage="0" data-role="organizer">
+                  <div class="reel-media stage-view" data-stage="0" data-role="organizer" hidden>
                     <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-organizer.mp4?v=4" muted playsinline preload="metadata" aria-label="Before the event, organizer view: the Contoso 2026 Vision All-Hands event in Viva Engage, with In review, Published, and Dismissed tabs, Join meeting, and tools to promote the event"></video>
                     <span class="callout callout--left" data-at="1.0" style="--x: 30.3%; --y: 48.7%; --len: 5"><span class="callout-line"></span><span class="callout-label">Review queue</span></span>
                     <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 76.6%; --y: 83.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Join meeting</span></span>
@@ -254,7 +254,7 @@
                     <span class="callout callout--left" data-at="5.0" style="--x: 76.6%; --y: 51.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Co-organizers</span></span>
                     <span class="callout callout--left" data-at="5.0" style="--x: 76.6%; --y: 78.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Attendees</span></span>
                   </div>
-                  <div class="reel-media stage-view" data-stage="0" data-role="attendee" hidden>
+                  <div class="reel-media stage-view" data-stage="0" data-role="attendee">
                     <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-attendee.mp4?v=2" muted playsinline preload="metadata" aria-label="Before the event, attendee view: the event page in Viva Engage with details, early questions and a best answer, presenters, and attendees"></video>
                     <span class="callout callout--left" data-at="1.0" style="--x: 78.1%; --y: 37.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Add to calendar</span></span>
                     <span class="callout callout--left" data-at="1.0" style="--x: 76.6%; --y: 86.8%; --len: 6"><span class="callout-line"></span><span class="callout-label">Join meeting</span></span>
@@ -304,13 +304,13 @@
               </div>
 
               <div class="story-columns role-tabs" role="tablist" aria-label="Event views" data-lifecycle-tabs>
-                <button class="role-tab" type="button" role="tab" aria-selected="true" data-role="organizer">
-                  <span class="story-label">For organizers</span>
-                  <span class="role-tab-text">Set up and promote the event, moderate Q&amp;A, and wrap it up afterward.</span>
-                </button>
-                <button class="role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="attendee">
+                <button class="role-tab" type="button" role="tab" aria-selected="true" data-role="attendee">
                   <span class="story-label">For attendees</span>
                   <span class="role-tab-text">Join, ask, and catch up on answers and the recording, all in one place.</span>
+                </button>
+                <button class="role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="organizer">
+                  <span class="story-label">For organizers</span>
+                  <span class="role-tab-text">Set up and promote the event, moderate Q&amp;A, and wrap it up afterward.</span>
                 </button>
               </div>
             </div>
@@ -375,6 +375,6 @@
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
     <script src="main.js?v=20261116z"></script>
-    <script src="story.js?v=20261117c"></script>
+    <script src="story.js?v=20261117d"></script>
   </body>
 </html>
