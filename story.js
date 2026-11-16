@@ -406,3 +406,81 @@
     });
   });
 })();
+
+// Opening hero (Events App, wide screens): the top reel opens larger, grown
+// up and to the left from its bottom-right corner into the empty space
+// beside the title, never over the text, and settles back to the column
+// width over the first half screen of scrolling.
+(function () {
+  const hero = document.querySelector(".hero-reel--top");
+  if (!hero) return;
+  const wide = window.matchMedia("(min-width: 900px) and (min-height: 560px)");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const MAX_SCALE = 1.6;
+  let maxScale = 1;
+
+  function measure() {
+    hero.style.setProperty("--hero-scale", 1);
+    if (!wide.matches || reduce.matches) {
+      maxScale = 1;
+      return;
+    }
+    const box = hero.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-gap")) || 24;
+    const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 0;
+    // Right edge of the text on the left (title, details, description)
+    let textRight = 0;
+    document.querySelectorAll(".case-title, .case-meta > div, .case-desc").forEach((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      textRight = Math.max(textRight, range.getBoundingClientRect().right);
+    });
+    const byWidth = (box.right - textRight - gap * 2) / box.width;
+    // Top of the page (scrollY 0): keep below the header with a gap
+    const top0 = box.top + window.scrollY;
+    const bottom0 = top0 + box.height;
+    const byHeight = (bottom0 - headerH - gap) / box.height;
+    maxScale = Math.max(1, Math.min(MAX_SCALE, byWidth, byHeight));
+  }
+
+  // The size trails the scroll: each frame it closes part of the distance to
+  // where the scroll says it should be, so it glides and settles softly
+  // instead of locking to the scrollbar.
+  let current = null;
+  let raf = 0;
+
+  function target() {
+    const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
+    const eased = p * p * (3 - 2 * p); // ease in and out
+    return maxScale - (maxScale - 1) * eased;
+  }
+
+  function step() {
+    const goal = target();
+    if (current === null) current = goal;
+    current += (goal - current) * 0.08;
+    if (Math.abs(goal - current) < 0.0005) current = goal;
+    hero.style.setProperty("--hero-scale", current.toFixed(4));
+    raf = current === goal ? 0 : requestAnimationFrame(step);
+  }
+
+  function apply() {
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+
+  function refresh() {
+    measure();
+    current = null;
+    apply();
+  }
+
+  window.addEventListener("scroll", apply, { passive: true });
+  window.addEventListener("resize", refresh);
+  wide.addEventListener("change", refresh);
+  reduce.addEventListener("change", refresh);
+
+  // Grow in on arrival: start at the column width and glide up to size
+  measure();
+  current = 1;
+  setTimeout(apply, 150);
+})();
