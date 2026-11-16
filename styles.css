@@ -4094,3 +4094,44 @@ html:not(.story-js) .gaps-to {
 html:not(.story-js) .gaps-track {
   height: auto !important;
 }
+
+/* A screen recording with a thin black frame baked into its edges (Teams
+   Q&A creation form): the video sits a hair larger than its frame and is
+   clipped to the window, so only the window shows. The edge sizes are measured from
+   the recording (8px sides, 6px top, 9px bottom of 2646px wide). */
+.reel-media--trim {
+  border-radius: 8px;
+}
+
+/* The video itself is clipped (not the frame around it), so callout labels
+   can still reach past the screen's edges */
+.reel-media--trim > video {
+  width: calc(100% + 0.61%);
+  max-width: none;
+  margin: -0.23% -0.31% -0.34% -0.31%;
+  border-radius: 0;
+  clip-path: inset(0.37% 0.31% 0.55% 0.31% round 8px);
+}
+
+/* Creation section callouts: long labels wrap onto a second line instead of
+   running past the panel. The cap (in screen widths) always fits in the
+   room beside the form, at any column width. */
+.reel-media--trim .callout-label {
+  width: max-content;
+  max-width: 30cqw;
+  white-space: normal;
+  text-wrap: balance; /* if one does wrap, keep its lines even and the box snug */
+}
+
+.reel-media--trim .callout--left .callout-label {
+  text-align: right;
+}
+
+/* Labels with plenty of room beside them stay on one line, except on
+   small screens where they wrap like the rest */
+@container (min-width: 420px) {
+  .reel-media--trim .callout--oneline .callout-label {
+    max-width: none;
+    white-space: nowrap;
+  }
+}

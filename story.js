@@ -555,7 +555,8 @@
     }
 
     function advance(g) {
-      if (g === gen) show((stage + 1) % stageCount, role);
+      // A single screen (no stage pills) simply plays again from the top
+      if (g === gen) show(stageCount > 1 ? (stage + 1) % stageCount : 0, role);
     }
 
     function run() {

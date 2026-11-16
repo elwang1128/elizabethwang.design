@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261117c" />
+    <link rel="stylesheet" href="styles.css?v=20261117j" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -183,9 +183,50 @@
             </div>
           </div>
 
-          <!-- 3. Before, during, after: one screen per stage, ideally the same event -->
+          <!-- 3. Creation: the organizer's form, annotated (story.js plays it
+               with timed callouts, like the lifecycle viewer below) -->
+          <section class="story-section" aria-labelledby="create-title">
+            <p class="story-eyebrow">03&nbsp;&nbsp;Creation</p>
+            <h2 class="story-headline" id="create-title">One form for every kind of event</h2>
+            <p class="story-body">
+              Organizers set everything up in one form: where the event lives,
+              whether it’s a broadcast or a meeting, roles, who can attend,
+              invites, and Q&amp;A. Each part folds into an accordion that still
+              shows its settings in small text when collapsed, so the whole event
+              can be checked at a glance.
+            </p>
+            <div class="lifecycle" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <figure class="case-shot stage-shot" aria-label="Creating an event in Viva Engage">
+                  <div class="reel-media reel-media--trim stage-view" data-stage="0" data-role="organizer">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-create-organizer.mp4" muted playsinline preload="metadata" aria-label="An organizer fills in the new event form in Viva Engage: hosting community, broadcast or meeting, roles, who can attend, calendar invites, and Q&amp;A options"></video>
+                    <span class="callout callout--oneline callout--left" data-at="1.0" style="--x: 77.7%; --y: 74.4%; --len: 8"><span class="callout-line"></span><span class="callout-label">Settings, even collapsed</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 77.0%; --y: 83.3%; --len: 8"><span class="callout-line"></span><span class="callout-label">At a glance</span></span>
+                    <span class="callout callout--left" data-at="5.0" style="--x: 28.3%; --y: 59.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Where it’s hosted</span></span>
+                    <span class="callout callout--left" data-at="8.0" style="--x: 28.3%; --y: 60%; --len: 4"><span class="callout-line"></span><span class="callout-label">Broadcast or meeting</span></span>
+                    <span class="callout callout--left" data-at="8.0" style="--x: 28.3%; --y: 78%; --len: 4"><span class="callout-line"></span><span class="callout-label">Teams or RTMP-in</span></span>
+                    <span class="callout callout--left" data-at="14.0" style="--x: 28.3%; --y: 60.4%; --len: 4"><span class="callout-line"></span><span class="callout-label">Roles</span></span>
+                    <span class="callout callout--left" data-at="19.0" style="--x: 28.3%; --y: 60.2%; --len: 4"><span class="callout-line"></span><span class="callout-label">Anyone or private</span></span>
+                    <span class="callout callout--oneline callout--right" data-at="19.0" data-step="2" style="--x: 29.4%; --y: 68.5%; --len: 30"><span class="callout-line"></span><span class="callout-label">MTO: open across companies</span></span>
+                    <span class="callout callout--left" data-at="23.0" style="--x: 28.3%; --y: 77.7%; --len: 4"><span class="callout-line"></span><span class="callout-label">Calendar invites</span></span>
+                    <span class="callout callout--left" data-at="28.0" style="--x: 29.4%; --y: 52.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Moderation</span></span>
+                    <span class="callout callout--left" data-at="28.0" style="--x: 29.4%; --y: 59%; --len: 4"><span class="callout-line"></span><span class="callout-label">Q&amp;A settings</span></span>
+                    <span class="callout callout--left" data-at="28.0" style="--x: 29.4%; --y: 74.7%; --len: 4"><span class="callout-line"></span><span class="callout-label">Anonymity</span></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+            <p class="story-body">
+              For companies made up of other companies, like Microsoft with
+              LinkedIn and GitHub, a multi-tenant organization (MTO) toggle opens
+              the event to people across all of them, not just the company the
+              organizer is creating it from.
+            </p>
+          </section>
+
+          <!-- 4. Before, during, after: one screen per stage, ideally the same event -->
           <section class="story-section" aria-labelledby="stages-title">
-            <p class="story-eyebrow">03&nbsp;&nbsp;The event experience</p>
+            <p class="story-eyebrow">04&nbsp;&nbsp;The event experience</p>
             <h2 class="story-headline" id="stages-title">Before, during, and after the event</h2>
 
             <!-- Event lifecycle viewer (story.js): the pills step through before,
@@ -278,7 +319,7 @@
 
           <!-- 4. Mobile: phone screens following before, during, after -->
           <section class="story-section" aria-labelledby="mobile-title">
-            <p class="story-eyebrow">04&nbsp;&nbsp;Mobile</p>
+            <p class="story-eyebrow">05&nbsp;&nbsp;Mobile</p>
             <h2 class="story-headline" id="mobile-title">The same event, wherever you are</h2>
             <p class="story-body">
               On mobile, events show up right in their communities, and the event
@@ -296,7 +337,7 @@
 
           <!-- 5. Connecting to Teams -->
           <section class="story-section" aria-labelledby="teams-title">
-            <p class="story-eyebrow">05&nbsp;&nbsp;Thinking bigger</p>
+            <p class="story-eyebrow">06&nbsp;&nbsp;Thinking bigger</p>
             <h2 class="story-headline" id="teams-title">One home for every Microsoft event</h2>
             <p class="story-body">
               Next, we looked beyond Engage. Organizers can create town halls and
@@ -310,7 +351,7 @@
 
           <!-- 6. Impact -->
           <section class="story-section" aria-labelledby="qa-impact-title">
-            <p class="story-eyebrow">06&nbsp;&nbsp;Impact</p>
+            <p class="story-eyebrow">07&nbsp;&nbsp;Impact</p>
             <h2 class="story-headline" id="qa-impact-title">Built to last</h2>
             <dl class="stats" data-reveal>
               <div style="--i: 0">
@@ -322,8 +363,8 @@
                 <dd>shipped, and became the foundation for the Events app</dd>
               </div>
               <div style="--i: 2">
-                <dt>Invites</dt>
-                <dd>calendar invites, one of the most requested features from communities</dd>
+                <dt>1 platform</dt>
+                <dd>Engage events moving onto the same event platform as Teams</dd>
               </div>
             </dl>
             <!-- TODO (Elizabeth): add anything else you can share publicly, like
@@ -334,6 +375,6 @@
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
     <script src="main.js?v=20261116z"></script>
-    <script src="story.js?v=20261117b"></script>
+    <script src="story.js?v=20261117c"></script>
   </body>
 </html>
