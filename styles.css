@@ -3489,3 +3489,87 @@ html.is-entered body {
     font-size: var(--text-md);
   }
 }
+
+/* Before / During / After labels above the event page reels (section 03):
+   the same clickable step labels as section 04 */
+.reel-steps {
+  margin-bottom: 16px;
+}
+
+/* Step labels as pill buttons (sections 03 and 04), so they read as
+   clickable: each step is an outlined pill, the one on screen is filled,
+   and a faint arrow sits between them */
+.draft-steps {
+  align-items: center;
+  gap: 8px;
+}
+
+.draft-steps li,
+.draft-steps li.is-current {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 1;
+}
+
+.draft-steps li + li::before {
+  content: "→";
+  opacity: 0.35;
+}
+
+.draft-steps button {
+  padding: 6px 12px;
+  border: 1px solid var(--hairline, rgba(0, 0, 0, 0.16));
+  border-radius: 999px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+
+.draft-steps li.is-current button {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+  opacity: 1;
+}
+
+.draft-steps button:focus-visible {
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .draft-steps li:not(.is-current):hover {
+    opacity: 1;
+  }
+
+  .draft-steps li:not(.is-current) button:hover {
+    border-color: var(--color-text);
+    opacity: 1;
+  }
+}
+
+/* Who answers at each Q&A stage (section 05). Copilot's tag carries a soft
+   Copilot-like gradient so its part stands out; people get a plain outline. */
+.copilot-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #dce6ff, #eedcff 55%, #ffe1ec);
+  color: #1a1a2e;
+  font-size: 11px;
+  line-height: 1;
+  vertical-align: 1px;
+}
+
+.copilot-tag--people {
+  background: none;
+  border: 1px solid var(--hairline, rgba(0, 0, 0, 0.16));
+  color: inherit;
+  padding: 3px 9px;
+}
+
+:root[data-theme="dark"] .copilot-tag:not(.copilot-tag--people) {
+  background: linear-gradient(90deg, #3a4a8c, #5b3a8c 55%, #8c3a62);
+  color: #fff;
+}

@@ -111,7 +111,8 @@
             features, so organizers couldn’t mix and match. After unifying events
             in Viva Engage, I proposed bringing that approach to Teams and created
             the initial vision for the product. I contributed to early discovery
-            and the creation flow, and led design for the event page.
+            and the creation flow, and led design for the event page, including
+            Q&amp;A with Copilot built in.
           </p>
         </section>
 
@@ -263,23 +264,30 @@
             <h2 class="story-headline" id="page-title">One page for the whole event</h2>
             <p class="story-body">
               I led design for the event page, the center of every event. It’s
-              where attendees find details, register, and ask questions, and where
-              organizers manage everything behind the scenes.
+              where attendees find details, register, and ask questions, where
+              organizers manage everything behind the scenes, and where Copilot
+              helps answer questions along the way.
             </p>
 
             <!-- Two views of the event page, switched by the tabs below
                  (story.js). The organizer panel is a placeholder for now. -->
             <div class="role-panels">
-              <div id="panel-attendees" role="tabpanel" aria-labelledby="tab-attendees">
+              <div id="panel-attendees" role="tabpanel" aria-labelledby="tab-attendees" hidden>
               <!-- Attendee reel (story.js): the same three moments, with callouts
                    that draw out to name each part. --x/--y place the dot on the
                    frame shown at data-at seconds; --len is the line length. -->
-              <figure class="case-shot hero-reel" data-reel aria-label="What attendees see before, during, and after the event">
+              <ol class="draft-steps reel-steps" data-reel-steps="attendee-reel" aria-label="Moments: choose one to see it">
+                <li class="is-current"><button type="button" aria-current="step">Before</button></li>
+                <li><button type="button">During</button></li>
+                <li><button type="button">After</button></li>
+              </ol>
+              <figure id="attendee-reel" class="case-shot hero-reel" data-reel aria-label="What attendees see before, during, and after the event">
                 <div class="hero-slide is-active">
                   <div class="reel-media">
-                    <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-attendee.mp4" muted playsinline preload="metadata" aria-label="Before the event: the event page with event details, registration, presenters, and Q&amp;A"></video>
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-attendee.mp4" muted playsinline preload="metadata" aria-label="Before the event: the event page with event details, registration, recommended events, presenters, and Q&amp;A"></video>
                   <span class="callout callout--left" data-at="1.0" style="--x: 70.7%; --y: 30.6%; --len: 10"><span class="callout-line"></span><span class="callout-label">Event details</span></span>
                   <span class="callout callout--left" data-at="1.0" style="--x: 72.3%; --y: 47.4%; --len: 10"><span class="callout-line"></span><span class="callout-label">Registration</span></span>
+                  <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 70.6%; --y: 62%; --len: 10"><span class="callout-line"></span><span class="callout-label">Recommended events</span></span>
                   <span class="callout callout--right" data-at="2.0" style="--x: 69.1%; --y: 70.2%; --len: 7"><span class="callout-line"></span><span class="callout-label">Presenters</span></span>
                   <span class="callout callout--right" data-at="3.0" style="--x: 69.1%; --y: 38.9%; --len: 7"><span class="callout-line"></span><span class="callout-label">Q&amp;A</span></span>
                   </div>
@@ -299,14 +307,20 @@
                   </div>
                 </div>
               </figure>
-              <p class="role-panel-text">Event details, presenters, registration, Q&amp;A, the live event, and the recording and recap afterward.</p>
+              <p class="role-panel-text">Event details, registration, recommended events, presenters, Q&amp;A answered by Copilot, the live event, and the recording and recap afterward.</p>
               </div>
-              <div id="panel-organizers" role="tabpanel" aria-labelledby="tab-organizers" hidden>
+              <div id="panel-organizers" role="tabpanel" aria-labelledby="tab-organizers">
                 <!-- Organizer reel (story.js). data-step orders stops that share
                      a time: at 1s the Branding callout comes first, then the
                      theme modal (.reel-pop) opens with its own callouts and
                      closes again, then attendee tracking. -->
-                <figure class="case-shot hero-reel" data-reel aria-label="What organizers see before, during, and after the event">
+                <ol class="draft-steps reel-steps" data-reel-steps="organizer-reel" aria-label="Moments: choose one to see it">
+                  <li class="is-current"><button type="button" aria-current="step">Set up</button></li>
+                  <li><button type="button">Invites</button></li>
+                  <li><button type="button">During</button></li>
+                  <li><button type="button">After</button></li>
+                </ol>
+                <figure id="organizer-reel" class="case-shot hero-reel" data-reel aria-label="What organizers see before, during, and after the event">
                   <div class="hero-slide is-active">
                     <div class="reel-media">
                       <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-organizer.mp4" muted playsinline preload="metadata" aria-label="Before the event: the organizer view of the event page, with branding, attendee tracking, presenters, and Q&amp;A moderation"></video>
@@ -322,8 +336,8 @@
                     <span class="callout callout--left" data-at="1.0" data-step="3" style="--x: 70.6%; --y: 66.6%; --len: 10"><span class="callout-line"></span><span class="callout-label">Attendee tracking</span></span>
                     <span class="callout callout--right" data-at="2.0" style="--x: 67.2%; --y: 65.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Presenter management</span></span>
                     <span class="callout callout--right" data-at="3.0" style="--x: 29.6%; --y: 35.7%; --len: 8"><span class="callout-line"></span><span class="callout-label">Q&amp;A moderation</span></span>
-                    <span class="callout callout--right" data-at="3.0" style="--x: 63.5%; --y: 35.5%; --len: 8"><span class="callout-line"></span><span class="callout-label">Copilot is on</span></span>
-                    <span class="callout callout--right" data-at="5.0" style="--x: 23.6%; --y: 68.8%; --len: 8"><span class="callout-line"></span><span class="callout-label">Copilot answers questions</span></span>
+                    <span class="callout callout--right" data-at="3.0" style="--x: 63.5%; --y: 35.5%; --len: 8"><span class="callout-line"></span><span class="callout-label">✦ Copilot is on</span></span>
+                    <span class="callout callout--right" data-at="5.0" style="--x: 23.6%; --y: 68.8%; --len: 8"><span class="callout-line"></span><span class="callout-label">✦ Copilot answers questions</span></span>
                     </div>
                   </div>
                   <div class="hero-slide">
@@ -351,18 +365,18 @@
                     </div>
                   </div>
                 </figure>
-                <p class="role-panel-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation.</p>
+                <p class="role-panel-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation, with Copilot ready to answer.</p>
               </div>
             </div>
 
             <div class="story-columns role-tabs" role="tablist" aria-label="Event page views">
-              <button class="role-tab" type="button" role="tab" id="tab-attendees" aria-selected="true" aria-controls="panel-attendees">
-                <span class="story-label">For attendees</span>
-                <span class="role-tab-text">Event details, presenters, registration, Q&amp;A, the live event, and the recording and recap afterward.</span>
-              </button>
-              <button class="role-tab" type="button" role="tab" id="tab-organizers" aria-selected="false" aria-controls="panel-organizers" tabindex="-1">
+              <button class="role-tab" type="button" role="tab" id="tab-organizers" aria-selected="true" aria-controls="panel-organizers">
                 <span class="story-label">For organizers</span>
-                <span class="role-tab-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation.</span>
+                <span class="role-tab-text">Branding, registration and attendee tracking, presenter and co-organizer management, and Q&amp;A moderation, with Copilot ready to answer.</span>
+              </button>
+              <button class="role-tab" type="button" role="tab" id="tab-attendees" aria-selected="false" aria-controls="panel-attendees" tabindex="-1">
+                <span class="story-label">For attendees</span>
+                <span class="role-tab-text">Event details, registration, recommended events, presenters, Q&amp;A answered by Copilot, the live event, and the recording and recap afterward.</span>
               </button>
             </div>
           </section>
@@ -444,25 +458,26 @@
           <!-- 5. Q&A across the event: three stages that reveal in turn, each
                with the Q&A post as it looks at that stage -->
           <section class="story-section" aria-labelledby="qa-title">
-            <p class="story-eyebrow">05&nbsp;&nbsp;Q&amp;A across the event</p>
+            <p class="story-eyebrow">05&nbsp;&nbsp;Q&amp;A with Copilot</p>
             <h2 class="story-headline" id="qa-title">Q&amp;A that doesn’t end when the event does</h2>
             <p class="story-body">
               Before, Q&amp;A only existed during the live event. Questions that
               didn’t get answered were lost. I designed Q&amp;A to carry through the
-              whole event.
+              whole event, with Copilot built in so every question can get an
+              answer, even when no presenter is there to give one.
             </p>
 
             <ol class="qa-stages">
               <li class="qa-stage" data-reveal>
                 <div class="qa-text">
-                  <h3 class="story-label">Before</h3>
+                  <h3 class="story-label">Before <span class="copilot-tag copilot-tag--people">Answered by presenters</span></h3>
                   <p>Attendees ask questions early, and presenters and organizers can answer them ahead of time.</p>
                 </div>
                 <img class="qa-shot" src="assets/images/events-app-qa-before.png" alt="A question from Mona Kane about making products easier to use, with a best answer from presenter Daniel Folk" loading="lazy" />
               </li>
               <li class="qa-stage" data-reveal>
                 <div class="qa-text">
-                  <h3 class="story-label">During</h3>
+                  <h3 class="story-label">During <span class="copilot-tag"><span aria-hidden="true">✦ </span>Answered by Copilot</span></h3>
                   <p>
                     During the event, people ask and expect answers in the moment.
                     Copilot posts questions on its own and answers them as the
@@ -473,7 +488,7 @@
               </li>
               <li class="qa-stage" data-reveal>
                 <div class="qa-text">
-                  <h3 class="story-label">After</h3>
+                  <h3 class="story-label">After <span class="copilot-tag"><span aria-hidden="true">✦ </span>Answered by Copilot</span></h3>
                   <p>
                     Once the event ends, Copilot answers open questions using the
                     event transcript, including questions asked after the event is
