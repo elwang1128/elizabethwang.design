@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261116" />
+    <link rel="stylesheet" href="styles.css?v=20261117c" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -54,7 +54,7 @@
           <img class="rule" src="assets/icons/rule.svg" alt="" />
           <div id="projects-menu" class="dropdown-menu">
             <a class="split-target" href="events-app.html">Teams Events App</a>
-            <a class="menu-soon" aria-disabled="true" title="Under construction">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
             <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
             <a class="split-target" href="play.html" data-transition>Play</a>
           </div>
@@ -112,7 +112,9 @@
             </div>
           </a>
           <a href="events-app.html">
-            <div class="project-image tile">
+            <!-- data-silk="subtle": a faint silk animation behind the screen
+                 recording (main.js + silk.js) -->
+            <div class="project-image tile" data-silk="subtle">
               <!-- Organizer screen recording (same file as the Events App page) -->
               <div class="inset inset--motion">
                 <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-organizer.mp4" autoplay muted loop playsinline aria-label="The organizer view of the Spring Kickoff event page in the Teams Events app"></video>
@@ -122,15 +124,21 @@
         </article>
 
         <article class="project" id="teams-qa">
-          <div class="project-title">
-            <span>02</span>
-            <span>Microsoft  /  Teams Q&amp;A + Engage Events</span>
-          </div>
-          <!-- Not shared yet: not a link. A faint silk animation (data-silk="subtle")
-               moves behind it, and the cursor reads [UNDER CONSTRUCTION]. -->
-          <div class="project-image tile" role="img" aria-label="Teams Q&amp;A + Engage Events: under construction" data-cursor-label="[UNDER CONSTRUCTION]" data-silk="subtle">
-            <span class="project-soon" aria-hidden="true">[Under construction]</span>
-          </div>
+          <a href="teams-qa.html">
+            <div class="project-title">
+              <span>02</span>
+              <span>Microsoft  /  Teams Q&amp;A + Engage Events</span>
+            </div>
+          </a>
+          <a href="teams-qa.html">
+            <!-- data-silk="subtle" + variant 1: the same faint silk as project 01,
+                 from a different patch of the pattern, lighter and cooler (silk.js) -->
+            <div class="project-image tile" data-silk="subtle" data-silk-variant="1">
+              <div class="inset inset--motion">
+                <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-organizer.mp4" autoplay muted loop playsinline aria-label="The organizer view of the Contoso 2026 Vision All-Hands event page in Viva Engage"></video>
+              </div>
+            </div>
+          </a>
         </article>
 
         <article class="project" id="emoji-motion">
@@ -165,9 +173,9 @@
       </main>
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
-    <script src="silk.js?v=20261116"></script>
+    <script src="silk.js?v=20261117c"></script>
     <script src="ripple.js?v=20261116"></script>
-    <script src="main.js?v=20261116"></script>
+    <script src="main.js?v=20261116z"></script>
     <script src="toolbox.js?v=20261116"></script>
   </body>
 </html>

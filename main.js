@@ -460,7 +460,8 @@
     canvas.className = "cover silk-canvas";
     canvas.setAttribute("aria-hidden", "true");
     tile.insertBefore(canvas, tile.firstChild);
-    if (!Silk.create(canvas, { subtle: true })) canvas.remove();
+    const variant = Number(tile.dataset.silkVariant || 0);
+    if (!Silk.create(canvas, { subtle: true, variant })) canvas.remove();
   });
 })();
 
@@ -574,3 +575,4 @@
     { passive: false }
   );
 })();
+

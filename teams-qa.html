@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261116" />
+    <link rel="stylesheet" href="styles.css?v=20261117c" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -44,7 +44,7 @@
           <img class="rule" src="assets/icons/rule.svg" alt="" />
           <div id="projects-menu" class="dropdown-menu">
             <a class="split-target" href="events-app.html">Teams Events App</a>
-            <a class="menu-soon" aria-disabled="true" title="Under construction">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
             <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
             <a class="split-target" href="play.html" data-transition>Play</a>
           </div>
@@ -115,186 +115,202 @@
 
         <!-- Right: the case study. Motion and the Q&A demo are driven by story.js. -->
         <section class="case-work story" aria-label="Case study">
-          <!-- 1. Context -->
+          <!-- Hero reel (story.js): before the event (video), during (still),
+               after (video), sliding in turn and repeating, like the Events App
+               page. On wide screens it opens larger and settles as you scroll. -->
+          <figure class="case-shot hero-reel hero-reel--top" data-reel aria-label="The Contoso 2026 Vision All-Hands event before, during, and after the event">
+            <div class="hero-slide is-active">
+              <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-attendee.mp4?v=2" muted playsinline preload="auto" aria-label="Before the event: an attendee scrolls the event page in Viva Engage, with details, early questions, and presenters"></video>
+            </div>
+            <div class="hero-slide" data-hold="4500">
+              <img class="hero-still" src="assets/images/teams-qa-during-attendee.webp" alt="During the event: the live keynote in Teams, with the Q&amp;A panel open beside the stage" />
+            </div>
+            <div class="hero-slide">
+              <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-after-attendee.mp4?v=2" muted playsinline preload="auto" aria-label="After the event: the event page shows the recording above the conversation and answered questions"></video>
+            </div>
+          </figure>
+
+          <!-- 1. Context: two features, each covering only part of an event -->
           <section class="story-section" aria-labelledby="context-title">
             <p class="story-eyebrow">01&nbsp;&nbsp;Context</p>
-            <h2 class="story-headline" id="context-title">Events in communities</h2>
+            <h2 class="story-headline" id="context-title">Two features, each missing half an event</h2>
             <p class="story-body">
-              Events bring people together around the conversations that matter,
-              from company-wide town halls to learning sessions to async AMAs.
-              Before, Q&amp;A, AMAs, live events, and webinars were separate
-              experiences, each with its own setup and features.
+              Viva Engage had AMAs, an ask-me-anything space where leaders and
+              employees connect in a community. Teams had Q&amp;A, a meeting tab
+              where organizers manage questions live. Research with leaders and
+              feedback from customers pointed to the same problem from both
+              sides: neither one covered the whole event.
             </p>
-            <div class="scatter" data-reveal aria-hidden="true">
-              <span style="--i: 0; --x: 4%; --y: 18%">Q&amp;A</span>
-              <span style="--i: 1; --x: 30%; --y: 52%">AMA</span>
-              <span style="--i: 2; --x: 55%; --y: 8%">Live event</span>
-              <span style="--i: 3; --x: 76%; --y: 46%">Webinar</span>
-            </div>
-            <a class="story-link" href="events-app.html">See how this became the Events app →</a>
           </section>
 
-          <!-- 2. The solution: three cards flow into one shared feed -->
-          <section class="story-section" aria-labelledby="types-title">
-            <p class="story-eyebrow">02&nbsp;&nbsp;The solution</p>
-            <h2 class="story-headline" id="types-title">Three event types, one feed</h2>
-            <figure class="feed-diagram" data-reveal>
-              <div class="feed-types">
-                <div class="feed-type" style="--i: 0">
-                  <h3 class="story-label">Broadcast</h3>
-                  <p>Powered by Teams town hall, for all-hands and events at scale.</p>
+          <!-- 1 → 2: one diagram, pinned while you scroll (story.js). It starts as
+               the two features with their gaps; scrolling fades the gaps, slides
+               the rows together into one Viva Engage events row, draws a thread
+               across it, and brings in section 02's text below. -->
+          <div class="gaps-track" data-gaps-scroll>
+            <div class="gaps-stage">
+              <figure class="gaps gaps--merged gaps--scroll" role="img" aria-label="AMAs covered before and after an event but had no live event; Teams Q&amp;A covered the live event but nothing before or after. Together they become Viva Engage events, which cover the whole event: ask early on the event page, live Q&amp;A in Teams, and answers and the recording stay on the page.">
+                <div class="gaps-head" aria-hidden="true"><span></span><span>Before</span><span>During</span><span>After</span></div>
+                <div class="gaps-merge" aria-hidden="true">
+                  <div class="gaps-row gaps-row--ama">
+                    <p class="story-label"><span class="gaps-from">AMAs</span><span class="gaps-to">Viva Engage events</span></p>
+                    <div class="gap-cell gap-cell--on" style="--i: 0">Ask questions early<small>from AMAs</small></div>
+                    <div class="gap-cell gap-cell--missing" style="--i: 1">No live event</div>
+                    <div class="gap-cell gap-cell--on" style="--i: 2">Answers and recording stay<small>from AMAs</small></div>
+                    <i class="gaps-thread"></i>
+                  </div>
+                  <div class="gaps-row gaps-row--teams">
+                    <p class="story-label"><span class="gaps-from">Teams Q&amp;A</span></p>
+                    <div class="gap-cell gap-cell--missing" style="--i: 3">Nothing before</div>
+                    <div class="gap-cell gap-cell--on" style="--i: 4">Live Q&amp;A in Teams<small>from Teams Q&amp;A</small></div>
+                    <div class="gap-cell gap-cell--missing" style="--i: 5">Nothing after</div>
+                  </div>
                 </div>
-                <div class="feed-type" style="--i: 1">
-                  <h3 class="story-label">Meeting</h3>
-                  <p>Powered by Teams webinar, for interactive sessions.</p>
-                </div>
-                <div class="feed-type" style="--i: 2">
-                  <h3 class="story-label">Async</h3>
-                  <p>Text-based AMAs, feedback, and crowdsourcing.</p>
-                </div>
-              </div>
-              <svg class="feed-lines" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M50 0 C50 30, 150 30, 150 60" pathLength="1" />
-                <path d="M150 0 L150 60" pathLength="1" />
-                <path d="M250 0 C250 30, 150 30, 150 60" pathLength="1" />
-              </svg>
-              <div class="feed-box" aria-hidden="true">
-                <p class="story-label">Shared feed</p>
-                <div class="feed-row"><span class="feed-tag">Q&amp;A</span><i></i></div>
-                <div class="feed-row"><span class="feed-tag">Conversation</span><i></i></div>
-                <div class="feed-row"><span class="feed-tag">Q&amp;A</span><i></i></div>
-              </div>
-            </figure>
-            <p class="story-body">
-              Every event type shares the same feed, so Q&amp;A and conversation
-              are built in no matter which type an organizer picks.
-            </p>
-          </section>
+              </figure>
+
+              <!-- 2. The solution: fades in under the diagram as the rows merge -->
+              <section class="gaps-after" aria-labelledby="types-title">
+                <p class="story-eyebrow">02&nbsp;&nbsp;The solution</p>
+                <h2 class="story-headline" id="types-title">Together, they fill each other’s gaps</h2>
+                <p class="story-body">
+                  We proposed bringing AMAs and Teams Q&amp;A together into one Viva
+                  Engage event: an event page with its own feed, linked to a live
+                  Teams meeting. Questions asked early carry into the meeting, and
+                  the conversation continues on the page afterward.
+                </p>
+                <a class="story-link" href="events-app.html">See how this became the Events app →</a>
+              </section>
+            </div>
+          </div>
 
           <!-- 3. Before, during, after: one screen per stage, ideally the same event -->
           <section class="story-section" aria-labelledby="stages-title">
             <p class="story-eyebrow">03&nbsp;&nbsp;The event experience</p>
             <h2 class="story-headline" id="stages-title">Before, during, and after the event</h2>
 
-            <div class="stage" data-reveal>
-              <h3 class="story-label">Before</h3>
-              <ul class="stage-points">
-                <li>Organizers create an event in a community or storyline and set up Q&amp;A.</li>
-                <li>Calendar invites go to communities, Microsoft 365 groups, or individuals, and edits or cancellations update the same invite automatically.</li>
-                <li>Attendees can ask and upvote questions early.</li>
-              </ul>
-              <!-- TODO (Elizabeth): replace with the "before" screen -->
-              <figure class="screen-slot" aria-hidden="true"><span>Screen · before</span></figure>
-            </div>
+            <!-- Event lifecycle viewer (story.js): the pills step through before,
+                 during, and after, and the tabs below switch between the
+                 organizer and attendee views. It plays through on its own:
+                 each screen's callouts run, then it moves to the next stage. -->
+            <div class="lifecycle" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <ol class="draft-steps reel-steps" aria-label="Event stages: choose one to see it">
+                  <li class="is-current"><button type="button" aria-current="step">Before</button></li>
+                  <li><button type="button">During</button></li>
+                  <li><button type="button">After</button></li>
+                </ol>
+                <figure class="case-shot stage-shot" aria-label="The event screens at each stage">
+                  <div class="reel-media stage-view" data-stage="0" data-role="organizer">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-organizer.mp4" muted playsinline preload="metadata" aria-label="Before the event, organizer view: the Contoso 2026 Vision All-Hands event in Viva Engage, with In review, Published, and Dismissed tabs, Join meeting, and tools to promote the event"></video>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 30.3%; --y: 48.7%; --len: 5"><span class="callout-line"></span><span class="callout-label">Review queue</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 76.6%; --y: 83.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Join meeting</span></span>
+                    <span class="callout callout--left" data-at="3.0" style="--x: 76.3%; --y: 53.2%; --len: 8"><span class="callout-line"></span><span class="callout-label">Promote your event</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 58.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Welcome post</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 65.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Email invites</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 72.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Share to a channel</span></span>
+                    <span class="callout callout--left" data-at="5.0" style="--x: 76.6%; --y: 30.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Presenters</span></span>
+                    <span class="callout callout--left" data-at="4.0" style="--x: 76.6%; --y: 40.2%; --len: 6"><span class="callout-line"></span><span class="callout-label">Featured</span></span>
+                    <span class="callout callout--left" data-at="5.0" style="--x: 76.6%; --y: 51.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Co-organizers</span></span>
+                    <span class="callout callout--left" data-at="5.0" style="--x: 76.6%; --y: 78.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Attendees</span></span>
+                  </div>
+                  <div class="reel-media stage-view" data-stage="0" data-role="attendee" hidden>
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-attendee.mp4?v=2" muted playsinline preload="metadata" aria-label="Before the event, attendee view: the event page in Viva Engage with details, early questions and a best answer, presenters, and attendees"></video>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 78.1%; --y: 37.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Add to calendar</span></span>
+                    <span class="callout callout--left" data-at="1.0" style="--x: 76.6%; --y: 86.8%; --len: 6"><span class="callout-line"></span><span class="callout-label">Join meeting</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 29.9%; --y: 56.6%; --len: 4"><span class="callout-line"></span><span class="callout-label">Ask questions early</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 31.4%; --y: 73.4%; --len: 4"><span class="callout-line"></span><span class="callout-label">Upvote</span></span>
+                    <span class="callout callout--left" data-at="2.0" style="--x: 34.3%; --y: 78.5%; --len: 4"><span class="callout-line"></span><span class="callout-label">Best answer</span></span>
+                    <span class="callout callout--left" data-at="2.0" style="--x: 76.6%; --y: 76.4%; --len: 6"><span class="callout-line"></span><span class="callout-label">Featured</span></span>
+                    <span class="callout callout--left" data-at="3.0" style="--x: 76.6%; --y: 38.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Presenters</span></span>
+                    <span class="callout callout--left" data-at="3.0" style="--x: 76.6%; --y: 61.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Attendees</span></span>
+                  </div>
+                  <div class="reel-media stage-view stage-view--still" data-stage="1" data-role="organizer" hidden>
+                    <img src="assets/images/teams-qa-during-organizer.webp" alt="During the event, organizer view in Teams: stage controls for who is live, the speaker on stage, and the Q&amp;A panel with In review, Published, and Dismissed tabs" loading="lazy" />
+                    <span class="callout callout--right" style="--x: 18%; --y: 17%; --len: 6"><span class="callout-line"></span><span class="callout-label">Stage controls</span></span>
+                    <span class="callout callout--right" style="--x: 16.1%; --y: 36.8%; --len: 6"><span class="callout-line"></span><span class="callout-label">Choose who’s live</span></span>
+                    <span class="callout callout--left" data-step="2" style="--x: 76.5%; --y: 32.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Q&amp;A moderation</span></span>
+                    <span class="callout callout--left" data-step="2" style="--x: 76.4%; --y: 52.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Same feed as the event page</span></span>
+                    <span class="callout callout--left" data-step="3" style="--x: 76.5%; --y: 92.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Back to the event page</span></span>
+                  </div>
+                  <div class="reel-media stage-view stage-view--still" data-stage="1" data-role="attendee" hidden>
+                    <img src="assets/images/teams-qa-during-attendee.webp" alt="During the event, attendee view in Teams: the speaker on stage beside the Q&amp;A panel, with a question and its best answer" loading="lazy" />
+                    <span class="callout callout--right" style="--x: 45%; --y: 52%; --len: 10"><span class="callout-line"></span><span class="callout-label">The live event</span></span>
+                    <span class="callout callout--left" data-step="2" style="--x: 76.4%; --y: 25.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Ask a question</span></span>
+                    <span class="callout callout--left" data-step="2" style="--x: 76.4%; --y: 52.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Same feed as the event page</span></span>
+                    <span class="callout callout--left" data-step="3" style="--x: 76.5%; --y: 92.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Back to the event page</span></span>
+                  </div>
+                  <div class="reel-media stage-view" data-stage="2" data-role="organizer" hidden>
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-after-organizer.mp4?v=2" muted playsinline preload="metadata" aria-label="After the event, organizer view: the recording on the event page, the conversation, and tools to export questions, post an update, and create a survey"></video>
+                    <span class="callout callout--right" data-at="1.0" style="--x: 51.1%; --y: 79.8%; --len: 10"><span class="callout-line"></span><span class="callout-label">Recording</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 76.6%; --y: 83.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Event has ended</span></span>
+                    <span class="callout callout--left" data-at="3.0" style="--x: 76.3%; --y: 53.2%; --len: 8"><span class="callout-line"></span><span class="callout-label">Wrap up your event</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 58.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Export questions</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 64.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Thank-you post</span></span>
+                    <span class="callout callout--left" data-at="3.0" data-step="2" style="--x: 76.3%; --y: 72.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">Feedback survey</span></span>
+                    <span class="callout callout--left" data-at="5.0" style="--x: 34.3%; --y: 22.6%; --len: 4"><span class="callout-line"></span><span class="callout-label">Answers stay</span></span>
+                  </div>
+                  <div class="reel-media stage-view" data-stage="2" data-role="attendee" hidden>
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-after-attendee.mp4?v=2" muted playsinline preload="metadata" aria-label="After the event, attendee view: the recording on the event page above the conversation and answered questions"></video>
+                    <span class="callout callout--right" data-at="1.0" style="--x: 51.1%; --y: 82.8%; --len: 10"><span class="callout-line"></span><span class="callout-label">Recording</span></span>
+                    <span class="callout callout--left" data-at="1.0" data-step="2" style="--x: 76.6%; --y: 86.8%; --len: 6"><span class="callout-line"></span><span class="callout-label">Event has ended</span></span>
+                    <span class="callout callout--left" data-at="4.0" style="--x: 33.2%; --y: 49.6%; --len: 4"><span class="callout-line"></span><span class="callout-label">Answers stay</span></span>
+                    <span class="callout callout--left" data-at="4.0" style="--x: 76.6%; --y: 20.4%; --len: 6"><span class="callout-line"></span><span class="callout-label">Presenters</span></span>
+                  </div>
+                </figure>
+                <p class="stage-text" data-stage="0">Organizers create the event in a community or storyline, and invites update on their own when plans change. Attendees can ask and upvote questions early.</p>
+                <p class="stage-text" data-stage="1" hidden>Attendees watch next to the same feed while moderators review questions and presenters answer the most upvoted ones.</p>
+                <p class="stage-text" data-stage="2" hidden>The recording stays with the conversation, and open questions can still be answered, so the feed keeps going.</p>
+              </div>
 
-            <div class="stage" data-reveal>
-              <h3 class="story-label">During</h3>
-              <ul class="stage-points">
-                <li>Attendees watch the live event alongside the feed.</li>
-                <li>Moderators review questions, and presenters answer the most upvoted ones.</li>
-              </ul>
-              <!-- TODO (Elizabeth): replace with the "during" screen -->
-              <figure class="screen-slot" aria-hidden="true"><span>Screen · during</span></figure>
-            </div>
-
-            <div class="stage" data-reveal>
-              <h3 class="story-label">After</h3>
-              <ul class="stage-points">
-                <li>The recording and conversation stay in the community.</li>
-                <li>Unanswered questions can still be answered, so the conversation keeps going.</li>
-              </ul>
-              <!-- TODO (Elizabeth): replace with the "after" screen -->
-              <figure class="screen-slot" aria-hidden="true"><span>Screen · after</span></figure>
+              <div class="story-columns role-tabs" role="tablist" aria-label="Event views" data-lifecycle-tabs>
+                <button class="role-tab" type="button" role="tab" aria-selected="true" data-role="organizer">
+                  <span class="story-label">For organizers</span>
+                  <span class="role-tab-text">Set up and promote the event, moderate Q&amp;A, and wrap it up afterward.</span>
+                </button>
+                <button class="role-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-role="attendee">
+                  <span class="story-label">For attendees</span>
+                  <span class="role-tab-text">Join, ask, and catch up on answers and the recording, all in one place.</span>
+                </button>
+              </div>
             </div>
           </section>
 
-          <!-- 4. Q&A: flip an organizer setting and the attendee view changes -->
-          <section class="story-section" aria-labelledby="qa-settings-title">
-            <p class="story-eyebrow">04&nbsp;&nbsp;Q&amp;A</p>
-            <h2 class="story-headline" id="qa-settings-title">Q&amp;A built for every event</h2>
-            <p class="story-body">
-              Moderation, upvotes, and anonymous questions can all be customized
-              throughout the event. Try the organizer settings to see what changes
-              for attendees.
-            </p>
 
-            <figure class="qa-demo" data-reveal data-moderation="on" data-upvotes="on" data-anonymous="on">
-              <div class="qa-demo-settings">
-                <p class="story-label">Organizer settings</p>
-                <button class="qa-switch" type="button" data-setting="moderation" aria-pressed="true">
-                  <span>Moderation</span><i aria-hidden="true"></i>
-                </button>
-                <button class="qa-switch" type="button" data-setting="upvotes" aria-pressed="true">
-                  <span>Upvotes</span><i aria-hidden="true"></i>
-                </button>
-                <button class="qa-switch" type="button" data-setting="anonymous" aria-pressed="true">
-                  <span>Anonymous questions</span><i aria-hidden="true"></i>
-                </button>
-              </div>
-
-              <div class="qa-demo-view" aria-live="polite">
-                <p class="story-label">What attendees see</p>
-                <div class="qa-ask">
-                  <span class="qa-ask-field">Ask a question</span>
-                  <span class="qa-ask-anon">☐ Post anonymously</span>
-                </div>
-                <p class="qa-ask-note">Questions appear after a moderator reviews them.</p>
-                <ul class="qa-list">
-                  <li>
-                    <span class="qa-who"><span class="qa-name">Priya S.</span><span class="qa-anon-name">Anonymous</span></span>
-                    <span class="qa-text">Will the session be recorded?</span>
-                    <span class="qa-votes">▲ 24</span>
-                  </li>
-                  <li>
-                    <span class="qa-who"><span class="qa-name">Marcus L.</span><span class="qa-anon-name">Anonymous</span></span>
-                    <span class="qa-text">How do we share feedback after launch?</span>
-                    <span class="qa-votes">▲ 11</span>
-                  </li>
-                </ul>
-              </div>
-            </figure>
-
-            <p class="story-body">
-              <!-- TODO (Elizabeth): add one or two design decisions, e.g. how
-                   anonymous questions work with moderation. -->
-            </p>
-          </section>
-
-          <!-- 5. Mobile: phone screens following before, during, after -->
+          <!-- 4. Mobile: phone screens following before, during, after -->
           <section class="story-section" aria-labelledby="mobile-title">
-            <p class="story-eyebrow">05&nbsp;&nbsp;Mobile</p>
-            <h2 class="story-headline" id="mobile-title">Ready on phones, too</h2>
+            <p class="story-eyebrow">04&nbsp;&nbsp;Mobile</p>
+            <h2 class="story-headline" id="mobile-title">The same event, wherever you are</h2>
             <p class="story-body">
-              Attendees can find events in their communities, join, and ask or
-              upvote questions from their phones.
+              On mobile, events show up right in their communities, and the event
+              page carries the same feed, so attendees can add it to their
+              calendar, ask, and upvote from their phones.
               <!-- TODO (Elizabeth): if relevant, mention the iOS and Android visual
                    refresh you led. -->
             </p>
-            <div class="phones" data-reveal aria-hidden="true">
-              <!-- TODO (Elizabeth): replace with phone screens -->
-              <figure class="phone" style="--i: 0"><span>Before</span></figure>
-              <figure class="phone" style="--i: 1"><span>During</span></figure>
-              <figure class="phone" style="--i: 2"><span>After</span></figure>
-            </div>
+            <!-- Phone screens: an event in a community, then its event page -->
+            <figure class="phones phones--shots" data-reveal>
+              <img class="phone" style="--i: 0" src="assets/images/teams-qa-mobile-community.png" alt="The All company community on a phone, with an upcoming Contoso Strategy Briefing event card above the community's posts" loading="lazy" />
+              <img class="phone" style="--i: 1" src="assets/images/teams-qa-mobile-event.png" alt="The Contoso 2026 Strategy Briefing All-Hands event page on a phone, with Add to calendar, featured people and organizers, and the event's question feed" loading="lazy" />
+            </figure>
           </section>
 
-          <!-- 6. Connecting to Teams -->
+          <!-- 5. Connecting to Teams -->
           <section class="story-section" aria-labelledby="teams-title">
-            <p class="story-eyebrow">06&nbsp;&nbsp;Connecting to Teams</p>
-            <h2 class="story-headline" id="teams-title">Where members already are</h2>
+            <p class="story-eyebrow">05&nbsp;&nbsp;Thinking bigger</p>
+            <h2 class="story-headline" id="teams-title">One home for every Microsoft event</h2>
             <p class="story-body">
-              Organizers can create town halls and webinars in Teams and link them
-              to an Engage community, so the event shows up where members already
-              are. This brings Teams features like event page customization and
-              registration to Engage users, and became the starting point for the
-              Events app.
+              Next, we looked beyond Engage. Organizers can create town halls and
+              webinars in Teams and link them to an Engage community, bringing
+              Teams features like event page customization and registration to
+              Engage users. That step toward unifying events across Microsoft
+              became the starting point for the Events app.
             </p>
             <a class="story-link" href="events-app.html">Read more about the Events app →</a>
           </section>
 
-          <!-- 7. Impact -->
+          <!-- 6. Impact -->
           <section class="story-section" aria-labelledby="qa-impact-title">
-            <p class="story-eyebrow">07&nbsp;&nbsp;Impact</p>
+            <p class="story-eyebrow">06&nbsp;&nbsp;Impact</p>
             <h2 class="story-headline" id="qa-impact-title">Built to last</h2>
             <dl class="stats" data-reveal>
               <div style="--i: 0">
@@ -317,7 +333,7 @@
       </main>
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
-    <script src="main.js?v=20261116"></script>
-    <script src="story.js?v=20261116"></script>
+    <script src="main.js?v=20261116z"></script>
+    <script src="story.js?v=20261117b"></script>
   </body>
 </html>

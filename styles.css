@@ -2610,8 +2610,6 @@ html.is-entered body {
   stroke: var(--color-text);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
 }
 
 .feed-box {
@@ -2655,9 +2653,11 @@ html.is-entered body {
   transition-delay: calc(0.2s + var(--i) * 0.12s);
 }
 
-.story-js .feed-lines path {
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.7s cubic-bezier(0.6, 0, 0.3, 1) 0.6s;
+/* The lines draw down from the cards into the box: a top-to-bottom reveal,
+   so every line reaches the box whatever its length on screen */
+.story-js .feed-lines {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.7s cubic-bezier(0.6, 0, 0.3, 1) 0.6s;
 }
 
 .story-js .feed-box {
@@ -2672,8 +2672,8 @@ html.is-entered body {
   transform: none;
 }
 
-.story-js .feed-diagram.is-in .feed-lines path {
-  stroke-dashoffset: 0;
+.story-js .feed-diagram.is-in .feed-lines {
+  clip-path: inset(0 0 -2px 0);
 }
 
 /* 03: before, during, after */
@@ -3581,4 +3581,516 @@ html.is-entered body {
   transform: scale(var(--hero-scale, 1));
   transform-origin: 100% 100%;
   will-change: transform;
+}
+
+/* Teams Q&A, section 03: each stage's screens span the full width under its
+   points, with Organizer / Attendee pills above them */
+.stage-views {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.view-pills {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.view-pills button {
+  padding: 6px 12px;
+  border: 1px solid var(--hairline, rgba(0, 0, 0, 0.16));
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+
+.view-pills button[aria-selected="true"] {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+  opacity: 1;
+  cursor: default;
+}
+
+.view-pills button:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .view-pills button[aria-selected="false"]:hover {
+    border-color: var(--color-text);
+    opacity: 1;
+  }
+}
+
+/* The exported stills already have rounded corners and a shadow baked in,
+   and are a little wider to match the recordings' window size */
+.stage-shot .stage-view--still {
+  width: calc(580 / 645 * 100%);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.stage-shot .stage-view[hidden] {
+  display: none;
+}
+
+/* Teams Q&A, section 03: each stage's description, written as prose */
+.stage-text {
+  margin: 0;
+}
+
+/* One text width across the case studies: running text never goes wider
+   than the body copy (560px), and short blocks stack instead of squeezing
+   into a side column */
+.flow-steps {
+  max-width: 560px;
+}
+
+.qa-text p {
+  max-width: 560px;
+}
+
+/* Teams Q&A stages: the label sits above its paragraph, and the paragraph
+   has the same width as the body copy */
+.stage {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.stage .story-label {
+  margin: 0;
+}
+
+.stage-text {
+  max-width: 560px;
+}
+
+.stage .stage-views {
+  margin-top: 12px;
+}
+
+/* Teams Q&A, section 02: the shared feed plays like a live feed. One post
+   at a time: the next drops in from above while the current one slides
+   down and fades out (story.js cycles .is-on / .is-leaving). */
+.feed-live {
+  position: relative;
+  margin-top: 4px;
+  aspect-ratio: 1415 / 501; /* the first post, until story.js measures */
+  overflow: hidden;
+  transition: height 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* story.js sets the height to the post on screen, so the box hugs it */
+.feed-live[style*="height"] {
+  aspect-ratio: auto;
+}
+
+.feed-card {
+  position: absolute;
+  inset: 0 0 auto;
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transform: translateY(-18px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.feed-card.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.feed-card.is-leaving {
+  opacity: 0;
+  transform: translateY(28px) scale(0.98);
+  transition: opacity 0.45s ease, transform 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed-card {
+    transition: none;
+  }
+}
+
+/* Teams Q&A, section 03: the lifecycle viewer, laid out like the Events App
+   event page section: stage pills above the screen, the stage's text under
+   it, and the organizer / attendee tabs below (above the screen on narrow
+   screens, where the Events App rules reorder them) */
+.lifecycle {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.lifecycle .role-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lifecycle .reel-steps {
+  margin-bottom: 0;
+}
+
+.lifecycle .stage-text[hidden] {
+  display: none;
+}
+
+/* Teams Q&A, sections 01–02: what each feature covered across Before /
+   During / After. Covered stages are solid cards; missing ones are dashed
+   and faint. The merged row (02) fills every stage, with a thread drawn
+   across to show it's one continuous event. */
+.gaps {
+  margin: 0;
+  padding: 24px;
+  display: grid;
+  gap: 12px;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease), opacity 0.7s ease, transform 0.7s ease;
+}
+
+.gaps-head,
+.gaps-row {
+  display: grid;
+  grid-template-columns: 112px repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+.gaps-head span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+
+.gaps-row {
+  position: relative;
+}
+
+.gaps-row .story-label {
+  margin: 0;
+  align-self: center;
+}
+
+.gap-cell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.3;
+  transition: background-color var(--theme-ease);
+}
+
+.gap-cell small {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+
+.gap-cell--on {
+  background: var(--color-bg);
+}
+
+.gap-cell--missing {
+  border: 1px dashed color-mix(in srgb, var(--color-text) 45%, transparent);
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* The thread behind the merged row: one line from Before to After */
+.gaps-thread {
+  position: absolute;
+  left: calc(112px + 12px);
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--color-text);
+  transform-origin: left;
+}
+
+/* Motion: cells come in one by one; the thread draws across after them */
+.story-js .gap-cell {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease, background-color var(--theme-ease);
+  transition-delay: calc(0.2s + var(--i) * 0.12s);
+}
+
+.story-js .gaps.is-in .gap-cell {
+  opacity: 1;
+  transform: none;
+}
+
+/* 01: what each covered comes in first, then the gaps show up dashed */
+.story-js .gaps:not(.gaps--merged) .gap-cell--missing {
+  transition-delay: calc(0.9s + var(--i) * 0.1s);
+}
+
+
+/* Hidden until revealed; the draw transition lives on the revealed state
+   so the line never shows while the page loads */
+.story-js .gaps-thread {
+  transform: scaleX(0);
+  opacity: 0;
+}
+
+.story-js .gaps.is-in .gaps-thread {
+  transform: scaleX(1);
+  opacity: 1;
+  transition: transform 0.9s cubic-bezier(0.6, 0, 0.3, 1) 0.7s, opacity 0.2s ease 0.7s;
+}
+
+@container (max-width: 600px) {
+  .gaps {
+    padding: 16px;
+  }
+
+  .gaps-head,
+  .gaps-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .gaps-head span:first-child {
+    display: none;
+  }
+
+  .gaps-row .story-label {
+    grid-column: 1 / -1;
+  }
+
+  .gaps-thread {
+    left: 0;
+    top: auto;
+    bottom: 32px;
+  }
+
+  .gap-cell {
+    min-height: 56px;
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+/* 02: the merge. Both rows sit in one grid cell; the Teams Q&A row starts
+   one row lower. Once revealed, the missing stages fade, the Teams row rises
+   into the gap, the space it held closes, the label changes, and the thread
+   draws across. */
+.gaps-merge {
+  --row-h: 76px;
+  --row-step: calc(var(--row-h) + 12px); /* one row plus the gap */
+  display: grid;
+  padding-bottom: var(--row-step);
+}
+
+.gaps-merge .gap-cell {
+  height: var(--row-h);
+  min-height: 0;
+}
+
+.gaps-merge .gaps-row {
+  grid-area: 1 / 1;
+}
+
+.gaps-row--teams {
+  transform: translateY(var(--row-step));
+}
+
+.gaps-row--teams .gap-cell--on {
+  z-index: 2;
+}
+
+.gaps-merge .story-label {
+  position: relative;
+  min-height: 1.2em;
+}
+
+.gaps-to {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+/* Without the script, show the finished merge */
+html:not(.story-js) .gaps-merge {
+  padding-bottom: 0;
+}
+
+html:not(.story-js) .gaps-row--ama {
+  transform: none;
+}
+
+html:not(.story-js) .gaps-merge .gap-cell--missing,
+html:not(.story-js) .gaps-merge .gaps-from {
+  opacity: 0;
+}
+
+html:not(.story-js) .gaps-row--teams {
+  transform: none;
+}
+
+html:not(.story-js) .gaps-to {
+  opacity: 1;
+}
+
+/* Transitions live on the revealed state only, so the starting layout
+   (applied when the script loads) never animates */
+/* The two rows meet in the middle, so the panel keeps its height and the
+   page below never moves */
+.story-js .gaps--merged.is-in .gaps-row--ama,
+.story-js .gaps--merged.is-in .gaps-row--teams {
+  transform: translateY(calc(var(--row-step) / 2));
+  transition: transform 0.8s cubic-bezier(0.6, 0, 0.2, 1) 3.2s;
+}
+
+.story-js .gaps--merged.is-in .gaps-from,
+.story-js .gaps--merged.is-in .gaps-to {
+  transition: opacity 0.4s ease 3.6s;
+}
+
+/* The gaps show up dashed, hold, then fade before the rows merge */
+.story-js .gaps--merged.is-in .gap-cell--missing {
+  animation: gap-show-then-fade 2.8s ease 0.35s both;
+}
+
+@keyframes gap-show-then-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  13%,
+  82% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.story-js .gaps--merged.is-in .gaps-from {
+  opacity: 0;
+}
+
+.story-js .gaps--merged.is-in .gaps-to {
+  opacity: 1;
+}
+
+/* In the merge, the line draws only once the two rows have met */
+.story-js .gaps--merged.is-in .gaps-thread {
+  transition-delay: 4.3s;
+}
+
+@container (max-width: 600px) {
+  .gaps-merge {
+    --row-h: 88px;
+    --row-step: calc(var(--row-h) + 8px + 1.6em);
+  }
+
+  .gaps-merge .gaps-thread {
+    bottom: calc(var(--row-h) / 2);
+  }
+}
+
+/* Teams Q&A, section 05: the phone screens, framed in a tile */
+.phones--shots {
+  margin: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: none;
+  padding: 32px 15%;
+  background: var(--tile-bg);
+  transition: background-color var(--theme-ease);
+}
+
+.phones--shots .phone {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-js .gaps-merge,
+  .story-js .gaps-row--teams,
+  .story-js .gaps--merged .gap-cell,
+  .story-js .gaps-to,
+  .story-js .gaps-merge .gaps-from {
+    transition-duration: 0s;
+    transition-delay: 0s;
+  }
+}
+
+/* Section 02 merge, scroll-driven: story.js sets every step from the scroll
+   position, so the timed transitions and animations are switched off */
+.story-js .gaps--scroll .gap-cell,
+.story-js .gaps--scroll .gaps-row,
+.story-js .gaps--scroll .gaps-from,
+.story-js .gaps--scroll .gaps-to,
+.story-js .gaps--scroll .gaps-thread {
+  transition: background-color var(--theme-ease);
+  animation: none;
+}
+
+/* A hero still exported with its own transparent margin and soft shadow
+   (Teams Q&A "during"): no second shadow or rounded box around the margin,
+   and a little wider so the window inside matches the videos' width */
+.hero-slide > img.hero-still {
+  width: calc(577 / 645 * 100%);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Teams Q&A, sections 01 → 02: the track gives the pinned diagram room to
+   play (story.js sets its height); the stage sticks under the header while
+   the diagram merges and section 02's text comes in below it */
+.gaps-track {
+  position: relative;
+  margin-top: 32px; /* breathing room under section 01's text */
+}
+
+.gaps-stage {
+  position: sticky;
+  top: calc(var(--header-h, 128px) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.gaps-after {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Without the script, everything shows in its final state */
+html:not(.story-js) .gaps-track {
+  height: auto !important;
 }

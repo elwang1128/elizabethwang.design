@@ -357,7 +357,7 @@
 // Tabs (Events App, section 03): "For attendees" / "For organizers" switch
 // the screen above them. Arrow keys move between tabs.
 (function () {
-  document.querySelectorAll(".role-tabs").forEach((list) => {
+  document.querySelectorAll(".role-tabs:not([data-lifecycle-tabs])").forEach((list) => {
     const tabs = Array.from(list.querySelectorAll('[role="tab"]'));
     function select(tab) {
       tabs.forEach((t) => {
@@ -483,4 +483,307 @@
   measure();
   current = 1;
   setTimeout(apply, 150);
+})();
+
+// Event lifecycle viewer (Teams Q&A, section 03). The Before / During /
+// After pills pick the stage and the For organizers / For attendees tabs
+// pick the view; only that screen shows. It runs only while on screen and
+// works like the Events App reels: a video pauses at each data-at time while
+// its callouts draw out (data-step groups take turns), a still steps through
+// its groups, and when a screen is done the next stage comes up on its own.
+(function () {
+  const STAGGER_MS = 700;
+  const READ_MS = 2200;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  function groupsOf(view) {
+    const map = new Map();
+    view.querySelectorAll(".callout").forEach((c) => {
+      const at = c.dataset.at === undefined ? 0 : Number(c.dataset.at);
+      const key = Math.round(at * 100) * 10 + Number(c.dataset.step || 0);
+      if (!map.has(key)) map.set(key, { time: at, els: [] });
+      map.get(key).els.push(c);
+    });
+    return Array.from(map.keys()).sort((a, b) => a - b).map((k) => map.get(k));
+  }
+
+  function hideAll(view) {
+    view.querySelectorAll(".callout.is-on").forEach((c) => {
+      c.style.setProperty("--delay", "0ms");
+      c.classList.remove("is-on");
+    });
+  }
+
+  document.querySelectorAll("[data-lifecycle]").forEach((box) => {
+    const steps = Array.from(box.querySelectorAll(".reel-steps li"));
+    const tabs = Array.from(box.querySelectorAll("[data-lifecycle-tabs] [role='tab']"));
+    const views = Array.from(box.querySelectorAll(".stage-view"));
+    const texts = Array.from(box.querySelectorAll(".stage-text"));
+    const groups = new Map(views.map((v) => [v, groupsOf(v)]));
+    const stageCount = steps.length;
+    let stage = 0;
+    let role = "organizer";
+    let inView = false;
+    let gen = 0; // bumps on every stop/start so old loops quit
+
+    const viewFor = () => views.find((v) => Number(v.dataset.stage) === stage && v.dataset.role === role);
+
+    async function showGroup(els, g) {
+      let delay = 0;
+      els.forEach((c) => {
+        c.style.setProperty("--delay", delay + "ms");
+        c.classList.add("is-on");
+        delay += STAGGER_MS;
+      });
+      await sleep(delay - STAGGER_MS + 600 + READ_MS);
+      if (g !== gen) return false;
+      els.forEach((c) => {
+        c.style.setProperty("--delay", "0ms");
+        c.classList.remove("is-on");
+      });
+      await sleep(350);
+      return g === gen;
+    }
+
+    function stop() {
+      gen++;
+      views.forEach((v) => {
+        const video = v.querySelector("video");
+        if (video) video.pause();
+        hideAll(v);
+      });
+    }
+
+    function advance(g) {
+      if (g === gen) show((stage + 1) % stageCount, role);
+    }
+
+    function run() {
+      stop();
+      if (!inView) return;
+      const g = gen;
+      const view = viewFor();
+      const list = groups.get(view);
+      const video = view.querySelector("video");
+      if (video) {
+        video.currentTime = 0; // start from the top so each callout meets its frame
+        let i = 0;
+        const play = () => {
+          const p = video.play();
+          if (p) p.catch(() => {});
+        };
+        video.onended = () => advance(g);
+        const tick = async () => {
+          if (g !== gen) return;
+          if (i < list.length && video.currentTime >= list[i].time) {
+            video.pause();
+            const time = list[i].time;
+            while (i < list.length && list[i].time === time) {
+              if (!(await showGroup(list[i].els, g))) return;
+              i++;
+            }
+            play();
+          }
+          requestAnimationFrame(tick);
+        };
+        play();
+        requestAnimationFrame(tick);
+      } else {
+        (async () => {
+          await sleep(400);
+          for (const grp of list) {
+            if (!(await showGroup(grp.els, g))) return;
+          }
+          await sleep(600);
+          advance(g);
+        })();
+      }
+    }
+
+    function show(nextStage, nextRole) {
+      stage = nextStage;
+      role = nextRole;
+      views.forEach((v) => (v.hidden = !(Number(v.dataset.stage) === stage && v.dataset.role === role)));
+      texts.forEach((t) => (t.hidden = Number(t.dataset.stage) !== stage));
+      steps.forEach((li, i) => {
+        li.classList.toggle("is-current", i === stage);
+        const b = li.querySelector("button");
+        if (i === stage) b.setAttribute("aria-current", "step");
+        else b.removeAttribute("aria-current");
+      });
+      tabs.forEach((t) => {
+        const on = t.dataset.role === role;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+      });
+      run();
+    }
+
+    steps.forEach((li, i) => li.querySelector("button").addEventListener("click", () => show(i, role)));
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => {
+        if (t.dataset.role !== role) show(stage, t.dataset.role);
+      });
+      t.addEventListener("keydown", (e) => {
+        const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        show(stage, next.dataset.role);
+        next.focus();
+      });
+    });
+
+    new IntersectionObserver((entries) => {
+      const now = entries[0].isIntersecting;
+      if (now === inView) return;
+      inView = now;
+      run();
+    }, { threshold: 0.25 }).observe(box.querySelector(".stage-shot"));
+  });
+})();
+
+// Live feed (Teams Q&A, section 02): posts take turns at the top of the
+// shared feed while the diagram is on screen
+(function () {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  document.querySelectorAll("[data-feed-live]").forEach((feed) => {
+    const cards = Array.from(feed.querySelectorAll(".feed-card"));
+    if (cards.length < 2) return;
+    let i = 0;
+    let timer = 0;
+
+    // The box hugs the post on screen and eases to the next one's height.
+    // The grey panel around it is held at the size it needs for the tallest
+    // post, so the page below never moves.
+    const panel = feed.closest(".feed-diagram");
+
+    function fit() {
+      const h = cards[i].offsetHeight;
+      if (h) feed.style.height = h + "px";
+    }
+
+    function hold() {
+      if (!panel) return;
+      const tallest = Math.max(...cards.map((c) => c.offsetHeight));
+      if (!tallest) return;
+      panel.style.minHeight = "";
+      feed.style.transition = "none";
+      feed.style.height = tallest + "px";
+      panel.style.boxSizing = "border-box";
+      panel.style.minHeight = panel.offsetHeight + "px";
+      fit();
+      feed.offsetHeight; // apply the height before easing comes back
+      feed.style.transition = "";
+    }
+
+    cards.forEach((c) => c.addEventListener("load", hold));
+    window.addEventListener("resize", hold);
+    hold();
+    fit();
+
+    function next() {
+      const out = cards[i];
+      i = (i + 1) % cards.length;
+      const inn = cards[i];
+      out.classList.remove("is-on");
+      out.classList.add("is-leaving");
+      inn.classList.remove("is-leaving");
+      inn.classList.add("is-on");
+      fit();
+      setTimeout(() => out.classList.remove("is-leaving"), 700);
+    }
+
+    function run(on) {
+      clearInterval(timer);
+      timer = 0;
+      if (on && !reduce.matches) timer = setInterval(next, 3200);
+    }
+
+    new IntersectionObserver((entries) => run(entries[0].isIntersecting), { threshold: 0.4 }).observe(feed);
+  });
+})();
+
+// Sections 01 → 02 (Teams Q&A): one diagram, pinned while you scroll. As it
+// rises into place the two features come in with their gaps; once pinned,
+// scrolling fades the gaps, slides the rows together into one Viva Engage
+// events row, draws a thread across it, and brings in section 02's text
+// below. Scrolling back up plays it in reverse.
+(function () {
+  const track = document.querySelector("[data-gaps-scroll]");
+  if (!track) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const stage = track.querySelector(".gaps-stage");
+  const fig = track.querySelector(".gaps");
+  const merge = fig.querySelector(".gaps-merge");
+  const ama = fig.querySelector(".gaps-row--ama");
+  const teams = fig.querySelector(".gaps-row--teams");
+  const on = Array.from(fig.querySelectorAll(".gap-cell--on"));
+  const tags = Array.from(fig.querySelectorAll(".gap-cell--on small"));
+  const gaps = Array.from(fig.querySelectorAll(".gap-cell--missing"));
+  const from = Array.from(fig.querySelectorAll(".gaps-from"));
+  const to = fig.querySelector(".gaps-to");
+  const thread = fig.querySelector(".gaps-thread");
+  const after = track.querySelector(".gaps-after");
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+  const span = (p, a, b) => clamp((p - a) / (b - a));
+  const ease = (t) => t * t * (3 - 2 * t);
+  let ticking = false;
+
+  // The track is as tall as the stage plus the distance the stage stays pinned
+  function size() {
+    track.style.height = stage.offsetHeight + window.innerHeight * 1.2 + "px";
+  }
+
+  function render() {
+    ticking = false;
+    const vh = window.innerHeight;
+    const stickTop = parseFloat(getComputedStyle(stage).top) || 0;
+    const stageTop = stage.getBoundingClientRect().top;
+    const trackTop = track.getBoundingClientRect().top;
+    const pinned = track.offsetHeight - stage.offsetHeight;
+    // pIn: the stage rising into place; q: progress while pinned
+    const pIn = reduce.matches ? 1 : clamp((vh * 0.95 - stageTop) / Math.max(1, vh * 0.95 - stickTop));
+    const q = reduce.matches ? 1 : clamp((stickTop - trackTop) / Math.max(1, pinned));
+    const step = parseFloat(getComputedStyle(merge).paddingBottom) || 0;
+
+    on.forEach((c, i) => {
+      const o = ease(span(pIn, i * 0.08, i * 0.08 + 0.35));
+      c.style.opacity = o;
+      c.style.transform = `translateY(${(1 - o) * 8}px)`;
+    });
+    gaps.forEach((c, i) => {
+      const o = ease(span(pIn, 0.3 + i * 0.08, 0.65 + i * 0.08)) * (1 - ease(span(q, 0.16, 0.3)));
+      c.style.opacity = o;
+      c.style.transform = `scale(${0.96 + o * 0.04})`;
+    });
+    const m = ease(span(q, 0.3, 0.52));
+    ama.style.transform = `translateY(${(m * step) / 2}px)`;
+    teams.style.transform = `translateY(${step - (m * step) / 2}px)`;
+    const l = ease(span(q, 0.44, 0.55));
+    from.forEach((f) => (f.style.opacity = 1 - l));
+    to.style.opacity = l;
+    tags.forEach((t) => (t.style.opacity = l));
+    const t = ease(span(q, 0.52, 0.66));
+    thread.style.opacity = t > 0 ? 1 : 0;
+    thread.style.transform = `scaleX(${t})`;
+    const a = ease(span(q, 0.62, 0.82));
+    after.style.opacity = a;
+    after.style.transform = `translateY(${(1 - a) * 16}px)`;
+  }
+
+  function queue() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(render);
+    }
+  }
+
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", () => {
+    size();
+    queue();
+  });
+  size();
+  render();
 })();

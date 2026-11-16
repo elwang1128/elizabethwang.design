@@ -5,6 +5,9 @@
 //   const silk = Silk.create(canvas);  // null if WebGL isn't available
 //   Silk.create(canvas, { subtle: true }) // a slow, faint version that sits
 //                                         // close to the tile color behind it
+//   Silk.create(canvas, { subtle: true, variant: 1 }) // the same look from a
+//                       // different patch of the pattern, a touch cooler and
+//                       // slower, so two subtle tiles never move in step
 //
 // It loops seamlessly every LOOP_SECONDS (the noise travels in a circle, so
 // the last frame meets the first), pauses while off screen, and holds still
@@ -27,6 +30,9 @@
     uniform float uAspect;
     uniform float uSubtle;  // 0 = full look, 1 = faint and close to uBg
     uniform vec3 uBg;       // the tile color the subtle version blends into
+    uniform vec2 uSeed;     // where in the pattern this tile starts
+    uniform vec3 uTint;     // the subtle version's color cast
+    uniform float uCentered; // 1 = keep the subtle version at the tile's own grey
     varying vec2 vUv;
 
     float hash(vec2 p) {
@@ -80,7 +86,7 @@
     }
 
     void main() {
-      vec2 p = vec2(vUv.x * uAspect, vUv.y) * 2.8;
+      vec2 p = vec2(vUv.x * uAspect, vUv.y) * 2.8 + uSeed;
 
       // Soft folds: domain-warped noise, stretched a little taller than wide
       vec2 sp = p * vec2(1.25, 0.75);
@@ -114,7 +120,11 @@
 
       // Subtle: almost no light streaks, and only a hint of the folds over
       // the tile color
-      vec3 subtle = mix(uBg, vec3(base) * vec3(1.0, 0.985, 0.96) + glint * 0.12, 0.2);
+      vec3 subtle = mix(uBg, vec3(base) * uTint + glint * 0.12, 0.2);
+      // Variant 1 (the Teams Q&A card) keeps its folds close to the tile
+      // color instead of pulling it darker, with only soft highlights
+      vec3 centered = uBg + (vec3(base) * uTint - 0.5) * 0.16 + glint * 0.01;
+      subtle = mix(subtle, centered, uCentered);
       color = mix(color, subtle, uSubtle);
 
       gl_FragColor = vec4(color, 1.0);
@@ -130,7 +140,8 @@
 
   function create(canvas, options) {
     const subtle = !!(options && options.subtle);
-    const loopSeconds = subtle ? 30 : LOOP_SECONDS;
+    const variant = (options && options.variant) || 0;
+    const loopSeconds = subtle ? (variant ? 38 : 30) : LOOP_SECONDS;
     // preserveDrawingBuffer lets the ripple read each frame as a texture
     const gl = canvas.getContext("webgl", { antialias: false, preserveDrawingBuffer: true });
     if (!gl) return null;
@@ -156,6 +167,10 @@
     const uSubtle = gl.getUniformLocation(program, "uSubtle");
     const uBg = gl.getUniformLocation(program, "uBg");
     gl.uniform1f(uSubtle, subtle ? 1 : 0);
+    gl.uniform2f(gl.getUniformLocation(program, "uSeed"), variant ? 7.3 : 0, variant ? 2.9 : 0);
+    gl.uniform1f(gl.getUniformLocation(program, "uCentered"), variant ? 1 : 0);
+    if (variant) gl.uniform3f(gl.getUniformLocation(program, "uTint"), 0.97, 0.985, 1.0);
+    else gl.uniform3f(gl.getUniformLocation(program, "uTint"), 1.0, 0.985, 0.96);
 
     // The subtle version takes its tile color from the page, and follows
     // the theme (light or dark) when it changes
