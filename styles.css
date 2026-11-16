@@ -524,6 +524,12 @@ body:has(.nav-dropdown.is-open) .toolbox {
     scale(var(--zoom));
 }
 
+/* The faint silk behind a screen recording (the two Microsoft projects) is
+   the backdrop, not the image: it stays put while the screen drifts */
+.project-image[data-silk="subtle"] > .silk-canvas {
+  transform: none;
+}
+
 .project-cursor {
   position: absolute;
   left: 0;
