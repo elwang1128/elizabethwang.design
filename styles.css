@@ -4098,7 +4098,8 @@ html:not(.story-js) .gaps-track {
 /* A screen recording with a thin black frame baked into its edges (Teams
    Q&A creation form): the video sits a hair larger than its frame and is
    clipped to the window, so only the window shows. The edge sizes are measured from
-   the recording (8px sides, 6px top, 9px bottom of 2646px wide). */
+   the recording (8px sides, 6px top, 9px bottom of 2646px wide), trimmed a
+   couple of pixels past it so no antialiased edge shows. */
 .reel-media--trim {
   border-radius: 8px;
 }
@@ -4106,11 +4107,11 @@ html:not(.story-js) .gaps-track {
 /* The video itself is clipped (not the frame around it), so callout labels
    can still reach past the screen's edges */
 .reel-media--trim > video {
-  width: calc(100% + 0.61%);
+  width: calc(100% + 0.72%);
   max-width: none;
-  margin: -0.23% -0.31% -0.34% -0.31%;
+  margin: -0.31% -0.36% -0.38% -0.36%;
   border-radius: 0;
-  clip-path: inset(0.37% 0.31% 0.55% 0.31% round 8px);
+  clip-path: inset(0.5% 0.36% 0.62% 0.36% round 8px);
 }
 
 /* Creation section callouts: long labels wrap onto a second line instead of
