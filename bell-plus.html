@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>bell.plus — Elizabeth Wang</title>
+    <meta name="description" content="bell.plus by Elizabeth Wang: a redesign of the live bell timer for students and teachers." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261118g" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page-case">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="bell-plus.html">bell.plus</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="index.html#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main class="case">
+        <!-- Left: stays put while the work on the right scrolls -->
+        <section class="case-info">
+          <div class="case-top">
+            <h1 class="case-title">bell.plus</h1>
+            <dl class="case-meta">
+              <div>
+                <dt class="sr-only">Company</dt>
+                <dd class="case-client">bell.plus</dd>
+                <dt class="sr-only">Role</dt>
+                <dd class="mono">Founding designer</dd>
+              </div>
+              <div class="mono">
+                <dt class="sr-only">Year</dt>
+                <dd>2025</dd>
+                <dt class="sr-only">Platforms</dt>
+                <dd>Web, mobile</dd>
+              </div>
+            </dl>
+          </div>
+          <p class="case-desc">
+              I redesigned the end-to-end experience of bell.plus for students and teachers, based on feedback from people who used the original site. bell.plus is a live timer that counts down to the next bell, so everyone knows how much time is left in class. It was built by Los Altos High School alumni.
+            </p>
+        </section>
+
+        <!-- Right: the case study. The live bell demo (bell.js) leads; the
+             sections below use screens from the Figma prototype. -->
+        <section class="case-work story" aria-label="Case study">
+          <!-- Live bell demo: a working copy of the redesigned timer -->
+          <figure class="bell-demo" data-bell-demo aria-label="A live demo of the redesigned bell timer counting down a school day">
+            <div class="bell-controls">
+              <div class="bell-speeds" role="group" aria-label="Playback speed">
+                <span>Speed</span>
+                <button type="button" data-speed="1">1×</button>
+                <button type="button" data-speed="60">60×</button>
+                <button type="button" data-speed="300">300×</button>
+              </div>
+              <div class="bell-themes" role="group" aria-label="Theme color">
+                <span>Theme</span>
+                <button type="button" style="--c: #66d9ff" data-theme-color="#66d9ff" aria-label="Sky theme" aria-pressed="true"></button>
+                <button type="button" style="--c: #5bae7a" data-theme-color="#5bae7a" aria-label="Green theme" aria-pressed="false"></button>
+                <button type="button" style="--c: #b5333e" data-theme-color="#b5333e" aria-label="Red theme" aria-pressed="false"></button>
+                <button type="button" style="--c: #e5704a" data-theme-color="#e5704a" aria-label="Orange theme" aria-pressed="false"></button>
+                <button type="button" style="--c: #f29bb5" data-theme-color="#f29bb5" aria-label="Pink theme" aria-pressed="false"></button>
+                <button type="button" style="--c: #f2d056" data-theme-color="#f2d056" aria-label="Yellow theme" aria-pressed="false"></button>
+                <button type="button" style="--c: #7b7ff0" data-theme-color="#7b7ff0" aria-label="Purple theme" aria-pressed="false"></button>
+              </div>
+            </div>
+            <div class="bell-screen">
+              <div class="bell-pie"></div>
+              <div class="bell-bar"><span>Westside High School</span><b>View schedule</b></div>
+              <div class="bell-readout">
+                <span class="bell-time"><span class="bell-mm">27</span><span class="bell-colon">:</span><span class="bell-ss">16</span></span>
+                <span class="bell-name">Lunch &amp; Advisory</span>
+                <span class="bell-sub">B Schedule</span>
+              </div>
+              <span class="bell-clock">September 22, 2025 | 11:18 AM</span>
+            </div>
+          </figure>
+
+          <!-- 1. The problem -->
+          <section class="story-section" aria-labelledby="problem-title">
+            <p class="story-eyebrow">01&nbsp;&nbsp;The problem</p>
+            <h2 class="story-headline" id="problem-title">Every school has its own bell schedule</h2>
+            <p class="story-body">
+              Each school runs its own schedule of periods, lunch, and short passing periods between classes. Not every bell applies to every student, either: one might have zero period while another has a free period at the same time.
+            </p>
+            <p class="story-body">
+              bell.plus follows each school’s schedule, including passing periods, and lets students make their own when the school’s doesn’t fit.
+            </p>
+          </section>
+
+          <!-- 2. Finding your school -->
+          <section class="story-section" aria-labelledby="school-title">
+            <p class="story-eyebrow">02&nbsp;&nbsp;Finding your school</p>
+            <h2 class="story-headline" id="school-title">Find your school</h2>
+            <p class="story-body">
+              Search for your school to open its timer. Results show which schedules are verified and when they were last updated. If a school isn’t listed, you can create its schedule or use a personal one.
+            </p>
+            <div class="lifecycle bell-recs" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <figure class="case-shot stage-shot" aria-label="Searching for Westside High School, opening its timer, and viewing the day's schedule">
+                  <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-school.mp4?v=2" muted playsinline preload="metadata" aria-label="Searching for Westside High School, opening its timer, and viewing the day's schedule"></video>
+                    <span class="callout callout--right" data-at="2.0" style="--x: 63.8%; --y: 38.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Search for your school</span></span>
+                    <span class="callout callout--right" data-at="5.0" style="--x: 47.1%; --y: 43.0%; --len: 6"><span class="callout-line"></span><span class="callout-label">Verified schedules</span></span>
+                    <span class="callout callout--left" data-at="5.0" data-step="2" style="--x: 37.2%; --y: 50.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Views and last updated</span></span>
+                    <span class="callout callout--left" data-at="5.0" data-step="3" style="--x: 37.6%; --y: 63.6%; --len: 4"><span class="callout-line"></span><span class="callout-label">Not listed? Make one</span></span>
+                    <span class="callout callout--right" data-at="8.0" style="--x: 58.0%; --y: 43.0%; --len: 8"><span class="callout-line"></span><span class="callout-label">Time left in the period</span></span>
+                    <span class="callout callout--left" data-at="8.0" data-step="2" style="--x: 41.5%; --y: 51.2%; --len: 5"><span class="callout-line"></span><span class="callout-label">Period and schedule</span></span>
+                    <span class="callout callout--right" data-at="8.0" data-step="3" style="--x: 62.8%; --y: 65.5%; --len: 8"><span class="callout-line"></span><span class="callout-label">Empties as time runs out</span></span>
+                    <span class="callout callout--left" data-at="10.0" style="--x: 80.2%; --y: 10.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Switch to the schedule</span></span>
+                    <span class="callout callout--right" data-at="12.0" style="--x: 62.4%; --y: 16.6%; --len: 5"><span class="callout-line"></span><span class="callout-label">Past periods fade</span></span>
+                    <span class="callout callout--right" data-at="12.0" data-step="2" style="--x: 53.5%; --y: 34.9%; --len: 8"><span class="callout-line"></span><span class="callout-label">What’s coming up</span></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Settings -->
+          <section class="story-section" aria-labelledby="settings-title">
+            <p class="story-eyebrow">03&nbsp;&nbsp;Settings</p>
+            <h2 class="story-headline" id="settings-title">Customize the timer</h2>
+            <p class="story-body">
+              Settings open over the timer, so changes show right away. Students can pick a theme, switch to dark mode, rename their classes, and turn on a sound or notification for each period.
+            </p>
+            <div class="lifecycle bell-recs" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <figure class="case-shot stage-shot" aria-label="Opening settings over the timer: theme colors, dark mode, block names, notifications, and bell sounds">
+                  <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-settings.mp4?v=2" muted playsinline preload="metadata" aria-label="Opening settings over the timer: theme colors, dark mode, block names, notifications, and bell sounds"></video>
+                    <span class="callout callout--left" data-at="2.0" style="--x: 76.1%; --y: 10.7%; --len: 5"><span class="callout-line"></span><span class="callout-label">Settings</span></span>
+                    <span class="callout callout--left" data-at="4.0" style="--x: 38.8%; --y: 28.8%; --len: 5"><span class="callout-line"></span><span class="callout-label">Theme colors</span></span>
+                    <span class="callout callout--left" data-at="4.0" data-step="2" style="--x: 38.8%; --y: 38.4%; --len: 5"><span class="callout-line"></span><span class="callout-label">Dynamic themes</span></span>
+                    <span class="callout callout--right" data-at="6.0" style="--x: 60.7%; --y: 49.9%; --len: 6"><span class="callout-line"></span><span class="callout-label">Light and dark mode</span></span>
+                    <span class="callout callout--right" data-at="8.0" style="--x: 58.5%; --y: 53.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Rename your classes</span></span>
+                    <span class="callout callout--right" data-at="10.0" style="--x: 60.4%; --y: 61.3%; --len: 6"><span class="callout-line"></span><span class="callout-label">Period notifications</span></span>
+                    <span class="callout callout--right" data-at="12.5" style="--x: 61.4%; --y: 65.5%; --len: 6"><span class="callout-line"></span><span class="callout-label">Pick a bell, or upload your own</span></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. Personal schedules -->
+          <section class="story-section" aria-labelledby="personal-title">
+            <p class="story-eyebrow">04&nbsp;&nbsp;Personal schedules</p>
+            <h2 class="story-headline" id="personal-title">Build your own schedule</h2>
+            <p class="story-body">
+              Students whose bells don’t match the school’s can switch to a personal schedule. Each block gets a name and the days and times it meets.
+            </p>
+            <div class="lifecycle bell-recs" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <figure class="case-shot stage-shot" aria-label="Switching to a personal schedule and adding English 11 on Monday, Wednesday, and Friday">
+                  <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-personal.mp4?v=2" muted playsinline preload="metadata" aria-label="Switching to a personal schedule and adding English 11 on Monday, Wednesday, and Friday"></video>
+                    <span class="callout callout--right" data-at="5.0" style="--x: 32.7%; --y: 20.9%; --len: 4"><span class="callout-line"></span><span class="callout-label">Switch to a personal schedule</span></span>
+                    <span class="callout callout--right" data-at="8.0" style="--x: 50.1%; --y: 58.0%; --len: 6"><span class="callout-line"></span><span class="callout-label">Start from scratch</span></span>
+                    <span class="callout callout--left" data-at="14.0" style="--x: 36.4%; --y: 22.3%; --len: 2"><span class="callout-line"></span><span class="callout-label">Name it after the class</span></span>
+                    <span class="callout callout--left" data-at="16.0" style="--x: 36.4%; --y: 33.6%; --len: 2"><span class="callout-line"></span><span class="callout-label">Different times on different days</span></span>
+                    <span class="callout callout--right" data-at="20.0" style="--x: 43.2%; --y: 20.7%; --len: 4"><span class="callout-line"></span><span class="callout-label">One block, every time it meets</span></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. For schools -->
+          <section class="story-section" aria-labelledby="create-title">
+            <p class="story-eyebrow">05&nbsp;&nbsp;For schools</p>
+            <h2 class="story-headline" id="create-title">Set up a school</h2>
+            <p class="story-body">
+              Staff sign in to edit.bell to add their school. They create each schedule, choose which blocks students can rename, assign schedules to days of the week, and add breaks and holidays. Once it’s saved, they get a link to share with students.
+            </p>
+            <div class="lifecycle bell-recs" data-lifecycle data-reveal>
+              <div class="role-panels">
+                <figure class="case-shot stage-shot" aria-label="Signing in to edit.bell, creating Westside High School, building its odd block schedule, adding holidays, and sharing the link">
+                  <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-create.mp4?v=2" muted playsinline preload="metadata" aria-label="Signing in to edit.bell, creating Westside High School, building its odd block schedule, adding holidays, and sharing the link"></video>
+                    <span class="callout callout--right" data-at="3.0" style="--x: 52.0%; --y: 65.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Staff sign in to edit.bell</span></span>
+                    <span class="callout callout--left" data-at="6.0" style="--x: 28.3%; --y: 50.7%; --len: 2"><span class="callout-line"></span><span class="callout-label">One-click sign in</span></span>
+                    <span class="callout callout--right" data-at="9.0" style="--x: 50.1%; --y: 60.2%; --len: 6"><span class="callout-line"></span><span class="callout-label">Add a school</span></span>
+                    <span class="callout callout--left" data-at="13.0" style="--x: 37.8%; --y: 47.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">School name</span></span>
+                    <span class="callout callout--left" data-at="13.0" data-step="2" style="--x: 37.8%; --y: 54.9%; --len: 4"><span class="callout-line"></span><span class="callout-label">Days with classes</span></span>
+                    <span class="callout callout--right" data-at="19.0" style="--x: 61.2%; --y: 15.7%; --len: 6"><span class="callout-line"></span><span class="callout-label">Every schedule the school uses</span></span>
+                    <span class="callout callout--left" data-at="19.0" data-step="2" style="--x: 70.9%; --y: 10.1%; --len: 6"><span class="callout-line"></span><span class="callout-label">A schedule for each weekday</span></span>
+                    <span class="callout callout--right" data-at="19.0" data-step="3" style="--x: 60.4%; --y: 48.8%; --len: 6"><span class="callout-line"></span><span class="callout-label">Breaks and holidays</span></span>
+                    <span class="callout callout--left" data-at="27.0" style="--x: 31.6%; --y: 32.5%; --len: 2"><span class="callout-line"></span><span class="callout-label">Each block’s times</span></span>
+                    <span class="callout callout--right" data-at="28.5" style="--x: 60.1%; --y: 32.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Students can rename this block</span></span>
+                    <span class="callout callout--right" data-at="28.5" data-step="2" style="--x: 60.1%; --y: 55.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Off for shared blocks like lunch</span></span>
+                    <span class="callout callout--right" data-at="36.0" style="--x: 26.8%; --y: 22.6%; --len: 6"><span class="callout-line"></span><span class="callout-label">Saved schedules fold into a list</span></span>
+                    <span class="callout callout--right" data-at="42.0" style="--x: 56.4%; --y: 60.4%; --len: 6"><span class="callout-line"></span><span class="callout-label">No school, or another schedule</span></span>
+                    <span class="callout callout--left" data-at="48.0" style="--x: 41.2%; --y: 51.8%; --len: 4"><span class="callout-line"></span><span class="callout-label">Add a country’s holidays</span></span>
+                    <span class="callout callout--right" data-at="51.0" style="--x: 62.8%; --y: 57.1%; --len: 4"><span class="callout-line"></span><span class="callout-label">Turn each holiday on or off</span></span>
+                    <span class="callout callout--left" data-at="56.0" style="--x: 71.2%; --y: 16.0%; --len: 6"><span class="callout-line"></span><span class="callout-label">Odd and even days</span></span>
+                    <span class="callout callout--left" data-at="60.0" style="--x: 73.7%; --y: 53.0%; --len: 6"><span class="callout-line"></span><span class="callout-label">Match a bell that runs early or late</span></span>
+                    <span class="callout callout--left" data-at="67.0" style="--x: 39.1%; --y: 56.4%; --len: 4"><span class="callout-line"></span><span class="callout-label">A link to share with students</span></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. Mobile -->
+          <section class="story-section" aria-labelledby="bell-mobile-title">
+            <p class="story-eyebrow">06&nbsp;&nbsp;Mobile</p>
+            <h2 class="story-headline" id="bell-mobile-title">Designed for mobile</h2>
+            <p class="story-body">
+              Students often check the time on their phones between classes, so every screen has a mobile version.
+            </p>
+            <figure class="bell-phones" data-reveal>
+              <img src="assets/images/bell-mobile-landing.png" alt="The landing page on a phone" loading="lazy" />
+              <img src="assets/images/bell-mobile-timer.png" alt="The timer on a phone" loading="lazy" />
+              <img src="assets/images/bell-mobile-schedule.png" alt="The day's schedule on a phone" loading="lazy" />
+            </figure>
+          </section>
+
+          <!-- 7. What's next -->
+          <section class="story-section" aria-labelledby="bell-next-title">
+            <p class="story-eyebrow">07&nbsp;&nbsp;What's next</p>
+            <h2 class="story-headline" id="bell-next-title">A work in progress</h2>
+            <p class="story-body">
+              The redesign builds on feedback from people who used the original design. The founder will bring it to bell.plus over time.
+            </p>
+            <figure class="bell-plant" aria-hidden="true">
+              <img class="bell-plant--light" src="assets/images/bell-plant-light.png" alt="" loading="lazy" />
+              <img class="bell-plant--dark" src="assets/images/bell-plant-dark.png" alt="" loading="lazy" />
+            </figure>
+          </section>
+        </section>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="story.js?v=20261117e"></script>
+    <script src="bell.js?v=5"></script>
+    <script src="main.js?v=20261116z"></script>
+  </body>
+</html>

@@ -4233,3 +4233,260 @@ html:not(.story-js) .gaps-track {
 .qa-shot {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 6px 20px 2px rgba(0, 0, 0, 0.12);
 }
+
+/* Placeholder label in an empty case-study screen (bell.plus, for now) */
+.case-soon {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+
+/* ---------- bell.plus live demo (bell-plus.html, bell.js) ----------
+   A working copy of the redesigned timer inside the case-study frame:
+   speed pills on top, the bell "screen", and theme dots below. */
+.bell-demo {
+  --bell-color: #66d9ff;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bell-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.bell-speeds,
+.bell-themes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bell-speeds span,
+.bell-themes span {
+  margin-right: 4px;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+
+.bell-speeds button {
+  padding: 6px 12px;
+  border: 1px solid var(--hairline, rgba(0, 0, 0, 0.16));
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.bell-speeds button[aria-pressed="true"] {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.bell-themes button {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c);
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px transparent;
+  transition: box-shadow 0.2s ease;
+}
+
+.bell-themes button[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px var(--color-text);
+}
+
+/* The bell screen itself: always the product's light look, whatever the
+   site theme */
+.bell-screen {
+  position: relative;
+  aspect-ratio: 1512 / 982;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f7f4ef;
+  color: #000;
+  font-family: "Inter", system-ui, sans-serif;
+  container-type: inline-size;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 6px 20px 2px rgba(0, 0, 0, 0.1);
+}
+
+.bell-bar {
+  position: absolute;
+  top: 3cqw;
+  left: 3.2cqw;
+  right: 2.1cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.35cqw;
+  font-weight: 500;
+}
+
+.bell-bar b {
+  padding: 0.55cqw 1cqw;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  font-size: 0.95cqw;
+  font-weight: 600;
+}
+
+.bell-pie {
+  --done: 0;
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 55.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(transparent 0 calc(var(--done) * 1turn), var(--bell-color) 0);
+  transition: background-color 0.4s ease;
+}
+
+.bell-readout {
+  position: absolute;
+  left: 50%; /* the circle's center */
+  top: 51%; /* the circle's center, as .bell-pie */
+  /* lift by half the countdown's height, so the numbers (not the whole
+     block with its labels) sit in the middle of the circle */
+  transform: translate(-50%, -5.3cqw);
+}
+
+/* Minutes and seconds take equal columns either side of the colon, so the
+   colon sits exactly on the circle's center line; the labels below line up
+   with the start of the minutes */
+.bell-time {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  font-size: 10.6cqw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bell-name {
+  display: block;
+  margin-top: 1.8cqw;
+  font-size: 1.9cqw;
+  font-weight: 600;
+}
+
+.bell-sub {
+  display: block;
+  margin-top: 0.4cqw;
+  font-size: 1.9cqw;
+}
+
+.bell-clock {
+  position: absolute;
+  left: 2.1cqw;
+  bottom: 1.6cqw;
+  font-size: 1.35cqw;
+  font-weight: 600;
+}
+
+/* Passing periods: the wedge softens so the bell reads as "between" */
+.bell-demo.is-passing .bell-pie {
+  opacity: 0.55;
+}
+
+/* bell.plus: the settings panel is tall, so it sits by height in its frame */
+.case-shot img.bell-settings {
+  width: auto;
+  height: 88%;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 6px 20px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* bell.plus: the three phone screens side by side, on the page */
+.bell-phones {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.bell-phones img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 6px 20px 2px rgba(0, 0, 0, 0.1);
+}
+
+.story-js .bell-phones img {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.6s ease;
+}
+
+.story-js .bell-phones img:nth-child(2) { transition-delay: 0.12s; }
+.story-js .bell-phones img:nth-child(3) { transition-delay: 0.24s; }
+
+.story-js .bell-phones.is-in img {
+  opacity: 1;
+  transform: none;
+}
+
+.bell-mm {
+  text-align: right;
+}
+
+.bell-colon {
+  padding: 0 0.02em;
+}
+
+/* bell.plus recordings: callout labels wrap and stay snug, like the Teams
+   Q&A creation form */
+.bell-rec .callout-label {
+  width: max-content;
+  max-width: 30cqw;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.bell-rec .callout--left .callout-label {
+  text-align: right;
+}
+
+/* bell.plus recordings: the full MacBook on black, so the frame is black
+   too and the recording blends in (no grey tile, no rounding or shadow) */
+.bell-recs .case-shot {
+  aspect-ratio: auto;
+  background: #000;
+}
+
+.bell-recs .reel-media.bell-rec {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.bell-recs .reel-media.bell-rec > video {
+  border-radius: 0;
+}
+
+/* bell.plus: closing note and the little plant by the window, which swaps
+   between day and night with the site theme */
+.bell-plant { margin: 40px auto 0; width: min(180px, 40%); }
+.bell-plant img { display: block; width: 100%; height: auto; }
+.bell-plant--dark { display: none !important; }
+:root[data-theme="dark"] .bell-plant--light { display: none !important; }
+:root[data-theme="dark"] .bell-plant--dark { display: block !important; }
