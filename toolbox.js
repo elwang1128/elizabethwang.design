@@ -1,6 +1,6 @@
 // Creative toolbox (homepage only; desktop with a mouse — hidden on phones/touch).
 //
-// [CREATIVE TOOLBOX] opens four tools:
+// [OPEN TOOLBOX] opens four tools:
 //   [BRUSH]      press and drag anywhere to paint
 //   [FLOWERS]    click anywhere and a flower grows up from that spot and blooms
 //   [FEED FISH]  five fish swim in; clicks sprinkle food that they chase and eat
@@ -91,7 +91,7 @@
   // ---------- toolbox UI ----------
   function setOpen(open) {
     tools.hidden = !open;
-    toggle.textContent = open ? "[CLOSE TOOLBOX]" : "[CREATIVE TOOLBOX]";
+    toggle.textContent = open ? "[CLOSE TOOLBOX]" : "[OPEN TOOLBOX]";
     toggle.setAttribute("aria-expanded", String(open));
     if (open) ensureLayers();
     else setMode(null);

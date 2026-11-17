@@ -807,7 +807,7 @@ body:has(.nav-dropdown.is-open) .toolbox {
 }
 
 /* ---------- Creative toolbox (homepage; desktop with a mouse only) ----------
-   [CREATIVE TOOLBOX] sits under ELIZABETH WANG, on the clock's row.
+   [OPEN TOOLBOX] sits under ELIZABETH WANG, on the clock's row.
    Brush / flowers / fish draw on fixed layers over the page (toolbox.js). */
 .toolbox {
   display: none;
