@@ -3871,7 +3871,7 @@ html.is-entered body {
 
 @container (max-width: 600px) {
   .gaps {
-    padding: 16px;
+    padding: 0; /* no tile anymore, so line up with the text */
   }
 
   .gaps-head,
@@ -4015,7 +4015,7 @@ html:not(.story-js) .gaps-to {
 @container (max-width: 600px) {
   .gaps-merge {
     --row-h: 88px;
-    --row-step: calc(var(--row-h) + 8px + 1.6em);
+    --row-step: calc(var(--row-h) + 28px + 1.6em); /* clear space above the second row's label */
   }
 
   .gaps-merge .gaps-thread {
