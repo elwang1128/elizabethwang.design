@@ -4365,7 +4365,7 @@ html:not(.story-js) .gaps-track {
   top: 51%; /* the circle's center, as .bell-pie */
   /* lift by half the countdown's height, so the numbers (not the whole
      block with its labels) sit in the middle of the circle */
-  transform: translate(-50%, -5.3cqw);
+  transform: translate(-50%, -7cqw);
 }
 
 /* Minutes and seconds take equal columns either side of the colon, so the
@@ -4490,3 +4490,18 @@ html:not(.story-js) .gaps-track {
 .bell-plant--dark { display: none !important; }
 :root[data-theme="dark"] .bell-plant--light { display: none !important; }
 :root[data-theme="dark"] .bell-plant--dark { display: block !important; }
+
+/* bell.plus: links out to the live site and the code */
+.bell-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.bell-links a {
+  padding: 10px 16px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.bell-links a:hover,
+.bell-links a:focus-visible { background: var(--color-text); color: var(--color-bg); }
