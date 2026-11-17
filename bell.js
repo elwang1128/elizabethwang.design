@@ -110,3 +110,36 @@
 
   render();
 })();
+
+// Brand guidelines carousel (bell.plus page): one slide at a time in a
+// scroll-snapped track. Swipe or scroll it, or use the arrows; the counter
+// follows whichever slide is in view.
+(function () {
+  const deck = document.querySelector("[data-brand-deck]");
+  if (!deck) return;
+  const track = deck.querySelector(".brand-track");
+  const slides = Array.from(track.children);
+  const count = deck.querySelector("[data-brand-count]");
+  const prev = deck.querySelector("[data-brand-prev]");
+  const next = deck.querySelector("[data-brand-next]");
+  const current = () => Math.round(track.scrollLeft / track.clientWidth);
+  // Past either end it wraps around to the other
+  // (jumping straight there, rather than sliding past every slide)
+  const go = (i) => {
+    const wraps = i < 0 || i >= slides.length;
+    i = (i + slides.length) % slides.length;
+    track.scrollTo({ left: i * track.clientWidth, behavior: wraps ? "auto" : "smooth" });
+  };
+  const update = () => {
+    const i = current();
+    count.textContent = `${i + 1} / ${slides.length}`;
+  };
+  prev.addEventListener("click", () => go(current() - 1));
+  next.addEventListener("click", () => go(current() + 1));
+  track.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(current() - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); go(current() + 1); }
+  });
+  track.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+  update();
+})();

@@ -4532,3 +4532,48 @@ html:not(.story-js) .gaps-track {
   height: 1.9cqw;
   margin-right: 0.4cqw;
 }
+
+/* bell.plus: brand guidelines carousel, one 16:9 slide at a time */
+.brand-deck { margin: 0; }
+.brand-track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--hairline, rgba(0, 0, 0, 0.12));
+  outline-offset: 4px;
+}
+.brand-track::-webkit-scrollbar { display: none; }
+.brand-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  aspect-ratio: 16 / 9;
+  background: #fff;
+}
+.brand-slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.brand-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.brand-controls span { min-width: 4.5em; text-align: center; }
+.brand-controls button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+.brand-controls button:hover:not(:disabled) { background: var(--color-text); color: var(--color-bg); }
+.brand-controls button:disabled { opacity: 0.3; cursor: default; }
