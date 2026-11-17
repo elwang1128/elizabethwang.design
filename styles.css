@@ -4577,3 +4577,18 @@ html:not(.story-js) .gaps-track {
 }
 .brand-controls button:hover:not(:disabled) { background: var(--color-text); color: var(--color-bg); }
 .brand-controls button:disabled { opacity: 0.3; cursor: default; }
+
+/* Emoji Motion: tiles in a row reveal left to right (3 across on wide
+   screens, 2 across below 1100px) */
+.story-js .story .case-grid--3 .case-tile[data-reveal]:nth-child(3n + 2) { transition-delay: 90ms; }
+.story-js .story .case-grid--3 .case-tile[data-reveal]:nth-child(3n) { transition-delay: 180ms; }
+@media (max-width: 1099px) {
+  .story-js .story .case-grid--3 .case-tile[data-reveal]:nth-child(n) { transition-delay: 0ms; }
+  .story-js .story .case-grid--3 .case-tile[data-reveal]:nth-child(2n) { transition-delay: 90ms; }
+}
+
+/* Emoji Motion: the camera is drawn small in its own frame; scale it up so
+   it reads at the same size as the other emojis */
+.case-tile img.gif-camera {
+  transform: scale(1.3);
+}

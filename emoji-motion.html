@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261118m" />
+    <link rel="stylesheet" href="styles.css?v=20261118o" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -116,8 +116,8 @@
         </section>
 
         <!-- Right: the work. The reel plays like a GIF: muted, looping, no controls. -->
-        <section class="case-work" aria-label="Work">
-          <figure class="case-reel">
+        <section class="case-work story" aria-label="Work">
+          <figure class="case-reel" data-reveal>
             <video
               src="assets/curology/reel.mp4"
               autoplay
@@ -132,23 +132,24 @@
           </figure>
           <!-- 12 GIFs: rows of 3 on wide screens, rows of 2 on narrow ones (favorites first) -->
           <div class="case-grid case-grid--3">
-            <figure class="case-tile"><img src="assets/curology/camera.gif" alt="Camera emoji" /></figure>
-            <figure class="case-tile"><img src="assets/curology/curology-box.gif" alt="Curology box emoji" /></figure>
-            <figure class="case-tile"><img src="assets/curology/tada.gif" alt="Party popper emoji" /></figure>
-            <figure class="case-tile"><img src="assets/curology/wink.gif" alt="Winking face emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/blush.gif" alt="Smiling face emoji with closed eyes" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/worried.gif" alt="Worried face emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/clap.gif" alt="Clapping hands emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/ok-hand.gif" alt="OK hand emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/clock.gif" alt="Alarm clock emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/phone-quiz.gif" alt="Phone emoji" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/doctor-1.gif" alt="Dermatologist emoji with long hair" loading="lazy" /></figure>
-            <figure class="case-tile"><img src="assets/curology/doctor-2.gif" alt="Dermatologist emoji with curly hair" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img class="gif-camera" src="assets/curology/camera.gif" alt="Camera emoji" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/curology-box.gif" alt="Curology box emoji" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/tada.gif" alt="Party popper emoji" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/wink.gif" alt="Winking face emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/blush.gif" alt="Smiling face emoji with closed eyes" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/worried.gif" alt="Worried face emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/clap.gif" alt="Clapping hands emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/ok-hand.gif" alt="OK hand emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/clock.gif" alt="Alarm clock emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/phone-quiz.gif" alt="Phone emoji" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/doctor-1.gif" alt="Dermatologist emoji with long hair" loading="lazy" /></figure>
+            <figure class="case-tile" data-reveal><img src="assets/curology/doctor-2.gif" alt="Dermatologist emoji with curly hair" loading="lazy" /></figure>
           </div>
         </section>
       </main>
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="story.js?v=20261117e"></script>
     <script src="main.js?v=20261116z"></script>
   </body>
 </html>
