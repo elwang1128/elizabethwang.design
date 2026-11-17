@@ -4532,3 +4532,26 @@ html:not(.story-js) .gaps-track {
   height: 1.9cqw;
   margin-right: 0.4cqw;
 }
+
+/* Conversation analytics: one annotated recording is the whole case study.
+   No tile behind it; the screen fills the column with rounded corners. On
+   wide screens it sits at the bottom right of the first screen, its bottom
+   edge level with the description, and the page doesn't scroll. */
+.ca-hero .case-shot {
+  aspect-ratio: auto;
+  background: none;
+}
+.ca-hero .reel-media {
+  width: 100%;
+}
+.ca-hero .reel-media > video {
+  aspect-ratio: 1440 / 876;
+}
+.case-desc .bell-links { margin-top: 20px; }
+@media (min-width: 900px) and (min-height: 560px) {
+  .ca-hero {
+    margin-top: max(0px, calc(100dvh - var(--header-h, 128px) - var(--gutter) - 100cqw * 876 / 1440));
+  }
+  .page-single .case-work { padding-bottom: 0; }
+  html:has(body.page-single) { overflow: hidden; }
+}

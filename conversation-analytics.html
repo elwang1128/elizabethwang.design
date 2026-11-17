@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <title>Conversation analytics — Elizabeth Wang</title>
+    <meta name="description" content="Conversation analytics by Elizabeth Wang: insights for Yammer posts, now in Viva Engage." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261118l" />
+    <script>
+      // Theme before first paint. A saved choice (from clicking the circle) wins;
+      // otherwise first-time visitors get dark mode when it is night in San Francisco.
+      (function () {
+        var NIGHT_START = 18; // 6 PM
+        var NIGHT_END = 6; // 6 AM
+        var theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (e) {}
+        if (theme !== "dark" && theme !== "light") {
+          var hour = Number(
+            new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hourCycle: "h23" }).format(new Date())
+          );
+          theme = hour >= NIGHT_START || hour < NIGHT_END ? "dark" : "light";
+        }
+        if (theme === "dark") document.documentElement.dataset.theme = "dark";
+      })();
+    </script>
+  </head>
+  <body class="page-single">
+    <div class="page-case">
+      <header class="site-header">
+        <nav class="nav-item">
+          <a href="index.html">Elizabeth Wang</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </nav>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="projects-menu">Projects</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="projects-menu" class="dropdown-menu">
+            <a class="split-target" href="events-app.html">Teams Events App</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
+            <a class="split-target" href="bell-plus.html">bell.plus</a>
+            <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
+            <a class="split-target" href="conversation-analytics.html">Conversation Analytics</a>
+            <a class="split-target" href="play.html" data-transition>Play</a>
+          </div>
+        </div>
+        <div class="nav-item nav-dropdown">
+          <button class="nav-button" type="button" aria-expanded="false" aria-controls="contact-menu">Contact</button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+          <div id="contact-menu" class="dropdown-menu">
+            <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+              <span class="copy-label copy-label--default split-target">Email</span>
+              <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+            </button>
+            <a class="split-target" href="https://www.linkedin.com/in/elizabeth-wang-design/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+        <div class="nav-item nav-about">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[MENU]</button>
+      </header>
+
+      <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
+        <div class="nav-item">
+          <a href="index.html#projects">Projects</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <button class="copy-email" type="button" data-email="wange1128@gmail.com" aria-label="Copy email address">
+            <span class="copy-label copy-label--default split-target">Email</span>
+            <span class="copy-label copy-label--done" aria-hidden="true">Copied email</span>
+          </button>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+        <div class="nav-item">
+          <a href="about.html">About</a>
+          <img class="rule" src="assets/icons/rule.svg" alt="" />
+        </div>
+      </nav>
+
+      <main class="case">
+        <!-- Left: stays put beside the hero -->
+        <section class="case-info">
+          <div class="case-top">
+            <h1 class="case-title">Conversation<br />analytics</h1>
+            <dl class="case-meta">
+              <div>
+                <dt class="sr-only">Company</dt>
+                <dd class="case-client">Microsoft</dd>
+                <dt class="sr-only">Role</dt>
+                <dd class="mono">Product design intern</dd>
+              </div>
+              <div class="mono">
+                <dt class="sr-only">Year</dt>
+                <dd>2020</dd>
+                <dt class="sr-only">Platforms</dt>
+                <dd>Web</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="case-desc">
+            <p>
+              As a product design intern, I designed conversation analytics for Yammer, now Viva Engage. Communicators can see a post’s reach and impressions, how much of it people read, a breakdown of reactions, and where the conversation was shared across the network.
+            </p>
+            <div class="bell-links">
+              <a class="mono" href="https://support.microsoft.com/en-us/viva/engage/track-engagement-in-viva-engage-with-analytics" target="_blank" rel="noopener">Support article ↗</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: one annotated screen recording (story.js lifecycle viewer):
+             the video pauses at each data-at while its callouts draw out -->
+        <section class="case-work story" aria-label="Case study">
+          <div class="lifecycle ca-hero" data-lifecycle>
+            <div class="role-panels">
+              <figure class="case-shot stage-shot" aria-label="Conversation analytics for a Viva Engage post">
+                <div class="reel-media stage-view" data-stage="0" data-role="all">
+                  <video disablepictureinpicture disableremoteplayback src="assets/images/conversation-analytics.mp4" muted playsinline preload="auto" aria-label="Scrolling through conversation analytics for a post in Viva Engage: reach and engagement, the engagement funnel, conversation trends, activity by platform, reactions, top comments, and shares"></video>
+                    <span class="callout callout--left" data-at="0.5" style="--x: 32.8%; --y: 59.1%; --len: 4"><span class="callout-line"></span><span class="callout-label">Impressions and reach</span></span>
+                    <span class="callout callout--right" data-at="0.5" data-step="2" style="--x: 59.4%; --y: 69.2%; --len: 3"><span class="callout-line"></span><span class="callout-label">How much of the post was read</span></span>
+                    <span class="callout callout--left" data-at="0.5" data-step="3" style="--x: 67.1%; --y: 55.5%; --len: 3"><span class="callout-line"></span><span class="callout-label">Every kind of engagement</span></span>
+                    <span class="callout callout--right" data-at="2.6" style="--x: 40.0%; --y: 59.0%; --len: 4"><span class="callout-line"></span><span class="callout-label">Views, reactions, and comments over time</span></span>
+                    <span class="callout callout--left" data-at="2.6" data-step="2" style="--x: 37.2%; --y: 59.0%; --len: 4"><span class="callout-line"></span><span class="callout-label">When it was featured or pinned</span></span>
+                    <span class="callout callout--left" data-at="2.6" data-step="3" style="--x: 67.1%; --y: 67.2%; --len: 3"><span class="callout-line"></span><span class="callout-label">Where people engage, by app</span></span>
+                    <span class="callout callout--right" data-at="4.3" style="--x: 35.6%; --y: 21.5%; --len: 4"><span class="callout-line"></span><span class="callout-label">A breakdown of reactions</span></span>
+                    <span class="callout callout--right" data-at="5.8" style="--x: 37.2%; --y: 40.3%; --len: 4"><span class="callout-line"></span><span class="callout-label">Where it was shared across the network</span></span>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    <script src="story.js?v=20261117e"></script>
+    <script src="main.js?v=20261116z"></script>
+  </body>
+</html>
