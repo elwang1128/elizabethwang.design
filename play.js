@@ -430,14 +430,29 @@
   });
 
   // ---------- Start ----------
-  // Begin centered on the wall, so there's something in every direction
+  // Begin with the first piece (the Fish Friend poster) in the middle of the
+  // screen. The wall wraps, so there's still something in every direction.
+  let startX = 0;
+  let startY = 0;
   function centerStart() {
-    px = -(W - window.innerWidth) / 2;
-    py = -cellH * 0.3;
+    const first = items[0];
+    const h = first.h || first.w * 4 / 3; // until the image knows its size
+    px = window.innerWidth / 2 - (first.x + first.w / 2);
+    py = window.innerHeight / 2 - (first.y + h / 2);
+    startX = px;
+    startY = py;
   }
   layout();
   centerStart();
   render();
+  // Once the first piece has its real height, center it exactly (unless the
+  // visitor has already started moving around)
+  items[0].media.addEventListener(items[0].isVideo ? "loadedmetadata" : "load", () => {
+    if (px !== startX || py !== startY) return;
+    items[0].h = items[0].el.offsetHeight;
+    centerStart();
+    render();
+  });
   window.addEventListener("resize", () => {
     layout();
     render();
