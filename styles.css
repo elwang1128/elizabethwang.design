@@ -4505,3 +4505,30 @@ html:not(.story-js) .gaps-track {
 }
 .bell-links a:hover,
 .bell-links a:focus-visible { background: var(--color-text); color: var(--color-bg); }
+
+/* bell.plus: the live demo is the hero. On wide screens it opens at the
+   bottom right of the first screen, its bottom edge level with the
+   description, like the other projects' heroes (without the grow-in). The
+   38px is the speed / theme row above the timer plus its gap. */
+@media (min-width: 900px) and (min-height: 560px) {
+  .bell-demo {
+    margin-top: max(0px, calc(100dvh - var(--header-h, 128px) - var(--gutter) - 100cqw * 982 / 1512 - 38px));
+  }
+}
+
+/* bell.plus demo: the bell logo by the school name and the settings gear
+   by View schedule, as in the designed screens (not interactive) */
+.bell-bar > span {
+  display: flex;
+  align-items: center;
+  gap: 0.9cqw;
+}
+.bell-bar img {
+  width: 1.6cqw;
+  height: 1.6cqw;
+}
+.bell-bar img.bell-gear {
+  width: 1.9cqw;
+  height: 1.9cqw;
+  margin-right: 0.4cqw;
+}
