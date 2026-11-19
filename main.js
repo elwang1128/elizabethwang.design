@@ -377,16 +377,6 @@
   // Coming back with the browser's back button can restore the blurred page
   window.addEventListener("pageshow", () => root.classList.remove("is-leaving"));
 
-  // These links have their own blur, so skip the site-wide page transition
-  // (styles.css, @view-transition) when one of them is the way out
-  window.addEventListener("pageswap", (e) => {
-    const vt = e.viewTransition;
-    if (!vt) return;
-    // A skipped or declined transition (Play opts out) rejects these; that's expected
-    [vt.ready, vt.finished, vt.updateCallbackDone].forEach((p) => p && p.catch(() => {}));
-    if (root.classList.contains("is-leaving")) vt.skipTransition();
-  });
-
   if (root.classList.contains("is-entering")) {
     const reveal = () => {
       root.classList.add("is-entered");
