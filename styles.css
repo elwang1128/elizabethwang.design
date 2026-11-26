@@ -463,8 +463,32 @@ body:has(.nav-dropdown.is-open) .toolbox {
   height: auto;
 }
 
+/* Before / during / after reel on the two Microsoft cards (story.js): it
+   fills the tile, and each slide holds a screen in the same slot as a single
+   recording, so it keeps the drift and hover lift */
+.project-image .tile-reel {
+  position: absolute;
+  inset: 0;
+}
+
+.project-image .inset.inset--motion img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The Teams Q&A "during" still has its own transparent margin and shadow:
+   no frame of our own, and a little wider so the window matches the videos */
+.project-image .inset.inset--still {
+  width: calc(460 / 645 * 577 / 553 * 100%);
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+
 @media (hover: hover) {
-  .project:hover .project-image .inset.inset--baked {
+  .project:hover .project-image .inset.inset--baked,
+  .project:hover .project-image .inset.inset--still {
     box-shadow: none;
   }
 }

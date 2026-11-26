@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261119z" />
+    <link rel="stylesheet" href="styles.css?v=20261125a" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -54,8 +54,8 @@
           <img class="rule" src="assets/icons/rule.svg" alt="" />
           <div id="projects-menu" class="dropdown-menu">
             <a class="split-target" href="events-app.html">Teams Events App</a>
-            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
             <a class="split-target" href="bell-plus.html">bell.plus</a>
+            <a class="split-target" href="teams-qa.html">Teams Q&amp;A + Engage Events</a>
             <a class="split-target" href="emoji-motion.html">Emoji Motion Design</a>
             <a class="split-target" href="play.html" data-transition>Play</a>
           </div>
@@ -116,27 +116,24 @@
             <!-- data-silk="subtle": a faint silk animation behind the screen
                  recording (main.js + silk.js) -->
             <div class="project-image tile" data-silk="subtle">
-              <!-- Organizer screen recording (same file as the Events App page) -->
-              <div class="inset inset--motion">
-                <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-organizer.mp4" autoplay muted loop playsinline aria-label="The organizer view of the Spring Kickoff event page in the Teams Events app"></video>
-              </div>
-            </div>
-          </a>
-        </article>
-
-        <article class="project" id="teams-qa">
-          <a href="teams-qa.html">
-            <div class="project-title">
-              <span>02</span>
-              <span>Microsoft  /  Teams Q&amp;A + Engage Events</span>
-            </div>
-          </a>
-          <a href="teams-qa.html">
-            <!-- data-silk="subtle" + variant 1: the same faint silk as project 01,
-                 from a different patch of the pattern, lighter and cooler (silk.js) -->
-            <div class="project-image tile" data-silk="subtle" data-silk-variant="1">
-              <div class="inset inset--motion">
-                <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-organizer.mp4?v=4" autoplay muted loop playsinline aria-label="The organizer view of the Contoso 2026 Vision All-Hands event page in Viva Engage"></video>
+              <!-- Before (video), during (still), after (video), sliding in
+                   turn like the hero on the Events App page (story.js) -->
+              <div class="hero-reel tile-reel" data-reel aria-label="The Spring Kickoff event page before, during, and after the event">
+                <div class="hero-slide is-active">
+                  <div class="inset inset--motion">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-attendee.mp4" muted playsinline preload="auto" aria-label="Before the event: an attendee scrolls the Spring Kickoff event page"></video>
+                  </div>
+                </div>
+                <div class="hero-slide" data-hold="4500">
+                  <div class="inset inset--motion">
+                    <img src="assets/images/events-app-during.webp?v=20261116s" alt="During the event: the live Spring Kickoff keynote in Teams, with the Q&amp;A panel open" />
+                  </div>
+                </div>
+                <div class="hero-slide">
+                  <div class="inset inset--motion">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/events-app-post-event.mp4" muted playsinline preload="metadata" aria-label="After the event: the event page shows the recording and a recap"></video>
+                  </div>
+                </div>
               </div>
             </div>
           </a>
@@ -145,15 +142,49 @@
         <article class="project" id="bell-plus">
           <a href="bell-plus.html">
             <div class="project-title">
-              <span>03</span>
+              <span>02</span>
               <span>bell.plus  /  Brand + Experience Redesign</span>
             </div>
           </a>
           <a href="bell-plus.html">
-            <!-- The bell.plus landing page over a faint silk animation -->
+            <!-- A bell.plus screen recording over a faint silk animation -->
             <div class="project-image tile" data-silk="subtle">
               <div class="inset inset--motion">
-                <img src="assets/images/bell-landing.jpg?v=2" alt="The redesigned bell.plus landing page: bell + your school, a school search, and a preview of the timer" />
+                <video disablepictureinpicture disableremoteplayback src="assets/images/bell-home.mp4" autoplay muted loop playsinline aria-label="The redesigned bell.plus: searching for a school, the live timer counting down the period, and the day's schedule"></video>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <article class="project" id="teams-qa">
+          <a href="teams-qa.html">
+            <div class="project-title">
+              <span>03</span>
+              <span>Microsoft  /  Teams Q&amp;A + Engage Events</span>
+            </div>
+          </a>
+          <a href="teams-qa.html">
+            <!-- data-silk="subtle" + variant 1: the same faint silk as project 01,
+                 from a different patch of the pattern, lighter and cooler (silk.js) -->
+            <div class="project-image tile" data-silk="subtle" data-silk-variant="1">
+              <!-- Before (video), during (still), after (video), sliding in
+                   turn like the hero on the Teams Q&A page (story.js) -->
+              <div class="hero-reel tile-reel" data-reel aria-label="The Contoso 2026 Vision All-Hands event before, during, and after the event">
+                <div class="hero-slide is-active">
+                  <div class="inset inset--motion">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-before-attendee.mp4?v=2" muted playsinline preload="auto" aria-label="Before the event: an attendee scrolls the event page in Viva Engage"></video>
+                  </div>
+                </div>
+                <div class="hero-slide" data-hold="4500">
+                  <div class="inset inset--motion inset--still">
+                    <img src="assets/images/teams-qa-during-attendee.webp" alt="During the event: the live keynote in Teams, with the Q&amp;A panel open" />
+                  </div>
+                </div>
+                <div class="hero-slide">
+                  <div class="inset inset--motion">
+                    <video disablepictureinpicture disableremoteplayback src="assets/images/teams-qa-after-attendee.mp4?v=2" muted playsinline preload="metadata" aria-label="After the event: the event page shows the recording above the answered questions"></video>
+                  </div>
+                </div>
               </div>
             </div>
           </a>
@@ -193,6 +224,7 @@
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
     <script src="silk.js?v=20261117c"></script>
     <script src="ripple.js?v=20261116"></script>
+    <script src="story.js?v=20261117e"></script>
     <script src="main.js?v=20261119c"></script>
     <script src="toolbox.js?v=20261118"></script>
   </body>
