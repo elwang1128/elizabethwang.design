@@ -560,7 +560,8 @@
       if (g === gen) show(stageCount > 1 ? (stage + 1) % stageCount : 0, role);
     }
 
-    function run() {
+    // from: where to start in the video (the timeline jumps with it)
+    function run(from = 0) {
       stop();
       if (!inView) return;
       const g = gen;
@@ -568,8 +569,9 @@
       const list = groups.get(view);
       const video = view.querySelector("video");
       if (video) {
-        video.currentTime = 0; // start from the top so each callout meets its frame
+        video.currentTime = from; // from the top, so each callout meets its frame
         let i = 0;
+        while (i < list.length && list[i].time < from - 0.001) i++;
         const play = () => {
           const p = video.play();
           if (p) p.catch(() => {});
@@ -642,6 +644,35 @@
       inView = now;
       run();
     }, { threshold: 0.25 }).observe(box.querySelector(".stage-shot"));
+
+    // Chapters (bell.plus): pills above the recording name its parts.
+    // Choosing one skips the recording there; the part playing is lit.
+    const chapters = Array.from(box.querySelectorAll(".rec-chapters button"));
+    if (chapters.length) {
+      const video = views[0].querySelector("video");
+      const times = chapters.map((b) => Number(b.dataset.at));
+      chapters.forEach((b, i) =>
+        b.addEventListener("click", () => {
+          inView = true;
+          run(times[i]);
+        })
+      );
+      let lit = -1;
+      const paint = () => {
+        let i = 0;
+        while (i + 1 < times.length && video.currentTime >= times[i + 1] - 0.05) i++;
+        if (i !== lit) {
+          lit = i;
+          chapters.forEach((b, k) => {
+            b.parentElement.classList.toggle("is-current", k === i);
+            if (k === i) b.setAttribute("aria-current", "step");
+            else b.removeAttribute("aria-current");
+          });
+        }
+        requestAnimationFrame(paint);
+      };
+      requestAnimationFrame(paint);
+    }
   });
 })();
 

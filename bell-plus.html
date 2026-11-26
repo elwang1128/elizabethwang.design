@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261125a" />
+    <link rel="stylesheet" href="styles.css?v=20261125c" />
     <script>
       // Theme before first paint. A saved choice (from clicking the circle) wins;
       // otherwise first-time visitors get dark mode when it is night in San Francisco.
@@ -180,6 +180,11 @@
             </p>
             <div class="lifecycle bell-recs" data-lifecycle data-reveal>
               <div class="role-panels">
+                <ol class="draft-steps rec-chapters" aria-label="Parts of the recording: choose one to skip to it">
+                  <li class="is-current"><button type="button" data-at="2.0" aria-current="step">Search</button></li>
+                  <li><button type="button" data-at="8.0">Timer</button></li>
+                  <li><button type="button" data-at="10.0">Schedule</button></li>
+                </ol>
                 <figure class="case-shot stage-shot" aria-label="Searching for Westside High School, opening its timer, and viewing the day's schedule">
                   <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
                     <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-school.mp4?v=2" muted playsinline preload="metadata" aria-label="Searching for Westside High School, opening its timer, and viewing the day's schedule"></video>
@@ -233,6 +238,11 @@
             </p>
             <div class="lifecycle bell-recs" data-lifecycle data-reveal>
               <div class="role-panels">
+                <ol class="draft-steps rec-chapters" aria-label="Parts of the recording: choose one to skip to it">
+                  <li class="is-current"><button type="button" data-at="5.0" aria-current="step">Switch</button></li>
+                  <li><button type="button" data-at="8.0">New schedule</button></li>
+                  <li><button type="button" data-at="14.0">Add a class</button></li>
+                </ol>
                 <figure class="case-shot stage-shot" aria-label="Switching to a personal schedule and adding English 11 on Monday, Wednesday, and Friday">
                   <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
                     <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-personal.mp4?v=2" muted playsinline preload="metadata" aria-label="Switching to a personal schedule and adding English 11 on Monday, Wednesday, and Friday"></video>
@@ -255,6 +265,13 @@
             </p>
             <div class="lifecycle bell-recs" data-lifecycle data-reveal>
               <div class="role-panels">
+                <ol class="draft-steps rec-chapters" aria-label="Parts of the recording: choose one to skip to it">
+                  <li class="is-current"><button type="button" data-at="0.6" aria-current="step">Sign in</button></li>
+                  <li><button type="button" data-at="5.8">Add a school</button></li>
+                  <li><button type="button" data-at="15.8">Schedules</button></li>
+                  <li><button type="button" data-at="44.8">Holidays</button></li>
+                  <li><button type="button" data-at="63.8">Share</button></li>
+                </ol>
                 <figure class="case-shot stage-shot" aria-label="Signing in to edit.bell, creating Westside High School, building its odd block schedule, adding holidays, and sharing the link">
                   <div class="reel-media bell-rec stage-view" data-stage="0" data-role="all">
                     <video disablepictureinpicture disableremoteplayback src="assets/images/bell-rec-create.mp4?v=3" muted playsinline preload="metadata" aria-label="Signing in to edit.bell, creating Westside High School, building its odd block schedule, adding holidays, and sharing the link"></video>
@@ -351,7 +368,7 @@
       </main>
     </div>
     <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
-    <script src="story.js?v=20261117e"></script>
+    <script src="story.js?v=20261125b"></script>
     <script src="bell.js?v=8"></script>
     <script src="main.js?v=20261119c"></script>
   </body>
