@@ -7,7 +7,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <title>Teams Events App — Elizabeth Wang</title>
-    <meta name="description" content="Teams Events App by Elizabeth Wang: one hub in Microsoft Teams for events from across Microsoft." />
+    <meta name="description" content="Teams Events App by Elizabeth Wang, lead product designer: one hub in Microsoft Teams for events from across Microsoft, with Copilot-powered Q&amp;A." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
@@ -110,7 +110,7 @@
             The Events app brings events from across Microsoft into one hub in
             Teams. Before, each event type lived in its own tool with fixed
             features, so organizers couldn’t mix and match. After unifying events
-            in Viva Engage, I proposed bringing that approach to Teams and created
+            in Viva Engage, I proposed bringing that approach to Teams and wrote
             the initial vision for the product. I contributed to early discovery
             and the creation flow, and led design for the event page, including
             Q&amp;A with Copilot built in.
@@ -218,6 +218,11 @@
               event should follow the same path. This made the experience easier to
               learn for organizers and gave attendees one place to go, no matter
               the event.
+            </p>
+            <p class="story-body">
+              AMAs and Teams Q&amp;A were each planned as standalone projects.
+              Building them separately would have added two more disconnected
+              tools, so I proposed one unified events experience instead.
             </p>
 
             <figure class="flow-wrap" data-reveal>
@@ -396,6 +401,14 @@
               preview exactly what attendees will see, then add their own branding
               before publishing.
             </p>
+            <p class="story-body">
+              This came from user research. Organizers hated that invites went out
+              automatically the moment an event was created. It left them no
+              control: what if it was a test event, the event wasn’t ready yet, or
+              they wanted invites to go out at a specific time? Starting every
+              event as a private draft puts organizers in charge of when attendees
+              hear about it.
+            </p>
 
             <!-- Draft → preview → branding → publish (story.js): real screens
                  with callouts. Dialogs (.reel-pop) open after the callout on
@@ -455,8 +468,9 @@
               Organizers can add a cover image and brand colors, and the page
               updates as they go. This gave organizers confidence before sharing
               their event with thousands of people.
-              <!-- TODO (Elizabeth): add any key decisions, e.g. why preview lives in
-                   the page instead of a separate screen. -->
+              Preview is an on/off switch on the event page itself, not a
+              separate screen, so organizers never leave the page they’re
+              building.
             </p>
           </section>
 
@@ -470,6 +484,11 @@
               didn’t get answered were lost. I designed Q&amp;A to carry through the
               whole event, with Copilot built in so every question can get an
               answer, even when no presenter is there to give one.
+            </p>
+            <p class="story-body">
+              Copilot’s answers still come from the presenters. During and after
+              the event, it answers from the live event transcript, so every
+              answer reflects what was actually said on stage.
             </p>
 
             <ol class="qa-stages">
@@ -536,6 +555,12 @@
             <h2 class="story-headline" id="next-title">Still growing</h2>
             <p class="story-body">
               The Events app is still growing. I created the initial mobile designs, bringing the event page to phones so attendees can find, register for, and join events from anywhere. Engage events are also moving fully onto the same platform, and AI is expanding across planning, running, and recapping events, with recap and Q&A answers heading to public preview at Microsoft Ignite.
+            </p>
+            <p class="story-body">
+              One tradeoff we made for launch was cutting a unified insights page.
+              Teams and Engage already had their own insights organizers could
+              use, and building one page on top of an already heavy workload was
+              expensive, so it became a fast follow.
             </p>
 
             <!-- Mobile explorations: labeled so they read as early visuals -->
